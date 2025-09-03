@@ -4,29 +4,31 @@ import jakarta.persistence.*;
 
 import java.sql.Blob;
 import java.sql.Date;
-
-@Table(name = "games")
+@Entity
+@Table(name = "games_test")
 public class Game {
 
     @Id
     @GeneratedValue
     @Column(name = "appid")
-    private int id;
+    private Integer id;
 
-    String name;
-    String developer;
-    double price;
-    String genre;
+    private String name;
+    private String developer;
+    private Double price;
+    private String genre;
     @Column(name = "release_date")
-    Date releaseDate;
-    String description;
-    int rating;
-    Blob banner;
-    public void setId(int id) {
+    private Date releaseDate;
+    private String description;
+    private Integer rating;
+    @Column(name = "banner")
+    private String bannerPath;
+
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -46,11 +48,11 @@ public class Game {
         this.developer = developer;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -78,19 +80,12 @@ public class Game {
         this.description = description;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 
-    public Blob getBanner() {
-        return banner;
-    }
-
-    public void setBanner(Blob banner) {
-        this.banner = banner;
-    }
 }
