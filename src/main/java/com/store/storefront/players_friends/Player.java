@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 
 @Entity
 public class Player {
@@ -17,7 +18,8 @@ public class Player {
 	private int player_level;
 	private Date creation_date;
 	private String game_language;
-	
+	@Transient
+	private String token;
 	//Costruttore classe players
 	public Player(int id, String name, String password, int games, int player_livel, Date creation_date, String game_language) {
 		this.id=id;
@@ -92,6 +94,12 @@ public class Player {
 	public void setGame_language(String game_language) {
 		this.game_language = game_language;
 	}
-	
-	
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 }

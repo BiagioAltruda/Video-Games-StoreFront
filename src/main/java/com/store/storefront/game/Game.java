@@ -88,4 +88,11 @@ public class Game {
         this.rating = rating;
     }
 
+    public String getBannerPath() {
+        return bannerPath;
+    }
+
+    public void setBannerPath(String bannerPath) {
+        this.bannerPath = bannerPath;
+    }
 }

@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 //fà comunicare i dati tra il database e Spreengboot
-public interface Player_Repo extends JpaRepository <Player, Integer>{
+public interface PlayerRepo extends JpaRepository <Player, Integer>{
 //estende l'interfaccia con JPARepositoryche è una generica di Spreeng e specifica l'entità Player_Model e il tipo della chiave primaria
 
-	List<Player_Model> findByNameAndPass(String name, String password);
+	Player findByNameAndPassword(String name, String password);
 	 //SELECT * FROM player WHERE name = ? AND password = ?
-
+	Player findByName(String name);
 }
