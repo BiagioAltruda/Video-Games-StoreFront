@@ -23,4 +23,10 @@ public class TransactionService {
 		return transactionRepo.findById(id).orElse(null);
 	}
 
+	
+	  //  Metodo per creare una nuova transazione
+    public Transaction createTransaction(Transaction transaction) {
+      
+        return transactionRepo.save(transaction);    //// save() inserisce un nuovo record se l'id è null,
 }
+    }
