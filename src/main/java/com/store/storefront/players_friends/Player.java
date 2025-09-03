@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Player_Model {
+public class Player {
 	
 	//Attributi classe players
 	@Id
@@ -14,22 +14,28 @@ public class Player_Model {
 	private String name;
 	private String password;
 	private int games;
-	private int player_livel;
+	private int player_level;
 	private Date creation_date;
 	private String game_language;
 	
 	//Costruttore classe players
-	public Player_Model(int id, String name, String password, int games, int player_livel, Date creation_date, String game_language) {
+	public Player(int id, String name, String password, int games, int player_livel, Date creation_date, String game_language) {
 		this.id=id;
 		this.name=name;
 		this.password=password;
 		this.games=games;
-		this.player_livel=player_livel;
+		this.player_level =player_livel;
 		this.creation_date=creation_date;
 		this.game_language=game_language;		
 	}
 
-	
+	public Player(String name, String password){
+		this.name=name;
+		this.password=password;
+	}
+	public Player(){}
+
+
 	//Metodi get e setter
 	public int getId() {
 		return id;
@@ -63,12 +69,12 @@ public class Player_Model {
 		this.games = games;
 	}
 
-	public int getPlayer_livel() {
-		return player_livel;
+	public int getPlayer_level() {
+		return player_level;
 	}
 
-	public void setPlayer_livel(int player_livel) {
-		this.player_livel = player_livel;
+	public void setPlayer_level(int player_level) {
+		this.player_level = player_level;
 	}
 
 	public Date getCreation_date() {

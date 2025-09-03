@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 //fà comunicare i dati tra il database e Spreengboot
-public interface Player_Repo extends JpaRepository <Player_Model, Integer>{
+public interface Player_Repo extends JpaRepository <Player, Integer>{
 //estende l'interfaccia con JPARepositoryche è una generica di Spreeng e specifica l'entità Player_Model e il tipo della chiave primaria
 
 }
