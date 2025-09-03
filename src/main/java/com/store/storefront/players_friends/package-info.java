@@ -1,0 +1,1 @@
+package com.store.storefront.players_friends;
