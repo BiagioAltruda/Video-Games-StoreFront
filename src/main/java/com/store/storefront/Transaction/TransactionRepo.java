@@ -11,5 +11,5 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long> {
 	
 	
 	List<Transaction> findByPlayerId(Long playerId);
-	//metodi che servirebbero
+	
 }

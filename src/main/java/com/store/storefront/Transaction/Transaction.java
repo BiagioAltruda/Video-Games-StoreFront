@@ -3,6 +3,8 @@ package com.store.storefront.Transaction;
 
 import java.time.LocalDateTime;
 
+import com.store.storefront.game.Game;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,7 +28,7 @@ public class Transaction {
 
 	@ManyToOne
 	@JoinColumn(name = "gamer_id")
-	private Games game;
+	private Game game;
 
 	@Column(name = "price_paid")
 	private double pricePaid;
@@ -37,7 +39,7 @@ public class Transaction {
 
 	}
 
-	public Transaction(Long id, Player player, Games game, double pricePaid, LocalDateTime data) {
+	public Transaction(Long id, Player player, Game game, double pricePaid, LocalDateTime data) {
 	
 		this.id = id;
 		this.player = player;
@@ -62,11 +64,11 @@ public class Transaction {
 		this.player = player;
 	}
 
-	public Games getGame() {
+	public Game getGame() {
 		return game;
 	}
 
-	public void setGame(Games game) {
+	public void setGame(Game game) {
 		this.game = game;
 	}
 
