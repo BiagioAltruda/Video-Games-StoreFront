@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Friends_Model {
+public class Friends {
 
 	//Attributi 
 	@Id
@@ -13,7 +13,7 @@ public class Friends_Model {
 	private int player_2;
 	
 	//Costruttore
-	public Friends_Model(int id, int player_1, int player_2) {
+	public Friends(int id, int player_1, int player_2) {
 		this.id=id;
 		this.player_1=player_1;
 		this.player_2=player_2;

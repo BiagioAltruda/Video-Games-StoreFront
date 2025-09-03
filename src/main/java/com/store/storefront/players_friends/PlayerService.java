@@ -6,20 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class Player_Service {
+public class PlayerService {
 	
 	@Autowired
 	//Annotazione che implementa le dependency injection, principio fondamentale dei framework
 	//Inietta automaticamente le dipendenze
 	//Elimina la necessità di creare manualmente le istanze
 
-	private Player_Repo repo;
+	private PlayerRepo repo;
 	
-	public Player_Model newAccount(Player_Model account) {
+	public Player newAccount(Player account) {
 		return repo.save(account);	}
 	//.save è un metodo preimpostato che salva gli oggetti "libro" nel database.
 	
-	public Player_Model updateAccount (Player_Model account) {
+	public Player updateAccount (Player account) {
 		return repo.save(account);
 	}
 	
@@ -27,12 +27,12 @@ public class Player_Service {
 		repo.deleteById(id);
 	}
 	
-	public List <Player_Model> getAll() {
+	public List <Player> getAll() {
 		return repo.findAll();
 	}
 	
-	public List<Player_Model> findByNameAndPass(String name, String password) {
-		return repo.findByNameAndPass(name, password);
+	public Player findByNameAndPassword(String name, String password) {
+		return repo.findByNameAndPassword(name, password);
 	}
 }
 

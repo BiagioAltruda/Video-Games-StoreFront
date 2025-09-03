@@ -4,7 +4,7 @@ package com.store.storefront.Transaction;
 import java.time.LocalDateTime;
 
 import com.store.storefront.game.Game;
-import com.store.storefront.players_friends.Player_Model;
+import com.store.storefront.players_friends.Player;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +25,7 @@ public class Transaction {
 	
 	@ManyToOne
 	@JoinColumn(name = "player_id")
-	private Player_Model player;
+	private Player player;
 
 	@ManyToOne
 	@JoinColumn(name = "gamer_id")
@@ -40,7 +40,7 @@ public class Transaction {
 
 	}
 
-	public Transaction(Long id, Player_Model player, Game game, double pricePaid, LocalDateTime data) {
+	public Transaction(Long id, Player player, Game game, double pricePaid, LocalDateTime data) {
 	
 		this.id = id;
 		this.player = player;
@@ -57,11 +57,11 @@ public class Transaction {
 		this.id = id;
 	}
 
-	public Player_Model getPlayer() {
+	public Player getPlayer() {
 		return player;
 	}
 
-	public void setPlayer(Player_Model player) {
+	public void setPlayer(Player player) {
 		this.player = player;
 	}
 

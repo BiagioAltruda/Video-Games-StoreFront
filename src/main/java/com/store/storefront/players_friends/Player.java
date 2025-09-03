@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Player_Model {
+public class Player {
 	
 	//Attributi classe players
 	@Id
@@ -19,7 +19,7 @@ public class Player_Model {
 	private String game_language;
 	
 	//Costruttore classe players
-	public Player_Model(int id, String name, String password, int games, int player_livel, Date creation_date, String game_language) {
+	public Player(int id, String name, String password, int games, int player_livel, Date creation_date, String game_language) {
 		this.id=id;
 		this.name=name;
 		this.password=password;
