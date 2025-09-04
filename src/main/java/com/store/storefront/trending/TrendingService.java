@@ -4,10 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-<<<<<<< HEAD
 
-=======
->>>>>>> c11ea1cfab97bb19a51f6c38676075f40899f2f9
 
 @Service
 public class TrendingService {
