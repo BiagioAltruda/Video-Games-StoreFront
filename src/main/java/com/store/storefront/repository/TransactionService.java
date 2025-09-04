@@ -2,7 +2,9 @@ package com.store.storefront.repository;
 
 import java.util.List;
 
+import com.store.storefront.model.Transaction;
 import org.apache.catalina.startup.Tomcat.ExistingStandardWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.store.storefront.model.Transaction;
@@ -10,7 +12,12 @@ import com.store.storefront.model.Transaction;
 @Service
 public class TransactionService {
 
-	private TransactionRepo transactionRepo;
+	private final TransactionRepo transactionRepo;
+	
+	@Autowired
+    public TransactionService(TransactionRepo transactionRepo) {
+        this.transactionRepo = transactionRepo;
+    }
 
 	// Metodo per ottenere tutte le transazioni dal DB
 	public List<Transaction> getAllTransactions() {
@@ -20,7 +27,7 @@ public class TransactionService {
 
 	// Metodo per ottenere una transazione tramite id
 
-	public Transaction getIdTransactions(Long id) {
+	public Transaction getTransactionById(Long id) {
 
 		return transactionRepo.findById(id).orElse(null);
 	}

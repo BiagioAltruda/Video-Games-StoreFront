@@ -46,4 +46,11 @@ public class PlayerController {
 		service.deleteAccount(id);
 	}
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> c11ea1cfab97bb19a51f6c38676075f40899f2f9
+>>>>>>> 59d636e1146787f54fbff7d6224b14dbdb274eae
 }

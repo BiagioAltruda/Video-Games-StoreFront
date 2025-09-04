@@ -1,15 +1,20 @@
 package com.store.storefront.model;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.store.storefront.trending.Trending;
+import jakarta.persistence.*;
 
+import java.util.List;
+@Entity
 @Table(name = "categories")
 public class Category {
     @Id
+    @Column(name = "category_id")
     private int id;
     private String name;
     private String description;
 
+    @OneToMany(mappedBy = "category", fetch =FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Trending> trending;
     public Category() {}
 
     public Category(int id, String name, String description) {
@@ -40,5 +45,13 @@ public class Category {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Trending> getTrending() {
+        return trending;
+    }
+
+    public void setTrending(List<Trending> trending) {
+        this.trending = trending;
     }
 }

@@ -106,3 +106,4 @@ function register() {
         alert('Si è verificato un errore durante la registrazione: ' + error.message);
     });
 }
+

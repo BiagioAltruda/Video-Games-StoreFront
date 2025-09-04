@@ -2,37 +2,47 @@ package com.store.storefront.trending;  //il mio amato model <3
 
 import java.sql.Date;
 
+<<<<<<< HEAD
 import org.junit.experimental.categories.Categories;
 import org.springframework.data.annotation.Id;
 
+=======
+import com.store.storefront.model.Category;
+>>>>>>> 59d636e1146787f54fbff7d6224b14dbdb274eae
 import com.store.storefront.model.Game;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 
 @Entity
 @Table (name="trending") //connettiamo alla tab del db
 
 public class Trending {
-	
-	@Id
+
+
+    @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment DB
-	
+	@Column(insertable=false, updatable=false)
 	private Integer id;
 	
 	
-	@ManyToOne
-	@JoinColumn(name="id_games")
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "game_id", nullable = false)
 	private Game game;
 	
-	@ManyToOne
-	@JoinColumn(name="id_categories")
-	private Categories categories;
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "category_id", nullable = false)
+	private Category category;
 	
 	@Column (name="period")
 	private Date period;
@@ -43,10 +53,11 @@ public class Trending {
        
 	
 	//costruttore pieno
-	public Trending(Integer id, Game game, Categories categories, Date period) {
+
+	public Trending(Integer id, Game game, Category categories, Date period) {
 		this.id = id;
 		this.game = game;
-		this.categories = categories;
+		this.category = categories;
 		this.period = period;
 	}
 
@@ -71,13 +82,15 @@ public class Trending {
 	}
 
 
-	public Categories getCategories() {
-		return categories;
+
+	public Category getCategory() {
+		return category;
 	}
 
 
-	public void setCategories(Categories categories) {
-		this.categories = categories;
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 
@@ -88,9 +101,6 @@ public class Trending {
 
 	public void setPeriod(Date period) {
 		this.period = period;
-	}   
-	
-	
-	
-	
+	}
+
 }
