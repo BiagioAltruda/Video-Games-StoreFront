@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@CrossOrigin(origins = "*") // Consente richieste CORS da qualsiasi origine (solo per sviluppo)
 @Controller
 @RequestMapping("/smoke/accounts") // Endpoint for account and login management
 public class LoginController {
