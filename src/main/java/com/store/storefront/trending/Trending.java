@@ -2,10 +2,12 @@ package com.store.storefront.trending;  //il mio amato model <3
 
 import java.sql.Date;
 
-import org.junit.experimental.categories.Categories;
-import org.springframework.data.annotation.Id;
 
-import com.store.storefront.game.Game;
+
+import jakarta.persistence.Id;
+
+import com.store.storefront.model.Category;
+import com.store.storefront.model.Game;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,7 +34,7 @@ public class Trending {
 	
 	@ManyToOne
 	@JoinColumn(name="id_categories")
-	private Categories categories;
+	private Category category;
 	
 	@Column (name="period")
 	private Date period;
@@ -43,10 +45,10 @@ public class Trending {
        
 	
 	//costruttore pieno
-	public Trending(Integer id, Game game, Categories categories, Date period) {
+	public Trending(Integer id, Game game, Category category, Date period) {
 		this.id = id;
 		this.game = game;
-		this.categories = categories;
+		this.category = category;
 		this.period = period;
 	}
 
@@ -71,13 +73,13 @@ public class Trending {
 	}
 
 
-	public Categories getCategories() {
-		return categories;
+	public Category getCategories() {
+		return category;
 	}
 
 
-	public void setCategories(Categories categories) {
-		this.categories = categories;
+	public void setCategories(Category category) {
+		this.category = category;
 	}
 
 
