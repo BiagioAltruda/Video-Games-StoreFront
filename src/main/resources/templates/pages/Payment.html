@@ -1,93 +1,172 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Payment Page</title>
-   <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <!-- Font Awesome (icone) -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link rel="stylesheet" href="../styles/StoreFrontStyleSheet.css" />
+  <meta charset="UTF-8" />
+  <title>Payment Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap & Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <!-- CSS del progetto -->
+  <link rel="stylesheet" href="../styles/StoreFrontStyleSheet.css" />
+
+  <style>
+    .card-shadow { box-shadow: 0 10px 25px rgba(0,0,0,.08); border-radius: 14px; }
+    .cc-input { letter-spacing: .1rem; }
+  </style>
 </head>
-<body>
+<body class="bg-light">
+
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg main-color-1 py-3">
-      <div class="container">
-          <a class="navbar-brand fw-bold" href="home.html">
-              <i class="fas fa-home me-2"></i>Payment for game
-          </a>
-      </div>
+    <div class="container">
+      <a class="navbar-brand fw-bold text-white" href="home.html">
+        <i class="fas fa-home me-2"></i>Payment for game
+      </a>
+    </div>
   </nav>
 
-  <!-- Transaction Details Section -->
-  <div class="container mt-4">
-      <h2 class="text-lg font-semibold">Transaction Details</h2>
-      <p><strong>Transaction ID:</strong> <span th:text="${transaction.id}"></span></p>
-      <p><strong>Player:</strong> <span th:text="${transaction.player.name}"></span></p>
-      <p><strong>Game:</strong> <span th:text="${transaction.game.title}"></span></p>
-      <p><strong>Price Paid:</strong> <span th:text="${transaction.pricePaid}"></span> €</p>
-      <p><strong>Date:</strong> <span th:text="${#dates.format(transaction.date, 'yyyy-MM-dd HH:mm')}"></span></p>
-  </div>
+  <div class="container my-4">
+    <!-- Contenitore messaggi (success/error) -->
+    <div id="alerts"></div>
 
-  <!-- Payment Form Section -->
-  <div class="container mt-4">
-      <form id="paymentForm" th:action="@{'/transactions/pay/' + ${transaction.id}}" method="post">
-          <h2 class="text-lg font-semibold">Payment Details</h2>
-          
-          <div class="mb-3">
-              <label for="cardholderName" class="form-label">Cardholder's Name</label>
-              <input type="text" id="cardholderName" name="cardholderName" class="form-control" required>
+    <div class="row g-4">
+      <!-- Transaction Details -->
+      <div class="col-lg-6">
+        <div class="card card-shadow">
+          <div class="card-header bg-white">
+            <h5 class="mb-0"><i class="fa-solid fa-receipt me-2"></i>Transaction Details</h5>
           </div>
-
-          <div class="mb-3">
-              <label for="cardNumber" class="form-label">Card Number</label>
-              <input type="text" id="cardNumber" name="cardNumber" class="form-control" required placeholder="1234 5678 9012 3456">
+          <div class="card-body">
+            <div class="d-flex justify-content-between border-bottom py-2">
+              <strong>Transaction ID</strong><span id="tx-id" class="text-muted">—</span>
+            </div>
+            <div class="d-flex justify-content-between border-bottom py-2">
+              <strong>Player</strong><span id="tx-player" class="text-muted">—</span>
+            </div>
+            <div class="d-flex justify-content-between border-bottom py-2">
+              <strong>Game</strong><span id="tx-game" class="text-muted">—</span>
+            </div>
+            <div class="d-flex justify-content-between border-bottom py-2">
+              <strong>Price Paid</strong><span id="tx-price" class="text-muted">—</span>
+            </div>
+            <div class="d-flex justify-content-between py-2">
+              <strong>Date</strong><span id="tx-date" class="text-muted">—</span>
+            </div>
           </div>
+        </div>
+      </div>
 
-          <div class="mb-3">
-              <label for="expirationDate" class="form-label">Expiration Date</label>
-              <input type="text" id="expirationDate" name="expirationDate" class="form-control" required placeholder="MM/YY">
+      <!-- Payment Form -->
+      <div class="col-lg-6">
+        <div class="card card-shadow">
+          <div class="card-header bg-white">
+            <h5 class="mb-0"><i class="fa-solid fa-credit-card me-2"></i>Payment Details</h5>
           </div>
+          <div class="card-body">
+            <form id="paymentForm" novalidate>
+              <!-- Campo nascosto con l’ID della transazione (modifica il value quando serve) -->
+              <input type="hidden" name="transactionId" value="1">
 
-          <div class="mb-3">
-              <label for="cvv" class="form-label">CVV</label>
-              <input type="text" id="cvv" name="cvv" class="form-control" required placeholder="123">
+              <div class="mb-3">
+                <label class="form-label">Cardholder's Name</label>
+                <input type="text" name="cardholderName" class="form-control" required />
+                <div class="invalid-feedback">Inserisci il nome del titolare.</div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Card Number</label>
+                <input type="text" name="cardNumber" class="form-control cc-input" inputmode="numeric"
+                       placeholder="1234 5678 9012 3456" maxlength="19" required />
+                <div class="invalid-feedback">Inserisci un numero carta valido.</div>
+              </div>
+
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <label class="form-label">Expiration Date</label>
+                  <input type="text" name="expirationDate" class="form-control" placeholder="MM/YY" maxlength="5" required />
+                  <div class="invalid-feedback">Formato MM/YY.</div>
+                </div>
+                <div class="col-6 mb-3">
+                  <label class="form-label">CVV</label>
+                  <input type="text" name="cvv" class="form-control" inputmode="numeric" maxlength="4" placeholder="123" required />
+                  <div class="invalid-feedback">CVV non valido.</div>
+                </div>
+              </div>
+
+              <button id="payBtn" type="submit" class="btn btn-primary w-100">
+                <span class="me-2"><i class="fa-solid fa-lock"></i></span>Confirm Payment
+              </button>
+            </form>
           </div>
+        </div>
+      </div>
+    </div><!-- row -->
+  </div><!-- container -->
 
-          <button type="submit" class="btn btn-primary w-100">Confirm Payment</button>
-      </form>
-  </div>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Scripts Bootstrap -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
-
-  <!-- Script per alert pagamento -->
   <script>
-    document.getElementById("paymentForm").addEventListener("submit", async function(e) {
-      e.preventDefault(); // blocca l'invio normale del form
+    // --- Utility per mostrare alert Bootstrap nel div #alerts ---
+    function showAlert(type, text) {
+      // type: 'success', 'danger', 'warning', 'info'
+      const wrap = document.getElementById('alerts');
+      wrap.innerHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+          ${text}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `;
+    }
 
-      const url = this.getAttribute("action"); // prende l'URL del th:action
+    // --- Inizializzazione dati "finti" della transazione nella card di destra ---
+    // In un’app reale potresti fare una GET /transactions/{id} e popolare questi campi.
+    (function presetTransactionDetails() {
+      const txId = document.querySelector('input[name="transactionId"]').value;
+      document.getElementById('tx-id').textContent     = txId;
+      document.getElementById('tx-player').textContent = 'Player Name';
+      document.getElementById('tx-game').textContent   = 'Game Title';
+      document.getElementById('tx-price').textContent  = '—';
+      document.getElementById('tx-date').textContent   = new Date().toLocaleString();
+    })();
+
+    // --- Gestione invio form e chiamata al backend ---
+    document.getElementById("paymentForm").addEventListener("submit", async function (e) {
+      e.preventDefault(); // Evita il refresh della pagina
+
+      // 1) Prendo l’ID transazione dal campo hidden del form (più flessibile che hardcodarlo)
+      const transactionId = this.querySelector('input[name="transactionId"]').value;
+
+      // 2) Raccolgo i dati in FormData per invio come form-body (compatibile con @RequestParam)
       const formData = new FormData(this);
 
+      // 3) Costruisco l’URL del tuo endpoint Spring Boot
+      const url = `http://localhost:8080/transactions/pay/${transactionId}`;
+
       try {
+        // 4) Chiamata POST verso il backend (controller TransactionController.processPayment)
         const response = await fetch(url, {
           method: "POST",
           body: formData
+          // Se usi Spring Security con CSRF attivo, aggiungi qui gli header X-CSRF-TOKEN
         });
 
-        const message = await response.text(); // risposta del backend
-        alert(message); // mostro popup con l’esito
-
-      } catch (error) {
-        alert("Errore durante il pagamento. Riprova.");
+        // 5) Gestione esito
+        if (response.ok) {
+          const message = await response.text(); // il controller ritorna una String
+          showAlert('success', message);         // alert verde con messaggio del server
+          // volendo anche alert semplice del browser:
+          // alert(message);
+        } else {
+          // Errore HTTP (es. 400/500): mostro status
+          showAlert('danger', `Errore dal server: ${response.status}`);
+        }
+      } catch (err) {
+        // Errore di rete o CORS
+        showAlert('danger', 'Errore di connessione al backend');
       }
     });
   </script>
