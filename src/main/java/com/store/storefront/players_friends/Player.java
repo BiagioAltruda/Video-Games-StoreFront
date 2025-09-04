@@ -4,9 +4,11 @@ import java.sql.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
 @Entity
+@Table(name = "players")
 public class Player {
 	
 	//Attributi classe players

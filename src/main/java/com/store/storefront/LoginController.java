@@ -20,10 +20,9 @@ public class LoginController {
     @ResponseBody
     @PostMapping("/register")
     public String register(@RequestParam String name, @RequestParam String password) {
-        String otherName = service.findByName(name).getName();
-        if (otherName != null)
-            return "A player with the same name already exists";
 
+        if (service.findByName(name) != null)
+            return "A player with the same name already exists";
         Date date = new Date(); //get current timestamp
         long time = date.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //format it in that pattern
@@ -51,7 +50,7 @@ public class LoginController {
     }
     @GetMapping("/profile")
     public ResponseEntity<Player> profile(@RequestHeader(value = "X-Token", required = false) String token, @RequestBody Player player) {
-        if (player.getToken()!=null && token != null)
+        if (token != null)
             return ResponseEntity.ok(player);
         return ResponseEntity.status(404).build();
     }
