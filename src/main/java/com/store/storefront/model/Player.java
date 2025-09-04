@@ -1,4 +1,4 @@
-package com.store.storefront.players_friends;
+package com.store.storefront.model;
 
 import java.sql.Date;
 

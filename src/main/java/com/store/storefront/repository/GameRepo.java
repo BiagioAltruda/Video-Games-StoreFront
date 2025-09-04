@@ -1,5 +1,6 @@
-package com.store.storefront.game;
+package com.store.storefront.repository;
 
+import com.store.storefront.model.Game;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GameRepo extends JpaRepository<Game, Integer> {

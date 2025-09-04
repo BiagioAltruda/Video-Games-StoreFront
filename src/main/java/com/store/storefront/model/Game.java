@@ -1,8 +1,7 @@
-package com.store.storefront.game;
+package com.store.storefront.model;
 
 import jakarta.persistence.*;
 
-import java.sql.Blob;
 import java.sql.Date;
 @Entity
 @Table(name = "games_test")

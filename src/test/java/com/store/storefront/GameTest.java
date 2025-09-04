@@ -1,4 +1,4 @@
-package com.store.storefront.game;
+package com.store.storefront;
 
 import org.junit.jupiter.api.Test;
 

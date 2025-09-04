@@ -1,7 +1,9 @@
-package com.store.storefront.players_friends;
+package com.store.storefront.controller;
 
 import java.util.List;
 
+import com.store.storefront.model.Player;
+import com.store.storefront.repository.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/player")
 public class PlayerController {
 		
-	//DIPENDENCY INJECTION
+	//DEPENDENCY INJECTION
 	private final PlayerService service;
 	//Crea un'istanza di "LibroService" Classe dove all'interno ho i metodi 
 	
@@ -29,12 +31,12 @@ public class PlayerController {
 		return service.getAll();
 	}
 	
-	@PostMapping
+	@PostMapping("/new")
 	public Player newPlayer(@RequestBody Player account) {
 		return service.newAccount(account);
 	}
 	
-	@PostMapping
+	@PostMapping("/update")
 	public Player updatePlayer(@RequestBody Player p) {
 		return service.updateAccount(p);
 	}
@@ -43,11 +45,9 @@ public class PlayerController {
 	public void deleteAccount (@PathVariable int id) {
 		service.deleteAccount(id);
 	}
+<<<<<<< HEAD:src/main/java/com/store/storefront/players_friends/PlayerController.java
 	
-	@GetMapping("/player/{nome}/{password}")
-	public Player findByNameAndPassword(
-			@PathVariable String name,	
-			@PathVariable String password) {
-		return service.findByNameAndPassword(name, password);
-	}
+=======
+
+>>>>>>> 76e71d9b35c35acfeacdd3f7195e11b3902d8c58:src/main/java/com/store/storefront/controller/PlayerController.java
 }
