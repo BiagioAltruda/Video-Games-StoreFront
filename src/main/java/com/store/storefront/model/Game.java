@@ -29,6 +29,7 @@ public class Game {
     private String genre;
     @Column(name = "release_date")
     private Date releaseDate;
+    @Column(length = 10000)
     private String description;
     private Integer rating;
     @Column(name = "banner")
