@@ -1,0 +1,87 @@
+package com.store.storefront.trending;  //il mio amato model <3
+
+import java.sql.Date;
+
+import org.springframework.data.annotation.Id;
+
+import jakarta.persistence.*;
+import com.store.storefront.model.Game;
+import com.store.storefront.model.Category;
+
+@Entity
+@Table (name="trending") //connettiamo alla tab del db
+
+public class Trending {
+
+    @jakarta.persistence.Id
+    @Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment DB
+	
+	private Integer id;
+	
+	
+	@ManyToOne
+	@JoinColumn(name="id_games")
+	private Game game;
+	
+	@ManyToOne
+	@JoinColumn(name="id")
+	private Category categories;
+	
+	@Column (name="period")
+	private Date period;
+	
+	public Trending () {
+		//costruttore vuoto
+	}
+       
+	
+	//costruttore pieno
+	public Trending(Integer id, Game game, Category categories, Date period) {
+		this.id = id;
+		this.game = game;
+		this.categories = categories;
+		this.period = period;
+	}
+
+//Getters & Setters
+	public Integer getId() {
+		return id;
+	}
+
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+
+	public Game getGame() {
+		return game;
+	}
+
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+
+
+	public Category getCategories() {
+		return categories;
+	}
+
+
+	public void setCategories(Category categories) {
+		this.categories = categories;
+	}
+
+
+	public Date getPeriod() {
+		return period;
+	}
+
+
+	public void setPeriod(Date period) {
+		this.period = period;
+	}
+
+}
