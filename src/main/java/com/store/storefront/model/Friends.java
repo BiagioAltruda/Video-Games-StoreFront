@@ -1,4 +1,4 @@
-package com.store.storefront.players_friends;
+package com.store.storefront.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -18,7 +18,9 @@ public class Friends {
 		this.player_1=player_1;
 		this.player_2=player_2;
 	}
-	
+
+	public Friends() {}
+
 	//Metodi Get e Setter
 	public int getId() {
 		return id;
