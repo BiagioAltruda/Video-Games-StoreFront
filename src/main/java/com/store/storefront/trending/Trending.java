@@ -1,6 +1,7 @@
 package com.store.storefront.trending;  //il mio amato model <3
 
 import java.sql.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 
@@ -16,17 +17,17 @@ public class Trending {
     @jakarta.persistence.Id
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment DB
-	
+	@Column(insertable=false, updatable=false)
 	private Integer id;
 	
 	
-	@ManyToOne
-	@JoinColumn(name="id_games")
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "game_id", nullable = false)
 	private Game game;
 	
-	@ManyToOne
-	@JoinColumn(name="id")
-	private Category categories;
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "category_id", nullable = false)
+	private Category category;
 	
 	@Column (name="period")
 	private Date period;
@@ -40,7 +41,7 @@ public class Trending {
 	public Trending(Integer id, Game game, Category categories, Date period) {
 		this.id = id;
 		this.game = game;
-		this.categories = categories;
+		this.category = categories;
 		this.period = period;
 	}
 
@@ -65,13 +66,13 @@ public class Trending {
 	}
 
 
-	public Category getCategories() {
-		return categories;
+	public Category getCategory() {
+		return category;
 	}
 
 
-	public void setCategories(Category categories) {
-		this.categories = categories;
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 
