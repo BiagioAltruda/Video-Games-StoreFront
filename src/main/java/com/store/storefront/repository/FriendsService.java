@@ -1,7 +1,8 @@
-package com.store.storefront.players_friends;
+package com.store.storefront.repository;
 
 import java.util.List;
 
+import com.store.storefront.model.Friends;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

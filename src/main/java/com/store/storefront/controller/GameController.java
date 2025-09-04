@@ -1,5 +1,7 @@
-package com.store.storefront.game;
+package com.store.storefront.controller;
 
+import com.store.storefront.repository.GameService;
+import com.store.storefront.model.Game;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

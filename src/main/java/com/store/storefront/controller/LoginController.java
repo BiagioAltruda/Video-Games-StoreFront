@@ -1,7 +1,7 @@
-package com.store.storefront;
+package com.store.storefront.controller;
 
-import com.store.storefront.players_friends.Player;
-import com.store.storefront.players_friends.PlayerService;
+import com.store.storefront.model.Player;
+import com.store.storefront.repository.PlayerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
-@RequestMapping("/smoke/")
+@RequestMapping("/smoke/accounts") // Endpoint for account and login management
 public class LoginController {
     PlayerService service;
     public LoginController(PlayerService service) {

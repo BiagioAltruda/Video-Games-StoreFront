@@ -1,8 +1,8 @@
-package com.store.storefront.Transaction;
+package com.store.storefront.repository;
 
 import java.util.List;
-import java.util.Optional;
 
+import com.store.storefront.model.Transaction;
 import org.springframework.stereotype.Service;
 
 @Service

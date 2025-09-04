@@ -1,4 +1,4 @@
-package com.store.storefront.Transaction;
+package com.store.storefront.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,10 +1,7 @@
-package com.store.storefront.Transaction;
+package com.store.storefront.model;
 
 
 import java.time.LocalDateTime;
-
-import com.store.storefront.game.Game;
-import com.store.storefront.players_friends.Player;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

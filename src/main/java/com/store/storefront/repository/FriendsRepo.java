@@ -1,5 +1,6 @@
-package com.store.storefront.players_friends;
+package com.store.storefront.repository;
 
+import com.store.storefront.model.Friends;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
