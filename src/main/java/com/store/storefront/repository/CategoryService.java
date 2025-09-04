@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class CategoryService {
 
-    private CategoryRepo repo;
+    private final CategoryRepo repo;
 
     public CategoryService(CategoryRepo repo) {
         this.repo = repo;

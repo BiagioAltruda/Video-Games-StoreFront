@@ -2,6 +2,8 @@ package com.store.storefront.controller;
 
 import java.util.List;
 
+import com.store.storefront.model.Transaction;
+import com.store.storefront.repository.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

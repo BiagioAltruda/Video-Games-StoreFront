@@ -2,6 +2,7 @@ package com.store.storefront.repository;
 
 import java.util.List;
 
+import com.store.storefront.model.Transaction;
 import org.apache.catalina.startup.Tomcat.ExistingStandardWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

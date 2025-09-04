@@ -6,13 +6,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class GameService{
+public class GameService{ //Service level class
 
     private final GameRepo repo;
     public GameService(GameRepo repo) {
         this.repo = repo;
-    }
+    } //Repository injection with constructor
 
+    //Basic CRUD methods for saving, searching, updating and deleting
     public Game save(Game game){
         return repo.save(game);
     }
@@ -33,5 +34,4 @@ public class GameService{
         else
             return "Game not found";
     }
-
 }
