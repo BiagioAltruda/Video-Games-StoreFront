@@ -71,12 +71,12 @@ public class Transaction {
 		this.game = game;
 	}
 
-	public double getPricePayed() {
+	public double getPricePaid() {
 		return pricePaid;
 	}
 
-	public void setPricePayed(double pricePayed) {
-		this.pricePaid = pricePayed;
+	public void setPricePaid(double pricePaid) {
+		this.pricePaid = pricePaid;
 	}
 
 	public LocalDateTime getData() {
