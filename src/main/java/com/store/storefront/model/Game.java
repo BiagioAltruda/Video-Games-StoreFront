@@ -1,20 +1,28 @@
 package com.store.storefront.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 import java.sql.Date;
 @Entity
-@Table(name = "games_test")
+@Table(name = "games_test") //Table responsible for containing the whole game catalogue
 public class Game {
 
-    @Id
-    @GeneratedValue
+    @Id             //field with basic validation, not validated field are optional for game creation's sake
+    @GeneratedValue //can be added later with no issue
     @Column(name = "appid")
+    @Min(1)
+    @Positive(message = "id has to be a positive number")
     private Integer id;
-
+    @NotBlank(message = "game name cannot be blank")
     private String name;
+    @NotBlank(message = "developer name cannot be blank")
     private String developer;
+    @Positive(message = "price cannot be negative")
     private Double price;
+    @NotBlank(message = "genre cannot be blank")
     private String genre;
     @Column(name = "release_date")
     private Date releaseDate;
