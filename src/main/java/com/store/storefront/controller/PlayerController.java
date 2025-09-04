@@ -45,9 +45,5 @@ public class PlayerController {
 	public void deleteAccount (@PathVariable int id) {
 		service.deleteAccount(id);
 	}
-<<<<<<< HEAD:src/main/java/com/store/storefront/players_friends/PlayerController.java
-	
-=======
 
->>>>>>> 76e71d9b35c35acfeacdd3f7195e11b3902d8c58:src/main/java/com/store/storefront/controller/PlayerController.java
 }
