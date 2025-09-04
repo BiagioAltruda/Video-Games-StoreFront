@@ -1,6 +1,13 @@
 package com.store.storefront.players_friends;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,5 +24,30 @@ public class PlayerController {
 		this.service = service;
 	}
 	
+	@GetMapping
+	public List<Player> getAll(){
+		return service.getAll();
+	}
 	
+	@PostMapping
+	public Player newPlayer(@RequestBody Player account) {
+		return service.newAccount(account);
+	}
+	
+	@PostMapping
+	public Player updatePlayer(@RequestBody Player p) {
+		return service.updateAccount(p);
+	}
+	
+	@DeleteMapping("/{id}")
+	public void deleteAccount (@PathVariable int id) {
+		service.deleteAccount(id);
+	}
+	
+	@GetMapping("/player/{nome}/{password}")
+	public Player findByNameAndPassword(
+			@PathVariable String name,	
+			@PathVariable String password) {
+		return service.findByNameAndPassword(name, password);
+	}
 }
