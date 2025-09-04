@@ -5,7 +5,7 @@ import java.sql.Date;
 import org.junit.experimental.categories.Categories;
 import org.springframework.data.annotation.Id;
 
-import com.store.storefront.game.Game;
+import com.store.storefront.model.Game;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

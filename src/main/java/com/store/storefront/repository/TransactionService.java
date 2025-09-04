@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.catalina.startup.Tomcat.ExistingStandardWrapper;
 import org.springframework.stereotype.Service;
 
+import com.store.storefront.model.Transaction;
+
 @Service
 public class TransactionService {
 

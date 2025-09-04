@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.store.storefront.model.Transaction;
+import com.store.storefront.repository.TransactionService;
+
 @RestController
 @RequestMapping("/transaction")
 public class TransactionController {
