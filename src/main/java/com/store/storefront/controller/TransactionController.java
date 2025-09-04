@@ -5,53 +5,56 @@ import java.util.List;
 import com.store.storefront.model.Transaction;
 import com.store.storefront.repository.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import com.store.storefront.model.Transaction;
+import com.store.storefront.repository.TransactionService;
 
 @RestController
-@RequestMapping("/transaction")
+@RequestMapping("/transactions")
 public class TransactionController {
 
-	@Autowired
-	private TransactionService transactionService;
+    @Autowired
+    private TransactionService transactionService;
 
-	// restituisce tutte le transazioni
-	@GetMapping
-	public List<Transaction> getAllTransaction() {
-		return transactionService.getAllTransactions();
+    // restituisce tutte le transazioni
+    @GetMapping
+    public List<Transaction> getAllTransaction() {
+        return transactionService.getAllTransactions();
+    }
 
-	}
-//restituito solo id della transazione
-	@GetMapping("/{id}")
-	public Transaction getIdTransaction(@PathVariable Long id) {
+    // restituisce transazione per id
+    @GetMapping("/{id}")
+    public Transaction getTransactionById(@PathVariable Long id) {
+        return transactionService.getTransactionById(id);
+    }
 
-		return transactionService.getIdTransactions(id);
-	}
-//creazione della transazione
-	@PostMapping
-	public Transaction createTransaction(@RequestBody Transaction transaction) {
+    // crea transazione
+    @PostMapping
+    public Transaction createTransaction(@RequestBody Transaction transaction) {
+        return transactionService.createTransaction(transaction);
+    }
 
-		return transactionService.createTransaction(transaction);
+    // aggiorna transazione
+    @PutMapping("/{id}")
+    public Transaction updateTransaction(@PathVariable Long id, @RequestBody Transaction transaction) {
+        return transactionService.updateTransaction(id, transaction);
+    }
 
-	}
-//aggiornamento della transazione
-	@PutMapping("/{id}")
-	public Transaction updateTransaction(@PathVariable Long id, @RequestBody Transaction transaction) {
-		
-		return transactionService.updateTransaction(id, transaction);
+    // elimina transazione
+    @DeleteMapping("/{id}")
+    public void deleteTransaction(@PathVariable Long id) {
+        transactionService.deleteTransaction(id);
+    }
 
-	}
-	//eliminazione della transazione
-	@DeleteMapping("/{id}")
-	public void  deleteTransaction(@PathVariable Long id) {
-		
-	 transactionService.deleteTransaction(id);
-	}
-
+    // simulazione di pagamento (mock)
+    @PostMapping("/pay/{id}")
+    public String processPayment(@PathVariable Long id,
+                                 @RequestParam String cardholderName,
+                                 @RequestParam String cardNumber,
+                                 @RequestParam String expirationDate,
+                                 @RequestParam String cvv) {
+        // mock pagamento → qui potresti aggiornare lo stato della transazione se vuoi
+        return "Pagamento riuscito per transazione ID: " + id;
+    }
 }

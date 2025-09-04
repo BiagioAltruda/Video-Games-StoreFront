@@ -1,20 +1,28 @@
 package com.store.storefront.trending;  //il mio amato model <3
 
 import java.sql.Date;
-import java.util.List;
 
-import org.springframework.data.annotation.Id;
-
-import jakarta.persistence.*;
-import com.store.storefront.model.Game;
 import com.store.storefront.model.Category;
+import com.store.storefront.model.Game;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
 
 @Entity
 @Table (name="trending") //connettiamo alla tab del db
 
 public class Trending {
 
-    @jakarta.persistence.Id
+
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment DB
 	@Column(insertable=false, updatable=false)
@@ -25,6 +33,7 @@ public class Trending {
 	@JoinColumn(name = "game_id", nullable = false)
 	private Game game;
 	
+
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "category_id", nullable = false)
 	private Category category;
@@ -38,6 +47,7 @@ public class Trending {
        
 	
 	//costruttore pieno
+
 	public Trending(Integer id, Game game, Category categories, Date period) {
 		this.id = id;
 		this.game = game;
@@ -66,9 +76,11 @@ public class Trending {
 	}
 
 
+
 	public Category getCategory() {
 		return category;
 	}
+
 
 
 	public void setCategory(Category category) {
