@@ -25,4 +25,24 @@
             color: white;
         }
 
-        
+         .carousel-image {
+            height: 500px;
+            object-fit: cover;
+            width: 100%;
+        }
+        .carousel-container {
+            max-width: 900px;
+            margin: 30px auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .btn-reload {
+            margin: 20px auto;
+            display: block;
+        }
+        .loading-text {
+            text-align: center;
+            padding: 50px;
+            color: #6c757d;
+        }
