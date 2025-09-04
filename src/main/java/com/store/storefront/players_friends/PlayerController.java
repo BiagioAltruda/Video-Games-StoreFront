@@ -29,12 +29,12 @@ public class PlayerController {
 		return service.getAll();
 	}
 	
-	@PostMapping
+	@PostMapping("/new")
 	public Player newPlayer(@RequestBody Player account) {
 		return service.newAccount(account);
 	}
 	
-	@PostMapping
+	@PostMapping("/update")
 	public Player updatePlayer(@RequestBody Player p) {
 		return service.updateAccount(p);
 	}
