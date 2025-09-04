@@ -35,5 +35,4 @@ build/
 ### Enviromental Variables ###
 .env
 
-
 .DS_Store

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/friends")
 public class FriendsController {
 
-	// DIPENDENCY INJECTION
+	// DEPENDENCY INJECTION
 	private final FriendsService service;
 	// Crea un'istanza di "LibroService" Classe dove all'interno ho i metodi
 
