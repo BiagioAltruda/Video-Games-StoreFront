@@ -34,8 +34,13 @@ public class Game {
     private Integer rating;
     @Column(name = "banner")
     private String bannerPath;
+    //One to many relationship to the trending table
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Trending> trending;
+    //Many to One relationship to the players table
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "appid", nullable = false)
+    private Player player;
 
     public void setId(Integer id) {
         this.id = id;
@@ -115,5 +120,13 @@ public class Game {
 
     public void setTrending(List<Trending> trending) {
         this.trending = trending;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

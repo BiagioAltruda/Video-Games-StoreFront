@@ -19,7 +19,6 @@ public class PlayerController {
 		
 	//DEPENDENCY INJECTION
 	private final PlayerService service;
-	//Crea un'istanza di "LibroService" Classe dove all'interno ho i metodi 
 	
 	@Autowired
 	public PlayerController (PlayerService service) {
