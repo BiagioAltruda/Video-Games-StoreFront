@@ -16,7 +16,9 @@ public class Transaction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment DB
 	@Positive(message = "id cannot be negative")
 	private Long id;
-	
+
+	//The following 2 are the foreign keys for the games-players relation with extra attributes
+	//Using the transaction table as the middle man
 	@ManyToOne
 	@JoinColumn(name = "player_id")
 	private Player player;
@@ -24,6 +26,7 @@ public class Transaction {
 	@ManyToOne
 	@JoinColumn(name = "game_id")
 	private Game game;
+
 
 	@Column(name = "price_paid")
 	@PositiveOrZero(message = "Cannot pay a negative amount")

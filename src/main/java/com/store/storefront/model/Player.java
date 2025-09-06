@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.store.storefront.trending.Trending;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,9 +24,6 @@ public class Player { //Entity responsible for storing the player data
 	private String name;
 	@NotBlank(message = "password cannot be blank")
 	private String password;
-	//One to Many side with players table
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "players")
-	private List<Game> games;
 
 
 	@PositiveOrZero(message = "player level cannot be negative")
@@ -50,14 +48,15 @@ public class Player { //Entity responsible for storing the player data
 	@ManyToMany(mappedBy = "friends") //bidirectional relation with mappedby
 	private Set<Player> friendOf = new HashSet<>();
 
-
+	//One-to-Many relationship to the games table using the transactions table
+	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Transaction> transactions = new HashSet<>();
 
 	//Player class constructors
-	public Player(int id, String name, String password, List<Game> games, int playerLevel, Date creation_date, String language) {
+	public Player(int id, String name, String password, int playerLevel, Date creation_date, String language) {
 		this.id=id;
 		this.name=name;
 		this.password=password;
-		this.games=games;
 		this.playerLevel =playerLevel;
 		this.creationDate =creation_date;
 		this.language = language;
@@ -93,14 +92,6 @@ public class Player { //Entity responsible for storing the player data
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public List<Game> getGames() {
-		return games;
-	}
-
-	public void setGames(List<Game> games) {
-		this.games = games;
 	}
 
 	public int getPlayerLevel() {
@@ -149,5 +140,13 @@ public class Player { //Entity responsible for storing the player data
 
 	public void setFriendOf(Set<Player> friendOf) {
 		this.friendOf = friendOf;
+	}
+
+	public Set<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public void setTransactions(Set<Transaction> transactions) {
+		this.transactions = transactions;
 	}
 }

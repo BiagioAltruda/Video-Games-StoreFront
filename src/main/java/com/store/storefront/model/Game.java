@@ -7,7 +7,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "games_test") //Table responsible for containing the whole game catalogue
@@ -39,12 +41,9 @@ public class Game {
     private List<Trending> trending;
 
 
-    //Many-to-One relationship to the players table
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "appid", nullable = false)
-    private Player players;
-
-
+    //One-to-Many relationship to the players table using the transactions table
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Transaction> transactions = new HashSet<>();
 
 
     public void setId(Integer id) {
@@ -127,11 +126,11 @@ public class Game {
         this.trending = trending;
     }
 
-    public Player getPlayers() {
-        return players;
+    public Set<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setPlayers(Player player) {
-        this.players = player;
+    public void setTransactions(Set<Transaction> transactions) {
+        this.transactions = transactions;
     }
 }
