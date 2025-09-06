@@ -50,6 +50,9 @@ public class LoginController {
         p.setToken(token);
         return ResponseEntity.ok(p);
     }
+
+    //another endpoint
+
     @GetMapping("/profile")
     public ResponseEntity<Player> profile(@RequestHeader(value = "X-Token", required = false) String token, @Validated @RequestBody Player player) {
         if (token != null)
