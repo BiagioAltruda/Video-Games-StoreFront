@@ -14,7 +14,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 
 @Entity
 @Table(name = "players")
-public class Player { //Entity responsible for storing the player data
+public class Player implements Reviewable{ //Entity responsible for storing the player data
 	
 	//Attributi classe players
 	@Id
@@ -52,14 +52,19 @@ public class Player { //Entity responsible for storing the player data
 	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Transaction> transactions = new HashSet<>();
 
+	//One-To-Many side of review relation
+	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Review> reviews = new HashSet<>();
+
 	//Player class constructors
-	public Player(int id, String name, String password, int playerLevel, Date creation_date, String language) {
+	public Player(int id, String name, String password, int playerLevel, Date creation_date, String language, Set<Review> reviews) {
 		this.id=id;
 		this.name=name;
 		this.password=password;
 		this.playerLevel =playerLevel;
 		this.creationDate =creation_date;
 		this.language = language;
+		this.reviews = reviews;
 	}
 
 	public Player(String name, String password){
@@ -68,6 +73,21 @@ public class Player { //Entity responsible for storing the player data
 	}
 	public Player(){}
 
+
+	@Override
+	public void addReview(Review review) {
+		this.reviews.add(review);
+	}
+
+	@Override
+	public String removeReview(Review review) {
+		if(this.reviews.contains(review)) {
+			this.reviews.remove(review);
+			return "200";
+		}
+		else
+			return "404";
+	}
 
 	//Getters and setters
 	public int getId() {

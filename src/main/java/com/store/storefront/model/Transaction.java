@@ -19,7 +19,7 @@ public class Transaction {
 
 	//The following 2 are the foreign keys for the games-players relation with extra attributes
 	//Using the transaction table as the middle man
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "player_id")
 	private Player player;
 

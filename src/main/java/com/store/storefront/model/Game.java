@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "games_test") //Table responsible for containing the whole game catalogue
-public class Game {
+public class Game implements Reviewable{
 
     @Id             //field with basic validation, not validated field are optional for game creation's sake
     @GeneratedValue //can be added later with no issue
@@ -45,7 +45,40 @@ public class Game {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Transaction> transactions = new HashSet<>();
 
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Review> reviews = new HashSet<>();
 
+    public Game() {}
+
+    public Game(Integer id, String name, String developer, Double price, String genre, Date releaseDate, String description, Integer rating, String bannerPath, List<Trending> trending, Set<Transaction> transactions, Set<Review> reviews) {
+        this.id = id;
+        this.name = name;
+        this.developer = developer;
+        this.price = price;
+        this.genre = genre;
+        this.releaseDate = releaseDate;
+        this.description = description;
+        this.rating = rating;
+        this.bannerPath = bannerPath;
+        this.trending = trending;
+        this.transactions = transactions;
+        this.reviews = reviews;
+    }
+
+    @Override
+    public void addReview(Review review) {
+        this.reviews.add(review);
+    }
+
+    @Override
+    public String removeReview(Review review) {
+        if(this.reviews.contains(review)) {
+            this.reviews.remove(review);
+            return "200";
+        }
+        else
+            return "404";
+    }
     public void setId(Integer id) {
         this.id = id;
     }
@@ -133,4 +166,14 @@ public class Game {
     public void setTransactions(Set<Transaction> transactions) {
         this.transactions = transactions;
     }
+
+    public Set<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+
 }
