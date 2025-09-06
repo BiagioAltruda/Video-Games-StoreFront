@@ -5,6 +5,7 @@ import java.util.List;
 import com.store.storefront.model.Transaction;
 import com.store.storefront.repository.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.store.storefront.model.Transaction;
@@ -35,13 +36,13 @@ public class TransactionController {
 
     // crea transazione
     @PostMapping
-    public Transaction createTransaction(@RequestBody Transaction transaction) {
+    public Transaction createTransaction(@Validated @RequestBody Transaction transaction) {
         return transactionService.createTransaction(transaction);
     }
 
     // aggiorna transazione
     @PutMapping("/{id}")
-    public Transaction updateTransaction(@PathVariable Long id, @RequestBody Transaction transaction) {
+    public Transaction updateTransaction(@PathVariable Long id, @Validated @RequestBody Transaction transaction) {
         return transactionService.updateTransaction(id, transaction);
     }
 

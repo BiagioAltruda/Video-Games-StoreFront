@@ -4,6 +4,7 @@ import com.store.storefront.model.Player;
 import com.store.storefront.repository.PlayerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -50,13 +51,13 @@ public class LoginController {
         return ResponseEntity.ok(p);
     }
     @GetMapping("/profile")
-    public ResponseEntity<Player> profile(@RequestHeader(value = "X-Token", required = false) String token, @RequestBody Player player) {
+    public ResponseEntity<Player> profile(@RequestHeader(value = "X-Token", required = false) String token, @Validated @RequestBody Player player) {
         if (token != null)
             return ResponseEntity.ok(player);
         return ResponseEntity.status(404).build();
     }
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestHeader(value = "X-Token", required = false) @RequestBody Player player) {
+    public ResponseEntity<String> logout(@RequestHeader(value = "X-Token", required = false) @Validated @RequestBody Player player) {
         player.setToken(null);
         return ResponseEntity.status(200).build();
     }

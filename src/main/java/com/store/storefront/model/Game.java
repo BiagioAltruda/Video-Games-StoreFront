@@ -15,7 +15,7 @@ public class Game {
 
     @Id             //field with basic validation, not validated field are optional for game creation's sake
     @GeneratedValue //can be added later with no issue
-    @Column(name = "appid")
+    @Column(insertable = false,updatable = false, name = "appid")
     @Min(1)
     @Positive(message = "id has to be a positive number")
     private Integer id;
@@ -29,18 +29,23 @@ public class Game {
     private String genre;
     @Column(name = "release_date")
     private Date releaseDate;
-    @Column(length = 10000)
+    @Column(length = 1000)
     private String description;
     private Integer rating;
     @Column(name = "banner")
     private String bannerPath;
-    //One to many relationship to the trending table
+    //One-to-many relationship to the trending table
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Trending> trending;
-    //Many to One relationship to the players table
+
+
+    //Many-to-One relationship to the players table
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "appid", nullable = false)
-    private Player player;
+    private Player players;
+
+
+
 
     public void setId(Integer id) {
         this.id = id;
@@ -122,11 +127,11 @@ public class Game {
         this.trending = trending;
     }
 
-    public Player getPlayer() {
-        return player;
+    public Player getPlayers() {
+        return players;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setPlayers(Player player) {
+        this.players = player;
     }
 }
