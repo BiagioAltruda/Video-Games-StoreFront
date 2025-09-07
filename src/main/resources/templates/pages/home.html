@@ -150,28 +150,11 @@
         </div>
     </div>
 
-    <div class="container my-5">
-        <h1 class="text-center mb-4">Carosello Immagini Random</h1>
-        
-        <div class="carousel-container">
-            <div id="randomCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner" id="carousel-inner">
-                    <!-- Le immagini verranno caricate qui dinamicamente -->
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#randomCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Precedente</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#randomCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Successiva</span>
-                </button>
-            </div>
-        </div>
-        
-        <div class="text-center mt-3">
-            <button class="btn btn-primary" onclick="loadRandomImages()">Carica immagini diverse</button>
-        </div>
+        <div id="image-carousel">
+        <img id="carousel-image" alt="Immagine del carosello">
+        <button class="carousel-btn prev" onclick="navigate(-1)">←</button>
+        <button class="carousel-btn next" onclick="navigate(1)">→</button>
+        <div class="image-counter" id="image-counter">1/0</div>
     </div>
 
     

@@ -7,12 +7,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
-@Entity
-@Table(name = "players")
+@Entity // Indica che questa classe è un'entità persistente
+@Table(name = "players") //dice a quale taballe del database ci si sta collegando
 public class Player {
 	
 	//Attributi classe players
-	@Id
+	@Id // Questo campo è la chiave primaria
 	private int id;
 	private String name;
 	private String password;
@@ -20,8 +20,9 @@ public class Player {
 	private int player_level;
 	private Date creation_date;
 	private String game_language;
-	@Transient
+	@Transient // Questo campo NON viene salvato nel database
 	private String token;
+	
 	//Costruttore classe players
 	public Player(int id, String name, String password, int games, int player_livel, Date creation_date, String game_language) {
 		this.id=id;

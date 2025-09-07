@@ -107,4 +107,92 @@ function register() {
     });
 }
 
+const fs = require('fs');
+const path = require('path');
+
+function getFilesInDirectory() {
+    const directoryPath = 'src/main/resources/images';
+    
+    try {
+        // Legge il contenuto della cartella
+        const files = fs.readdirSync(directoryPath);
+        
+        // Filtra solo i file (esclude le cartelle)
+        const fileArray = files.filter(file => {
+            const filePath = path.join(directoryPath, file);
+            return fs.statSync(filePath).isFile();
+        });
+        
+        return fileArray;
+    } catch (error) {
+        console.error('Errore nella lettura della cartella:', error);
+        return [];
+    }
+}
+
+let currentIndex = 0;
+let imageFiles = [];
+
+function initializeCarousel() {
+    const fileArray = getFilesInDirectory();
+    
+    // Filtra solo file immagine (estensioni comuni)
+    imageFiles = fileArray.filter(file => 
+        /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(file)
+    );
+
+    if (imageFiles.length === 0) {
+        console.error('Nessuna immagine trovata nella cartella');
+        return;
+    }
+
+    createCarousel();
+    showImage(currentIndex);
+}
+
+function createCarousel() {
+    const carousel = document.createElement('div');
+    carousel.id = 'image-carousel';
+    carousel.style.position = 'relative';
+    carousel.style.maxWidth = '800px';
+    carousel.style.margin = '0 auto';
+
+    const imgElement = document.createElement('img');
+    imgElement.id = 'carousel-image';
+    imgElement.style.width = '100%';
+    imgElement.style.height = 'auto';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.textContent = '←';
+    prevBtn.onclick = () => navigate(-1);
+    prevBtn.style.position = 'absolute';
+    prevBtn.style.left = '10px';
+    prevBtn.style.top = '50%';
+
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = '→';
+    nextBtn.onclick = () => navigate(1);
+    nextBtn.style.position = 'absolute';
+    nextBtn.style.right = '10px';
+    nextBtn.style.top = '50%';
+
+    carousel.appendChild(imgElement);
+    carousel.appendChild(prevBtn);
+    carousel.appendChild(nextBtn);
+    
+    document.body.appendChild(carousel);
+}
+
+function showImage(index) {
+    const imagePath = `src/main/resources/images/${imageFiles[index]}`;
+    document.getElementById('carousel-image').src = imagePath;
+}
+
+function navigate(direction) {
+    currentIndex = (currentIndex + direction + imageFiles.length) % imageFiles.length;
+    showImage(currentIndex);
+}
+
+// Inizializza il carosello
+document.addEventListener('DOMContentLoaded', initializeCarousel);
        
