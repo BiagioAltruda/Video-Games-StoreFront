@@ -1,11 +1,10 @@
 package com.store.storefront.model;
 
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 
 @Entity // Indica che questa classe è un'entità persistente
 @Table(name = "players") //dice a quale taballe del database ci si sta collegando
@@ -22,7 +21,24 @@ public class Player {
 	private String game_language;
 	@Transient // Questo campo NON viene salvato nel database
 	private String token;
+<<<<<<< HEAD
 	
+=======
+
+	@ManyToMany
+	@JoinTable(
+			name = "friends", //name of the relationships table
+			joinColumns = @JoinColumn(name = "player_1"), //name THIS entity in the other table
+			inverseJoinColumns = @JoinColumn(name = "player_2") //name of the other entity
+	)
+	private Set<Player> friends = new HashSet<>(); //Set containing friend list
+
+	@ManyToMany(mappedBy = "friends") //bidirectional relation with mappedby
+	private Set<Player> friendOf = new HashSet<>();
+
+
+
+>>>>>>> 38a96f6e6cf3fe55aaff9771ea972fb151bf4301
 	//Costruttore classe players
 	public Player(int id, String name, String password, int games, int player_livel, Date creation_date, String game_language) {
 		this.id=id;
@@ -104,5 +120,21 @@ public class Player {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public Set<Player> getFriends() {
+		return friends;
+	}
+
+	public void setFriends(Set<Player> friends) {
+		this.friends = friends;
+	}
+
+	public Set<Player> getFriendOf() {
+		return friendOf;
+	}
+
+	public void setFriendOf(Set<Player> friendOf) {
+		this.friendOf = friendOf;
 	}
 }

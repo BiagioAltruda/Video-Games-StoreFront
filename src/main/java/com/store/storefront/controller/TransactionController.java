@@ -15,6 +15,7 @@ import com.store.storefront.repository.TransactionService;
 
 @RestController
 @RequestMapping("/transactions")
+@CrossOrigin("*")
 public class TransactionController {
 
     @Autowired

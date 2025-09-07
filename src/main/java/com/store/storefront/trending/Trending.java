@@ -2,13 +2,10 @@ package com.store.storefront.trending;  //il mio amato model <3
 
 import java.sql.Date;
 
-<<<<<<< HEAD
-import org.junit.experimental.categories.Categories;
 import org.springframework.data.annotation.Id;
 
-=======
 import com.store.storefront.model.Category;
->>>>>>> 59d636e1146787f54fbff7d6224b14dbdb274eae
+
 import com.store.storefront.model.Game;
 
 import jakarta.persistence.CascadeType;
@@ -17,11 +14,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-
 
 @Entity
 @Table (name="trending") //connettiamo alla tab del db
@@ -29,7 +24,7 @@ import jakarta.persistence.Table;
 public class Trending {
 
 
-    @Id
+    @jakarta.persistence.Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment DB
 	@Column(insertable=false, updatable=false)
 	private Integer id;

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>profile</title>
+</head>
+<body>
+
+<h1 id="welcome"></h1>
+
+</body>
+
+<script>
+
+    async function getPlayerData(id) {
+        URL = "http://localhost:8080/smoke/api/player/" + id;
+        try{
+            const response =await fetch(URL);
+
+        } catch (e) {
+
+        }
+    }
+
+
+</script>
+</html>
+
