@@ -1,10 +1,15 @@
 package com.store.storefront.repository;
 
 import com.store.storefront.ReviewableEntities;
+import com.store.storefront.model.Player;
 import com.store.storefront.model.Review;
 import com.store.storefront.model.Reviewable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Service
 public class ReviewService{
 
     private final ReviewRepo reviewRepo;
@@ -23,6 +28,25 @@ public class ReviewService{
         if ("PLAYER".equals(review.getReviewedType().getValue()))
             return playerRepo.findById(review.getReviewedId()).orElse(null);
         return null;
+    }
+    public List<Review> getAll(){
+        return reviewRepo.findAll();
+    }
+    public Review getReviewById(int id){
+        return reviewRepo.findById(id).orElse(null);
+    }
+    public void deleteReviewById(int id){
+        reviewRepo.deleteById(id);
+    }
+    public Review updateReview(Review review){
+        return reviewRepo.save(review);
+    }
+    public List<Review> findReviewsByPlayerId(int reviewedId){
+
+        return  reviewRepo.findReviewsByReviewedId(reviewedId);
+    }
+    public List<Review> findReviewsByPlayer(Player  player){
+        return reviewRepo.findReviewsByPlayer(player);
     }
 
 

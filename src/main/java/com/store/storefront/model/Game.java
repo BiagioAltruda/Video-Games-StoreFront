@@ -45,7 +45,7 @@ public class Game implements Reviewable{
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Transaction> transactions = new HashSet<>();
 
-    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "reviewedId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Review> reviews = new HashSet<>();
 
     public Game() {}
@@ -83,7 +83,7 @@ public class Game implements Reviewable{
         this.id = id;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
