@@ -2,8 +2,11 @@ package com.store.storefront.model;  //il mio amato model <3
 
 import java.sql.Date;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 import org.springframework.data.annotation.Id;
 
+<<<<<<< HEAD:src/main/java/com/store/storefront/model/Trending.java
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +16,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+=======
+import com.store.storefront.model.Category;
+
+import com.store.storefront.model.Game;
+>>>>>>> features-review-and-comments:src/main/java/com/store/storefront/trending/Trending.java
 
 @Entity
 @Table (name="trending") //connettiamo alla tab del db
@@ -21,6 +29,7 @@ public class Trending {
 
 
     @jakarta.persistence.Id
+	@Positive(message = "Id cannot be negative")
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment DB
 	@Column(insertable=false, updatable=false)
 	private Integer id;
@@ -36,8 +45,10 @@ public class Trending {
 	private Category category;
 	
 	@Column (name="period")
+	@Temporal(TemporalType.DATE)
 	private Date period;
-	
+
+	//Constructors
 	public Trending () {
 		//costruttore vuoto
 	}

@@ -6,9 +6,13 @@ import com.store.storefront.model.Transaction;
 import com.store.storefront.service.TransactionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+=======
+import org.springframework.validation.annotation.Validated;
+>>>>>>> features-review-and-comments
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,6 +38,7 @@ public class TransactionController {
 		return transactionService.getAllTransactions();
 	}
 
+<<<<<<< HEAD
 	// restituisce transazione per id
 	// Una transazione per id (404 se non esiste)
 	@GetMapping("/transactions/{id}")
@@ -51,6 +56,19 @@ public class TransactionController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(saved); // costruisce una risposta http, la salva,
 																		// controlla lo status
 	}
+=======
+    // crea transazione
+    @PostMapping
+    public Transaction createTransaction(@Validated @RequestBody Transaction transaction) {
+        return transactionService.createTransaction(transaction);
+    }
+
+    // aggiorna transazione
+    @PutMapping("/{id}")
+    public Transaction updateTransaction(@PathVariable Long id, @Validated @RequestBody Transaction transaction) {
+        return transactionService.updateTransaction(id, transaction);
+    }
+>>>>>>> features-review-and-comments
 
 	// Aggiorna (404 se non esiste)
 	@PutMapping("/transactions/{id}")
