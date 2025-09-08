@@ -1,9 +1,10 @@
+// Funzione principale che crea le card
 function showAllGames(games) {
     const gameCards = games
         .map((game) => {
             return `
 <div class="col-md-4 mb-4 cardStyle" data-genre="${game.genre}">
-    <div class="card game-card">
+    <div class="card game-card" onclick="showGameDetails(${game.id})" style="cursor: pointer;">
         <img src="${game.bannerPath ? game.bannerPath : 'https://via.placeholder.com/300x450/51073a/ecf0f1?text=No+Image'}" 
              class="card-img-top" alt="${game.name}"
              onerror="this.src='https://via.placeholder.com/300x450/51073a/ecf0f1?text=Image+Error'">
@@ -12,13 +13,10 @@ function showAllGames(games) {
             <h5 class="card-title">${game.name}</h5>
             <p class="card-developer">${game.developer}</p>
             <p class="card-genre">${game.genre}</p>
-            <p class="card-price">€${game.price ? game.price.toFixed(2) : 'N/D'}</p>
         </div>
         
         <div class="card-body">
-            <p class="card-text">${game.description ? game.description.substring(0, 100) + '...' : 'Nessuna descrizione'}</p>
-            <p class="card-rating">⭐ ${game.rating || 'N/A'}/100</p>
-            <a href="#" class="btn btn-primary" onclick="showGameDetails(${game.id})">Dettagli</a>
+            <p class="card-rating">${game.price ? '€' + game.price.toFixed(2) : 'Gratis'}</p>
         </div>
     </div>
 </div>
@@ -26,21 +24,112 @@ function showAllGames(games) {
         })
         .join("");
 
-    const productContainer = document.getElementById('catalogoCompleto');
+    const productContainer = document.getElementById('cards-container');
     productContainer.innerHTML = `<div class="row">${gameCards}</div>`;
 }
 
-// Funzione per caricare i giochi dal database
+// Funzione che chiama il TUO database
 async function loadGames() {
     try {
         const response = await fetch('http://localhost:8080/smoke/games/all');
+        
+        if (!response.ok) {
+            throw new Error(`Errore HTTP: ${response.status}`);
+        }
+        
         const games = await response.json();
         showAllGames(games);
+        
     } catch (error) {
-        console.error('Errore nel caricamento giochi:', error);
-        // eventuale fallback con dati mock
+        console.error('Errore nel caricamento dal database:', error);
+        // Mostra un messaggio di errore all'utente
+        const container = document.getElementById('cards-container');
+        container.innerHTML = `
+            <div class="col-12 text-center">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Impossibile caricare i giochi. Riprova più tardi.
+                </div>
+            </div>
+        `;
     }
 }
 
-// Chiamata quando la pagina è caricata
+// Avvia il caricamento quando la pagina è pronta
 document.addEventListener('DOMContentLoaded', loadGames);
+
+function showGameDetails(gameId) {
+    console.log('Apri dettagli gioco ID:', gameId);
+    // Reindirizza alla pagina dettagli
+    window.location.href = `dettagli.html?id=${gameId}`;
+    // Oppure mostra un modal con i dettagli
+}
+
+//metodo per mostrare i dettagli del gioco
+function showGameDetails(gameId) {
+    const url = `http://localhost:8080/smoke/games/${gameId}`;
+
+    fetch(url)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Gioco non trovato');
+            }
+            return response.json();
+        })
+        .then((game) => {
+            const gameDetails = `
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="${game.bannerPath || 'https://via.placeholder.com/500x700/51073a/ecf0f1?text=No+Image'}" 
+                             class="img-fluid rounded" alt="${game.name}" 
+                             onerror="this.src='https://via.placeholder.com/500x700/51073a/ecf0f1?text=Image+Error'">
+                    </div>
+                    <div class="col-md-6">
+                        <h2 class="text-white">${game.name}</h2>
+                        <p class="text-light"><strong>Sviluppatore:</strong> ${game.developer}</p>
+                        <p class="text-light"><strong>Genere:</strong> ${game.genre}</p>
+                        <p class="text-light"><strong>Prezzo:</strong> ${game.price ? '€' + game.price.toFixed(2) : 'Gratis'}</p>
+                        <p class="text-light"><strong>Pegi:</strong> + ${game.rating || 'N/A'}</p>
+                        <p class="text-light"><strong>Data di rilascio:</strong> ${game.releaseDate || 'N/D'}</p>
+                        
+                        <div class="mt-4">
+                            <h5 class="text-white">Descrizione</h5>
+                            <p class="text-light">${game.description || 'Nessuna descrizione disponibile'}</p>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <button class="btn btn-primary me-2">
+                                <i class="fas fa-shopping-cart me-1"></i>Aggiungi al Carrello
+                            </button>
+                            <button class="btn btn-secondary" onclick="closeGameDetails()">
+                                <i class="fas fa-arrow-left me-1"></i>Torna indietro
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+
+            document.getElementById('cards-container').innerHTML = gameDetails;
+        })
+        .catch((error) => {
+            console.error("Errore durante il recupero dei dettagli", error);
+            document.getElementById('cards-container').innerHTML = `
+                <div class="col-12 text-center">
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        Errore nel caricamento dei dettagli: ${error.message}
+                    </div>
+                    <button class="btn btn-secondary" onclick="closeGameDetails()">
+                        Torna alla lista
+                    </button>
+                </div>
+            `;
+        });
+}
+
+// funzione per tornare alla lista giochi
+function closeGameDetails() {
+    loadGames(); // Richiama la funzione che carica tutti i giochi
+}
