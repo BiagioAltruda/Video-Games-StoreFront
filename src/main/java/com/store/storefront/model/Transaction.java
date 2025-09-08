@@ -3,10 +3,22 @@ package com.store.storefront.model;
 
 import java.time.LocalDateTime;
 
+<<<<<<< HEAD
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+=======
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+>>>>>>> 0bc71eb5c1dbfb5f0142508c09edc6726afbcd61
 
 @Entity
 @Table(name = "transactions") // nome della tabella nel database
@@ -16,17 +28,24 @@ public class Transaction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment DB
 	@Positive(message = "id cannot be negative")
 	private Long id;
+<<<<<<< HEAD
 
 	//The following 2 are the foreign keys for the games-players relation with extra attributes
 	//Using the transaction table as the middle man
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "player_id")
+=======
+	
+	@ManyToOne
+	@JoinColumn(name = "player_id", nullable = false)
+>>>>>>> 0bc71eb5c1dbfb5f0142508c09edc6726afbcd61
 	private Player player;
 
 	@ManyToOne
-	@JoinColumn(name = "game_id")
+	@JoinColumn(name = "game_id",nullable = false)
 	private Game game;
 
+<<<<<<< HEAD
 
 	@Column(name = "price_paid")
 	@PositiveOrZero(message = "Cannot pay a negative amount")
@@ -35,6 +54,12 @@ public class Transaction {
 	@Column(name="transaction_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	@NotNull(message = "Account creation date cannot be null")
+=======
+	@Column(name = "price_paid",nullable = false)
+	private double pricePaid;
+
+	@Column(name="transaction_date",nullable = false)
+>>>>>>> 0bc71eb5c1dbfb5f0142508c09edc6726afbcd61
 	private LocalDateTime date;
 
 	//Constructors
@@ -85,12 +110,12 @@ public class Transaction {
 		this.pricePaid = pricePaid;
 	}
 
-	public LocalDateTime getData() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setData(LocalDateTime data) {
-		this.date = data;
+	public void setDate(LocalDateTime date) {
+		this.date = date;
 	}
 
 	

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>FAQ – Smoke Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap & Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <!-- CSS del progetto -->
+  <link rel="stylesheet" href="../styles/StoreFrontStyleSheet.css" />
+
+  <style>
+    .card-shadow { box-shadow: 0 10px 25px rgba(0,0,0,.08); border-radius: 14px; }
+    .faq-search { max-width: 520px; }
+    .filter-btns .btn { margin: .25rem; }
+    .highlight { background: #fff4cc; }
+  </style>
+</head>
+<body class="bg-light">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg main-color-1 py-3">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-white" href="home.html">
+        <i class="fas fa-home me-2"></i>Smoke Home
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbar">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-user me-1"></i>Profilo</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-book me-1"></i>Catalogo</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-tags me-1"></i>Categorie</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="Preventivatore.html"><i class="fas fa-chart-line me-1"></i>Trends</a></li>
+          <li class="nav-item"><a class="nav-link active text-white fw-semibold" aria-current="page" href="FAQ.html"><i class="fa-solid fa-circle-question me-1"></i>FAQ</a></li>
+        </ul>
+        <form class="d-flex me-2">
+          <input class="form-control me-2" type="search" placeholder="Cerca...">
+          <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-4">
+    <!-- Header -->
+    <div class="text-center mb-4">
+      <h1 class="fw-bold mb-2"><i class="fa-solid fa-circle-question me-2"></i>Domande frequenti (FAQ)</h1>
+      <p class="text-muted mb-3">Hai dubbi su pagamenti, ordini, chiavi digitali o rimborsi? Trova subito la risposta 👇</p>
+
+      <!-- Ricerca -->
+      <div class="mx-auto faq-search">
+        <div class="input-group">
+          <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <input id="faqSearch" type="text" class="form-control" placeholder="Cerca una domanda (es: rimborso, Steam, pagamento)..." />
+        </div>
+      </div>
+
+      <!-- Filtri -->
+      <div class="filter-btns mt-3">
+        <button class="btn btn-sm btn-outline-primary active" data-filter="all"><i class="fa-solid fa-asterisk me-1"></i>Tutto</button>
+        <button class="btn btn-sm btn-outline-primary" data-filter="ordini"><i class="fa-solid fa-basket-shopping me-1"></i>Ordini</button>
+        <button class="btn btn-sm btn-outline-primary" data-filter="pagamenti"><i class="fa-solid fa-credit-card me-1"></i>Pagamenti</button>
+        <button class="btn btn-sm btn-outline-primary" data-filter="consegna"><i class="fa-solid fa-key me-1"></i>Consegna chiavi</button>
+        <button class="btn btn-sm btn-outline-primary" data-filter="rimborsi"><i class="fa-solid fa-rotate-left me-1"></i>Rimborsi</button>
+        <button class="btn btn-sm btn-outline-primary" data-filter="account"><i class="fa-solid fa-user-gear me-1"></i>Account</button>
+        <button class="btn btn-sm btn-outline-primary" data-filter="tecnico"><i class="fa-solid fa-screwdriver-wrench me-1"></i>Tecnico</button>
+        <button class="btn btn-sm btn-outline-primary" data-filter="privacy"><i class="fa-solid fa-shield-halved me-1"></i>Privacy</button>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="accordion card-shadow" id="faqAccordion">
+      <!-- 1 -->
+      <div class="accordion-item" data-topic="pagamenti ordini">
+        <h2 class="accordion-header" id="h1">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#c1" aria-expanded="true" aria-controls="c1">
+            Quali metodi di pagamento accettate?
+          </button>
+        </h2>
+        <div id="c1" class="accordion-collapse collapse show" aria-labelledby="h1" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Accettiamo carte di credito/debito dei principali circuiti e portafogli digitali. I pagamenti sono processati tramite connessioni protette (HTTPS). Non memorizziamo i numeri completi della carta.
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="accordion-item" data-topic="pagamenti">
+        <h2 class="accordion-header" id="h2">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2" aria-expanded="false" aria-controls="c2">
+            Quando viene addebitato l’importo?
+          </button>
+        </h2>
+        <div id="c2" class="accordion-collapse collapse" aria-labelledby="h2" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            L’addebito avviene al completamento dell’ordine. In alcuni casi potresti vedere una pre-autorizzazione che scompare automaticamente in breve tempo.
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="accordion-item" data-topic="consegna ordini">
+        <h2 class="accordion-header" id="h3">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c3" aria-expanded="false" aria-controls="c3">
+            Quando ricevo la chiave/il gioco digitale?
+          </button>
+        </h2>
+        <div id="c3" class="accordion-collapse collapse" aria-labelledby="h3" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Subito dopo il pagamento la chiave digitale è disponibile nella tua area ordini e via email. In rari casi possono servire alcuni minuti.
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="accordion-item" data-topic="consegna tecnico">
+        <h2 class="accordion-header" id="h4">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c4" aria-expanded="false" aria-controls="c4">
+            Non ho ricevuto l’email con la key: che faccio?
+          </button>
+        </h2>
+        <div id="c4" class="accordion-collapse collapse" aria-labelledby="h4" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Controlla la cartella spam/indesiderata e verifica l’indirizzo del tuo account. Se non trovi nulla, contattaci con il numero d’ordine: ti aiutiamo subito.
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="accordion-item" data-topic="consegna ordini">
+        <h2 class="accordion-header" id="h5">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c5" aria-expanded="false" aria-controls="c5">
+            Le chiavi hanno limitazioni regionali (region-lock)?
+          </button>
+        </h2>
+        <div id="c5" class="accordion-collapse collapse" aria-labelledby="h5" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Dipende dal titolo/edizione. Eventuali limitazioni sono indicate nella pagina prodotto. Se hai dubbi sulla tua regione, scrivici prima dell’acquisto.
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="accordion-item" data-topic="tecnico consegna">
+        <h2 class="accordion-header" id="h6">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c6" aria-expanded="false" aria-controls="c6">
+            Come attivo una key su Steam/Ubisoft/Xbox/PlayStation?
+          </button>
+        </h2>
+        <div id="c6" class="accordion-collapse collapse" aria-labelledby="h6" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            In genere dal client ufficiale: cerca “Attiva un prodotto” (Steam) o “Usa un codice” (console). Le istruzioni specifiche sono riportate nei dettagli dell’ordine.
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="accordion-item" data-topic="rimborsi pagamenti">
+        <h2 class="accordion-header" id="h7">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c7" aria-expanded="false" aria-controls="c7">
+            Posso ottenere un rimborso?
+          </button>
+        </h2>
+        <div id="c7" class="accordion-collapse collapse" aria-labelledby="h7" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Possiamo rimborsare gli ordini non ancora attivati o in caso di key non funzionante. Apri un ticket dall’area ordini: verifichiamo e ti aggiorniamo rapidamente.
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="accordion-item" data-topic="account tecnico">
+        <h2 class="accordion-header" id="h8">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c8" aria-expanded="false" aria-controls="c8">
+            Ho dimenticato la password: come la reimposto?
+          </button>
+        </h2>
+        <div id="c8" class="accordion-collapse collapse" aria-labelledby="h8" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Vai su “Hai dimenticato la password?” nella schermata di accesso, inserisci la tua email e segui le istruzioni ricevute.
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 -->
+      <div class="accordion-item" data-topic="tecnico">
+        <h2 class="accordion-header" id="h9">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c9" aria-expanded="false" aria-controls="c9">
+            Il download è lento: consigli?
+          </button>
+        </h2>
+        <div id="c9" class="accordion-collapse collapse" aria-labelledby="h9" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Prova una rete cablata, chiudi applicazioni in background, scegli server vicini (nei client che lo permettono) e verifica che l’antivirus non limiti il traffico.
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 -->
+      <div class="accordion-item" data-topic="privacy pagamenti">
+        <h2 class="accordion-header" id="h10">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c10" aria-expanded="false" aria-controls="c10">
+            I miei dati di pagamento sono al sicuro?
+          </button>
+        </h2>
+        <div id="c10" class="accordion-collapse collapse" aria-labelledby="h10" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Utilizziamo connessioni cifrate (HTTPS) e i pagamenti sono gestiti da provider certificati. Non archiviamo i dettagli completi della tua carta sul nostro server.
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 -->
+      <div class="accordion-item" data-topic="account ordini">
+        <h2 class="accordion-header" id="h11">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c11" aria-expanded="false" aria-controls="c11">
+            Dove trovo le mie chiavi e le fatture?
+          </button>
+        </h2>
+        <div id="c11" class="accordion-collapse collapse" aria-labelledby="h11" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Nell’area personale, sezione “I miei ordini”, puoi consultare chiavi attive, cronologia e scaricare le fatture disponibili.
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 -->
+      <div class="accordion-item" data-topic="ordini rimborsi">
+        <h2 class="accordion-header" id="h12">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c12" aria-expanded="false" aria-controls="c12">
+            Ho sbagliato edizione/piattaforma: posso modificare l’ordine?
+          </button>
+        </h2>
+        <div id="c12" class="accordion-collapse collapse" aria-labelledby="h12" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Se la key non è stata ancora attivata contattaci subito: verifichiamo disponibilità di cambio o rimborso secondo policy.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to action -->
+    <div class="text-center mt-4">
+      <p class="text-muted mb-2">Non hai trovato la risposta?</p>
+      <a href="#" class="btn btn-primary"><i class="fa-solid fa-paper-plane me-2"></i>Contattaci</a>
+    </div>
+  </main>
+
+  <!-- Footer (uguale al tuo) -->
+  <footer class="footer mt-5 py-5 main-color-1">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="footer-section">
+            <h5 class="text-white mb-3">🎮 Smoke Home</h5>
+            <p class="text-light">
+              Dal 2023 vendiamo videogiochi "fumosi" a prezzi incredibili!<br/>
+              La nostra missione? Rendere il gaming accessibile a tutti.<br/><br/>
+              ⚡ Consegna rapida delle chiavi digitali<br/>
+              🎯 Assistenza amichevole e veloce
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="footer-section">
+            <h5 class="text-white mb-3">🔗 Link Utili</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2"><a href="DomandeFrequenti.html" class="text-light text-decoration-none"><i class="fas fa-question-circle me-2"></i>Domande frequenti</a></li>
+              <li class="mb-2"><a href="#" class="text-light text-decoration-none"><i class="fas fa-envelope me-2"></i>Contatti</a></li>
+            </ul>
+            <h6 class="text-white mt-4 mb-2">🌐 Canali Social</h6>
+            <div class="social-links">
+              <a href="https://discord.com/" class="text-light me-3"><i class="fab fa-discord fa-lg"></i></a>
+              <a href="https://www.instagram.com/" class="text-light me-3"><i class="fab fa-instagram fa-lg"></i></a>
+              <a href="https://www.facebook.com/" class="text-light me-3"><i class="fab fa-facebook fa-lg"></i></a>
+              <a href="https://www.youtube.com/" class="text-light"><i class="fab fa-youtube fa-lg"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="footer-section">
+            <h5 class="text-white mb-3">📧 Contattaci</h5>
+            <form class="contact-form">
+              <div class="mb-3"><input type="email" class="form-control" placeholder="Scrivi la tua mail" required></div>
+              <div class="mb-3"><textarea class="form-control" rows="3" placeholder="Fai la tua domanda" required></textarea></div>
+              <button type="submit" class="btn btn-light w-100"><i class="fas fa-paper-plane me-2"></i>Invia</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4"><div class="col-12"><hr class="footer-divider"></div></div>
+      <div class="row mt-3">
+        <div class="col-12 text-center">
+          <p class="text-light mb-0">&copy; 2023 Smoke Home - Tutti i diritti riservati</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JSON-LD FAQ (SEO) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"Quali metodi di pagamento accettate?","acceptedAnswer":{"@type":"Answer","text":"Accettiamo carte di credito/debito e portafogli digitali tramite connessioni protette. Non memorizziamo i numeri completi della carta."}},
+      {"@type":"Question","name":"Quando ricevo la chiave/il gioco digitale?","acceptedAnswer":{"@type":"Answer","text":"Di norma subito dopo il pagamento, nell'area ordini e via email. In rari casi possono servire alcuni minuti."}},
+      {"@type":"Question","name":"Posso ottenere un rimborso?","acceptedAnswer":{"@type":"Answer","text":"Rimborsiamo gli ordini non ancora attivati o in caso di key non funzionante, previa verifica dal ticket di assistenza."}},
+      {"@type":"Question","name":"Le chiavi hanno limitazioni regionali?","acceptedAnswer":{"@type":"Answer","text":"Eventuali limitazioni sono indicate nella pagina prodotto. In caso di dubbi contattaci prima dell'acquisto."}},
+      {"@type":"Question","name":"Come attivo una key su Steam/Ubisoft/Xbox/PlayStation?","acceptedAnswer":{"@type":"Answer","text":"Dal client ufficiale seleziona 'Attiva un prodotto' o 'Usa un codice' e segui le istruzioni mostrante nei dettagli dell'ordine."}},
+      {"@type":"Question","name":"I miei dati di pagamento sono al sicuro?","acceptedAnswer":{"@type":"Answer","text":"Usiamo connessioni HTTPS e provider di pagamento affidabili. Non archiviamo i dettagli completi della tua carta sul nostro server."}}
+    ]
+  }
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Script filtro/ricerca FAQ -->
+  <script>
+    (function(){
+      const search = document.getElementById('faqSearch');
+      const items  = Array.from(document.querySelectorAll('#faqAccordion .accordion-item'));
+      const btns   = Array.from(document.querySelectorAll('.filter-btns .btn'));
+
+      function applyFilter() {
+        const q = (search.value || '').toLowerCase().trim();
+        const activeBtn = btns.find(b => b.classList.contains('active'));
+        const topic = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
+
+        let visibleCount = 0;
+
+        items.forEach(it => {
+          const txt = it.innerText.toLowerCase();
+          const topics = (it.getAttribute('data-topic') || '').split(/\s+/);
+
+          const matchTopic = (topic === 'all') || topics.includes(topic);
+          const matchText  = !q || txt.includes(q);
+
+          if (matchTopic && matchText) {
+            it.style.display = '';
+            visibleCount++;
+          } else {
+            it.style.display = 'none';
+          }
+        });
+
+        // Se vuoi mostrare un messaggio “nessun risultato”, aggiungi un div e gestiscilo qui
+      }
+
+      // search live
+      search.addEventListener('input', applyFilter);
+
+      // filtri
+      btns.forEach(b => b.addEventListener('click', () => {
+        btns.forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        applyFilter();
+      }));
+
+      // deep-link a voce specifica (es: FAQ.html#c7)
+      if (location.hash) {
+        const target = document.querySelector(location.hash);
+        if (target && target.classList.contains('collapse')) {
+          new bootstrap.Collapse(target, {toggle:true});
+          target.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
