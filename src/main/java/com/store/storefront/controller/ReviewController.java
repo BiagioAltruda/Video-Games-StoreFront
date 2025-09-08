@@ -1,11 +1,12 @@
 package com.store.storefront.controller;
 
-import com.store.storefront.model.Player;
+import com.store.storefront.ReviewableEntities;
 import com.store.storefront.model.Review;
 import com.store.storefront.model.Reviewable;
 import com.store.storefront.repository.PlayerService;
 import com.store.storefront.repository.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,10 +29,15 @@ public class ReviewController {
     public Review getReviewById(@PathVariable int id) {
         return reviewService.getReviewById(id);
     }
-    @GetMapping("/reviewer/{id}")
-    public List<Review> getReviewByPlayer(@RequestBody Player player) {
-        return reviewService.findReviewsByPlayer(player);
+    @GetMapping("/entity/{id}-{type}")
+    public ResponseEntity<List<Review>> getReviewByEntity(@PathVariable int id, @PathVariable String type) {
+        if (type.equals("PLAYER"))
+            return ResponseEntity.ok(reviewService.findReviewsByEntityIdAndType(id, ReviewableEntities.PLAYER));
+        if (type.equals("GAME"))
+            return ResponseEntity.ok(reviewService.findReviewsByEntityIdAndType(id, ReviewableEntities.GAME));
+        return ResponseEntity.notFound().build();
     }
+
     @GetMapping("/player/{playerId}")
     public List<Review> getReviewByPlayerId(@PathVariable int playerId) {
         return reviewService.findReviewsByPlayerId(playerId);
