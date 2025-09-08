@@ -1,6 +1,8 @@
-package com.store.storefront.repository;
+package com.store.storefront.service;
 
 import com.store.storefront.model.Category;
+import com.store.storefront.repository.CategoryRepo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

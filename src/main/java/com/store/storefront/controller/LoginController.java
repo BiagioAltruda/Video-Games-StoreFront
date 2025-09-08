@@ -1,7 +1,8 @@
 package com.store.storefront.controller;
 
 import com.store.storefront.model.Player;
-import com.store.storefront.repository.PlayerService;
+import com.store.storefront.service.PlayerService;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

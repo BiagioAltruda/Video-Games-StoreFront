@@ -1,6 +1,8 @@
-package com.store.storefront.repository;
+package com.store.storefront.service;
 
 import com.store.storefront.model.Game;
+import com.store.storefront.repository.GameRepo;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;

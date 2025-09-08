@@ -3,7 +3,8 @@ package com.store.storefront.controller;
 import java.util.List;
 
 import com.store.storefront.model.Transaction;
-import com.store.storefront.repository.TransactionService;
+import com.store.storefront.service.TransactionService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

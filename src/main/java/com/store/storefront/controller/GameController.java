@@ -1,7 +1,8 @@
 package com.store.storefront.controller;
 
-import com.store.storefront.repository.GameService;
 import com.store.storefront.model.Game;
+import com.store.storefront.service.GameService;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

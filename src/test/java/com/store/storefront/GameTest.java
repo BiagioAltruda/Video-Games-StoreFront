@@ -1,7 +1,8 @@
 package com.store.storefront;
 
 import com.store.storefront.model.Game;
-import com.store.storefront.repository.GameService;
+import com.store.storefront.service.GameService;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

@@ -3,7 +3,8 @@ package com.store.storefront.controller;
 import java.util.List;
 
 import com.store.storefront.model.Player;
-import com.store.storefront.repository.PlayerService;
+import com.store.storefront.service.PlayerService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

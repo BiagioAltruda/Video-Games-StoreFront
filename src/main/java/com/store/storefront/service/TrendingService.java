@@ -1,8 +1,11 @@
-package com.store.storefront.trending;
+package com.store.storefront.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.store.storefront.model.Trending;
+import com.store.storefront.repository.TrendingRepo;
 
 @Service
 public class TrendingService {

@@ -1,12 +1,8 @@
-package com.store.storefront.trending;  //il mio amato model <3
+package com.store.storefront.model;  //il mio amato model <3
 
 import java.sql.Date;
 
 import org.springframework.data.annotation.Id;
-
-import com.store.storefront.model.Category;
-
-import com.store.storefront.model.Game;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

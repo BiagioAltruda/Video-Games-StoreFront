@@ -1,6 +1,5 @@
 package com.store.storefront.model;
 
-import com.store.storefront.trending.Trending;
 import jakarta.persistence.*;
 
 import java.util.List;
