@@ -1,15 +1,18 @@
-package com.store.storefront.trending;  //il mio amato model <3
+package com.store.storefront.model;  //il mio amato model <3
 
 import java.sql.Date;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
-import org.springframework.data.annotation.Id;
-
-import com.store.storefront.model.Category;
-
-import com.store.storefront.model.Game;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 @Entity
 @Table (name="trending") //connettiamo alla tab del db
 

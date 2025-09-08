@@ -1,8 +1,10 @@
-package com.store.storefront.repository;
+package com.store.storefront.service;
 
 import java.util.List;
 
 import com.store.storefront.model.Player;
+import com.store.storefront.repository.PlayerRepo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

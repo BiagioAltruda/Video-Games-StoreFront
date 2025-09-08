@@ -3,7 +3,8 @@ package com.store.storefront.controller;
 import java.util.List;
 
 import com.store.storefront.model.Friends;
-import com.store.storefront.repository.FriendsService;
+import com.store.storefront.service.FriendsService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

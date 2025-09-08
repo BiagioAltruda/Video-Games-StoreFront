@@ -1,12 +1,11 @@
 package com.store.storefront.controller;
 
 import com.store.storefront.model.Player;
-import com.store.storefront.repository.PlayerService;
+import com.store.storefront.service.PlayerService;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -15,6 +14,7 @@ import java.util.*;
 @RequestMapping("/smoke/accounts") // Endpoint for account and login management
 public class LoginController {
     PlayerService service;
+    private final Map<String, Player> validSessions = new HashMap<>();
     public LoginController(PlayerService service) {
         this.service = service;
     }
@@ -39,29 +39,39 @@ public class LoginController {
 
     @ResponseBody
     @PostMapping("/login")
-    public ResponseEntity<Player> login(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
 
         Player p = service.findByNameAndPass(username, password);
         if (p == null)
             return ResponseEntity.status(404).body(null);
         if (!password.equals(p.getPassword()))
-            return ResponseEntity.status(404).body(null);;
+            return ResponseEntity.status(404).body(null);
+        System.out.println(p);
         String token = UUID.randomUUID().toString();
-        p.setToken(token);
-        return ResponseEntity.ok(p);
+        //p.getTransactions();
+        validSessions.put(token, p);
+        return ResponseEntity.ok(token);
     }
 
-    //another endpoint
 
     @GetMapping("/profile")
-    public ResponseEntity<Player> profile(@RequestHeader(value = "X-Token", required = false) String token, @Validated @RequestBody Player player) {
-        if (token != null)
-            return ResponseEntity.ok(player);
-        return ResponseEntity.status(404).build();
+    public ResponseEntity<Player> profile(@RequestHeader(value = "X-Token", required = false) String token) {
+        System.out.println(token);
+        if (token != null) {
+
+            System.out.println(validSessions.containsKey(token));
+            if (!validSessions.containsKey(token))
+                return ResponseEntity.status(404).build();
+            System.out.println(validSessions.get(token));
+            int playerId = validSessions.get(token).getId();
+            return ResponseEntity.ok(service.findById(playerId));
+        }
+        return ResponseEntity.notFound().build();
+
     }
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestHeader(value = "X-Token", required = false) @Validated @RequestBody Player player) {
-        player.setToken(null);
+    public ResponseEntity<String> logout(@RequestHeader(value = "X-Token", required = false) String token) {
+        validSessions.remove(token);
         return ResponseEntity.status(200).build();
     }
 }

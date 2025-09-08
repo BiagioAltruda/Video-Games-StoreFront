@@ -2,25 +2,27 @@ package com.store.storefront.controller;
 
 import java.util.List;
 
-import com.store.storefront.model.Transaction;
-import com.store.storefront.repository.TransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
-<<<<<<< HEAD
-import org.springframework.validation.annotation.Validated;
-=======
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
->>>>>>> 0bc71eb5c1dbfb5f0142508c09edc6726afbcd61
-import org.springframework.web.bind.annotation.*;
+import com.store.storefront.model.Transaction;
+import com.store.storefront.service.TransactionService;
 
 @RestController
 @RequestMapping
 @CrossOrigin("*")
 public class TransactionController {
 
-	@Autowired
-	private TransactionService transactionService;
+	private final TransactionService transactionService;
 
 	public TransactionController(TransactionService transactionService) {
 		this.transactionService = transactionService;
@@ -37,19 +39,7 @@ public class TransactionController {
 		return transactionService.getAllTransactions();
 	}
 
-<<<<<<< HEAD
-    // crea transazione
-    @PostMapping
-    public Transaction createTransaction(@Validated @RequestBody Transaction transaction) {
-        return transactionService.createTransaction(transaction);
-    }
 
-    // aggiorna transazione
-    @PutMapping("/{id}")
-    public Transaction updateTransaction(@PathVariable Long id, @Validated @RequestBody Transaction transaction) {
-        return transactionService.updateTransaction(id, transaction);
-    }
-=======
 	// restituisce transazione per id
 	// Una transazione per id (404 se non esiste)
 	@GetMapping("/transactions/{id}")
@@ -67,7 +57,6 @@ public class TransactionController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(saved); // costruisce una risposta http, la salva,
 																		// controlla lo status
 	}
->>>>>>> 0bc71eb5c1dbfb5f0142508c09edc6726afbcd61
 
 	// Aggiorna (404 se non esiste)
 	@PutMapping("/transactions/{id}")

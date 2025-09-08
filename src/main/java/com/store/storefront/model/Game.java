@@ -1,6 +1,5 @@
 package com.store.storefront.model;
 
-import com.store.storefront.trending.Trending;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
