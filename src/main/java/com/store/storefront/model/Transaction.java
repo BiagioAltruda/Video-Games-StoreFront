@@ -3,14 +3,10 @@ package com.store.storefront.model;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 @Entity
 @Table(name = "transactions") // nome della tabella nel database
@@ -18,9 +14,12 @@ public class Transaction {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment DB
+	@Positive(message = "id cannot be negative")
 	private Long id;
-	
-	@ManyToOne
+
+	//The following 2 are the foreign keys for the games-players relation with extra attributes
+	//Using the transaction table as the middle man
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "player_id")
 	private Player player;
 
@@ -28,12 +27,17 @@ public class Transaction {
 	@JoinColumn(name = "game_id")
 	private Game game;
 
+
 	@Column(name = "price_paid")
+	@PositiveOrZero(message = "Cannot pay a negative amount")
 	private double pricePaid;
 
 	@Column(name="transaction_date")
+	@Temporal(TemporalType.TIMESTAMP)
+	@NotNull(message = "Account creation date cannot be null")
 	private LocalDateTime date;
 
+	//Constructors
 	public Transaction() {
 
 	}
@@ -47,6 +51,8 @@ public class Transaction {
 		this.date = data;
 	}
 
+
+	//Getters and Setters
 	public Long getId() {
 		return id;
 	}

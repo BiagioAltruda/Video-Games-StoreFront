@@ -1,0 +1,50 @@
+package com.store.storefront.controller;
+
+import com.store.storefront.model.Player;
+import com.store.storefront.model.Review;
+import com.store.storefront.model.Reviewable;
+import com.store.storefront.repository.PlayerService;
+import com.store.storefront.repository.ReviewService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("smoke.com/review")
+public class ReviewController {
+    private final ReviewService reviewService;
+    private final PlayerService  playerService;
+    @Autowired
+    public ReviewController(ReviewService reviewService,  PlayerService playerService) {
+        this.reviewService = reviewService;
+        this.playerService = playerService;
+    }
+    @GetMapping("/all")
+    public List<Review> getAllReviews() {
+        return reviewService.getAll();
+    }
+    @GetMapping("/{id}")
+    public Review getReviewById(@PathVariable int id) {
+        return reviewService.getReviewById(id);
+    }
+    @GetMapping("/reviewer/{id}")
+    public List<Review> getReviewByPlayer(@RequestBody Player player) {
+        return reviewService.findReviewsByPlayer(player);
+    }
+    @GetMapping("/player/{playerId}")
+    public List<Review> getReviewByPlayerId(@PathVariable int playerId) {
+        return reviewService.findReviewsByPlayerId(playerId);
+    }
+    @PostMapping("/add/{posterId}")
+    public Reviewable addReview(@RequestBody Review review, @RequestBody Reviewable reviewable, @PathVariable int posterId) {
+        review.setReviewedId(reviewable.getId());
+        review.setPlayer(playerService.findById(posterId));
+        return reviewService.createReview(review);
+    }
+    @DeleteMapping("/delete/{id}")
+    public void deleteReview(@PathVariable int id) {
+        reviewService.deleteReviewById(id);
+    }
+
+}
