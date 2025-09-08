@@ -42,13 +42,10 @@ public class ReviewService{
         return reviewRepo.save(review);
     }
     public List<Review> findReviewsByPlayerId(int reviewedId){
-
         return  reviewRepo.findReviewsByReviewedId(reviewedId);
     }
-    public List<Review> findReviewsByPlayer(Player  player){
-        return reviewRepo.findReviewsByPlayer(player);
+    public List<Review> findReviewsByEntityIdAndType(int reviewedId, ReviewableEntities reviewedType){
+        return reviewRepo.findReviewsByReviewedIdAndReviewedType(reviewedId, reviewedType);
     }
-
-
 
 }

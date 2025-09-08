@@ -12,7 +12,7 @@ public class Review {
     private Integer id;
 
     //@Column(name = "reviewer_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reviewer_id")
     private Player player;
 
@@ -23,30 +23,36 @@ public class Review {
 
     @Column(name = "is_positive_review")
     private boolean isPositiveReview;
+    @Enumerated(EnumType.STRING)
     @Column(name = "reviewed_type")
     private ReviewableEntities reviewedType;
     private String content;
 
     public Review() {}
 
-//    public Review(int id, Player player, int reviewId, boolean isPositiveReview, boolean isProfileReview, String content) {
-//        this.id = id;
-//        this.player = player;
-//        this.reviewId = reviewId;
-//        this.isPositiveReview = isPositiveReview;
-//        this.isProfileReview = isProfileReview;
-//        this.content = content;
-//    }
+    public Review(Integer id, Player player, int reviewedId, boolean isPositiveReview, ReviewableEntities reviewedType, String content) {
+        this.id = id;
+        this.player = player;
+        this.reviewedId = reviewedId;
+        this.isPositiveReview = isPositiveReview;
+        this.content = content;
+        this.reviewedType = null;
+        if(reviewedType.getValue().equals("GAME"))
+            this.reviewedType = ReviewableEntities.GAME;
+        if(reviewedType.getValue().equals("PLAYER"))
+            this.reviewedType = ReviewableEntities.PLAYER;
+    }
 
-    public void setReviewedEntity(Game game){
+    /*
+    public void assignReviewedEntity(Game game){
         this.reviewedType = ReviewableEntities.GAME;
         this.reviewedId = game.getId();
     }
-    public void setReviewedEntity(Player player){
+    public void assignReviewedEntity(Player player){
         this.reviewedType = ReviewableEntities.PLAYER;
         this.reviewedId = player.getId();
     }
-
+*/
 
     public void setId(Integer id) {
         this.id = id;
@@ -103,3 +109,28 @@ public class Review {
         this.reviewedType = reviewedType;
     }
 }
+
+/*
+example of accepted json for posting review
+[
+    {
+        "id": 1,
+        "player": {
+            "id": 1,
+            "name": "biagio",
+            "password": "test",
+            "playerLevel": 0,
+            "creationDate": null,
+            "language": null,
+            "token": null,
+            "friends": [],
+            "friendOf": [],
+            "transactions": []
+        },
+        "reviewedId": 10090,
+        "reviewedType": "GAME",
+        "content": "test",
+        "positiveReview": true
+    }
+]
+ */

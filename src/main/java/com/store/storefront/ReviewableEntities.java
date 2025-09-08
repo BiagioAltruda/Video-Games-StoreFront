@@ -1,6 +1,8 @@
 package com.store.storefront;
 
-public enum ReviewableEntities {
+import java.io.Serializable;
+
+public enum ReviewableEntities implements Serializable {
     GAME("GAME"),
     PLAYER("PLAYER");
 
