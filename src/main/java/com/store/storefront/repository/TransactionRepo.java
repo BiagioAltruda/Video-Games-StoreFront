@@ -11,6 +11,12 @@ import org.springframework.stereotype.Repository;
 public interface TransactionRepo extends JpaRepository<Transaction, Long> {
 	
 	
-	List<Transaction> findByPlayerId(Long playerId);
+	List<Transaction> findByPlayer_Id(Long playerId);
+	
+	List<Transaction> findByGame_Id(Long gameId);
+	
+	List<Transaction> findByPlayer_IdOrderByDateDesc(Long playerId);
+	
+	long countByPlayer_Id(Long playerId);
 	
 }

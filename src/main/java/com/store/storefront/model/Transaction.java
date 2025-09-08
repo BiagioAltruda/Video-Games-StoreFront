@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,17 +22,17 @@ public class Transaction {
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name = "player_id")
+	@JoinColumn(name = "player_id", nullable = false)
 	private Player player;
 
 	@ManyToOne
-	@JoinColumn(name = "game_id")
+	@JoinColumn(name = "game_id",nullable = false)
 	private Game game;
 
-	@Column(name = "price_paid")
+	@Column(name = "price_paid",nullable = false)
 	private double pricePaid;
 
-	@Column(name="transaction_date")
+	@Column(name="transaction_date",nullable = false)
 	private LocalDateTime date;
 
 	public Transaction() {
@@ -79,12 +80,12 @@ public class Transaction {
 		this.pricePaid = pricePaid;
 	}
 
-	public LocalDateTime getData() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setData(LocalDateTime data) {
-		this.date = data;
+	public void setDate(LocalDateTime date) {
+		this.date = date;
 	}
 
 	

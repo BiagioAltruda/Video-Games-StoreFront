@@ -3,11 +3,10 @@ package com.store.storefront.repository;
 import java.util.List;
 
 import com.store.storefront.model.Transaction;
-import org.apache.catalina.startup.Tomcat.ExistingStandardWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.store.storefront.model.Transaction;
+
 
 @Service
 public class TransactionService {
@@ -49,7 +48,7 @@ public class TransactionService {
 			
 		}
 		//se esiste la transazione aggiorno i dati
-		existing.setData(updateTransaction.getData());
+		existing.setDate(updateTransaction.getDate());
 		existing.setGame(updateTransaction.getGame());
 		existing.setPlayer(updateTransaction.getPlayer());
 		existing.setPricePaid(updateTransaction.getPricePaid());
@@ -64,5 +63,11 @@ public class TransactionService {
 		transactionRepo.deleteById(id);
 
 	}
+//	//metta la data pagamento e salvo, Metodo usato dal controller /transactions/pay/{id}
+//	public Transaction markAsPaid(Long id) {
+//	    Transaction t = getTransactionById(id); 
+//	    t.setDate(java.time.LocalDateTime.now());
+//	    return transactionRepo.save(t);
+//	}
 
 }

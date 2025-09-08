@@ -109,66 +109,81 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script>
-    // --- Utility per mostrare alert Bootstrap nel div #alerts ---
-    function showAlert(type, text) {
-      // type: 'success', 'danger', 'warning', 'info'
-      const wrap = document.getElementById('alerts');
-      wrap.innerHTML = `
-        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-          ${text}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      `;
+<script>
+(function () {
+  "use strict";
+
+  // ---- util ----
+  function $(sel, root){ return (root||document).querySelector(sel); }
+  function showAlert(type, text) {
+    var wrap = $('#alerts');
+    if (!wrap) { alert(text); return; }
+    wrap.innerHTML =
+      '<div class="alert alert-'+type+' alert-dismissible fade show" role="alert">'
+      + text +
+      '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+      '</div>';
+  }
+
+  // Usa http://localhost:8080 se la pagina è file://, altrimenti path relativo
+  var IS_HTTP = (location.protocol === 'http:' || location.protocol === 'https:');
+  var BASE = IS_HTTP ? '' : 'http://localhost:8080';
+
+  function getTransactionId() {
+    var hidden = $('input[name="transactionId"]');
+    if (hidden && hidden.value) return hidden.value.trim();
+    var qs = new URLSearchParams(location.search).get('id');
+    return qs ? qs.trim() : '';
+  }
+
+  async function pay(id) {
+    var btn = $('#payBtn') || $('#paymentForm button[type="submit"]');
+    if (btn) btn.setAttribute('disabled', 'disabled');
+
+    try {
+      var res = await fetch(BASE + '/transactions/pay/' + encodeURIComponent(id), { method: 'POST' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      var msg = await res.text();
+      showAlert('success', msg);
+      var dateEl = $('#tx-date');
+      if (dateEl) dateEl.textContent = new Date().toLocaleString();
+    } catch (e) {
+      showAlert('danger', 'Errore di connessione o server non disponibile');
+    } finally {
+      if (btn) btn.removeAttribute('disabled');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var form = $('#paymentForm');
+    if (!form) return;
+
+    var txId = getTransactionId();
+    if (!txId) { showAlert('danger', 'Manca l’ID della transazione.'); return; }
+
+    // Se manca l'hidden lo creo
+    if (!$('input[name="transactionId"]')) {
+      var hidden = document.createElement('input');
+      hidden.type = 'hidden';
+      hidden.name = 'transactionId';
+      hidden.value = txId;
+      form.appendChild(hidden);
     }
 
-    // --- Inizializzazione dati "finti" della transazione nella card di destra ---
-    // In un’app reale potresti fare una GET /transactions/{id} e popolare questi campi.
-    (function presetTransactionDetails() {
-      const txId = document.querySelector('input[name="transactionId"]').value;
-      document.getElementById('tx-id').textContent     = txId;
-      document.getElementById('tx-player').textContent = 'Player Name';
-      document.getElementById('tx-game').textContent   = 'Game Title';
-      document.getElementById('tx-price').textContent  = '—';
-      document.getElementById('tx-date').textContent   = new Date().toLocaleString();
-    })();
+    // Dati placeholder (se vuoi quelli reali, fai una GET qui)
+    var el;
+    if ((el = $('#tx-id')))    el.textContent = txId;
+    if ((el = $('#tx-player')))el.textContent = 'Player Name';
+    if ((el = $('#tx-game')))  el.textContent = 'Game Title';
+    if ((el = $('#tx-price'))) el.textContent = '—';
+    if ((el = $('#tx-date')))  el.textContent = new Date().toLocaleString();
 
-    // --- Gestione invio form e chiamata al backend ---
-    document.getElementById("paymentForm").addEventListener("submit", async function (e) {
-      e.preventDefault(); // Evita il refresh della pagina
-
-      // 1) Prendo l’ID transazione dal campo hidden del form (più flessibile che hardcodarlo)
-      const transactionId = this.querySelector('input[name="transactionId"]').value;
-
-      // 2) Raccolgo i dati in FormData per invio come form-body (compatibile con @RequestParam)
-      const formData = new FormData(this);
-
-      // 3) Costruisco l’URL del tuo endpoint Spring Boot
-      const url = `http://localhost:8080/transactions/pay/${transactionId}`;
-
-      try {
-        // 4) Chiamata POST verso il backend (controller TransactionController.processPayment)
-        const response = await fetch(url, {
-          method: "POST",
-          body: formData
-          // Se usi Spring Security con CSRF attivo, aggiungi qui gli header X-CSRF-TOKEN
-        });
-
-        // 5) Gestione esito
-        if (response.ok) {
-          const message = await response.text(); // il controller ritorna una String
-          showAlert('success', message);         // alert verde con messaggio del server
-          // volendo anche alert semplice del browser:
-          // alert(message);
-        } else {
-          // Errore HTTP (es. 400/500): mostro status
-          showAlert('danger', `Errore dal server: ${response.status}`);
-        }
-      } catch (err) {
-        // Errore di rete o CORS
-        showAlert('danger', 'Errore di connessione al backend');
-      }
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      pay(txId);
     });
-  </script>
+  });
+})();
+</script>
 </body>
 </html>
