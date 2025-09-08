@@ -183,60 +183,114 @@
 /* ===== GAME CARDS ===== */
 .game-card {
     border: none;
-    border-radius: 10px;
+    border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
-    position: relative;
-    height: 100%;
+    background: linear-gradient(135deg, var(--main-color) 0%, #3a0529 100%);
+    height: 480px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
 }
 
 .game-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.game-card .card-img-top {
-    height: 200px;
-    object-fit: cover;
-    width: 100%;
-}
-
-.card-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(81, 7, 58, 0.9));
-    padding: 20px 15px 15px;
-    color: var(--light-color);
-}
-
-.card-title {
-    font-weight: 600;
-    margin: 0;
-    font-size: 1.1rem;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-}
-
-/* Responsive per le card */
-@media (max-width: 768px) {
-    .game-card .card-img-top {
-        height: 180px;
-    }
-    
-    .card-overlay {
-        padding: 15px 10px 10px;
-    }
-    
-    .card-title {
-        font-size: 1rem;
-    }
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
 }
 
 .card-img-top {
     width: 100%;
-    height: 450px;
+    height: 280px;
     object-fit: cover;
-    display: block;
+    border-bottom: 3px solid var(--secondary-color);
+}
+
+.card-overlay {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--light-color);
+    margin-bottom: 8px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.card-developer {
+    font-size: 1rem;
+    color: var(--secondary-color);
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.card-genre {
+    font-size: 0.9rem;
+    color: var(--light-color);
+    background-color: rgba(166, 177, 178, 0.2);
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.card-body {
+    padding: 0 20px 20px;
+    background: rgba(81, 7, 58, 0.8);
+}
+
+.card-rating {
+    font-size: 1.1rem;
+    color: var(--light-color);
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+    background: rgba(236, 240, 241, 0.1);
+    border-radius: 10px;
+}
+
+/* Effetto hover per la card */
+.game-card:hover .card-img-top {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+/* Responsive per le card */
+@media (max-width: 768px) {
+    .game-card {
+        height: 420px;
+    }
+    
+    .card-img-top {
+        height: 220px;
+    }
+    
+    .card-title {
+        font-size: 1.2rem;
+    }
+    
+    .card-overlay {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .game-card {
+        height: 380px;
+        margin: 0 10px;
+    }
+    
+    .card-img-top {
+        height: 200px;
+    }
+    
+    .card-title {
+        font-size: 1.1rem;
+    }
 }
