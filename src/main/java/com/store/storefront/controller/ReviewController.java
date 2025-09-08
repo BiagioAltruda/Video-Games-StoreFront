@@ -2,20 +2,18 @@ package com.store.storefront.controller;
 
 import com.store.storefront.ReviewableEntities;
 import com.store.storefront.model.Review;
-import com.store.storefront.model.Reviewable;
-import com.store.storefront.repository.PlayerService;
 import com.store.storefront.repository.ReviewService;
+import com.store.storefront.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("smoke.com/review")
 public class ReviewController {
     private final ReviewService reviewService;
-    private final PlayerService  playerService;
+    private final PlayerService playerService;
     @Autowired
     public ReviewController(ReviewService reviewService,  PlayerService playerService) {
         this.reviewService = reviewService;

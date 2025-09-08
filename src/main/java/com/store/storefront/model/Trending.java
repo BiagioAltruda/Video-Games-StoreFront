@@ -4,9 +4,6 @@ import java.sql.Date;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
-import org.springframework.data.annotation.Id;
-
-<<<<<<< HEAD:src/main/java/com/store/storefront/model/Trending.java
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,12 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-=======
-import com.store.storefront.model.Category;
-
-import com.store.storefront.model.Game;
->>>>>>> features-review-and-comments:src/main/java/com/store/storefront/trending/Trending.java
-
 @Entity
 @Table (name="trending") //connettiamo alla tab del db
 
