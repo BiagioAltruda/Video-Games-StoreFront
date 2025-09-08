@@ -1,5 +1,6 @@
 package com.store.storefront.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.store.storefront.ReviewableEntities;
 import jakarta.persistence.*;
 
@@ -12,6 +13,8 @@ public class Review {
     private Integer id;
 
     //@Column(name = "reviewer_id")
+
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reviewer_id")
     private Player player;
@@ -26,6 +29,7 @@ public class Review {
     @Enumerated(EnumType.STRING)
     @Column(name = "reviewed_type")
     private ReviewableEntities reviewedType;
+
     private String content;
 
     public Review() {}

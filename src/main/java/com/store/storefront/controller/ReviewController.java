@@ -42,9 +42,8 @@ public class ReviewController {
     public List<Review> getReviewByPlayerId(@PathVariable int playerId) {
         return reviewService.findReviewsByPlayerId(playerId);
     }
-    @PostMapping("/add/{posterId}")
-    public Reviewable addReview(@RequestBody Review review, @PathVariable int posterId) {
-        review.setPlayer(playerService.findById(posterId));
+    @PostMapping
+    public Review addReview(@RequestBody Review review) {
         System.out.println(review.getReviewedType());
         return reviewService.createReview(review);
     }

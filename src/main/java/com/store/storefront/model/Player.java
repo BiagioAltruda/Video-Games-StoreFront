@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.store.storefront.trending.Trending;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -22,6 +23,7 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 	private int id;
 	@NotBlank(message = "name cannot be blank")
 	private String name;
+	@JsonIgnore
 	@NotBlank(message = "password cannot be blank")
 	private String password;
 
@@ -32,10 +34,7 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 	private Date creationDate;
 
 	private String language;
-	//Token field for storing temporary session tokens for authentication's sake
-	//This way we can include the token directly into the player object sent and recived from the client
-	@Transient
-	private String token;
+
 
 	@ManyToMany
 	@JoinTable(
@@ -45,14 +44,17 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 	)
 	private Set<Player> friends = new HashSet<>(); //Set containing friend list
 
+
 	@ManyToMany(mappedBy = "friends") //bidirectional relation with mappedby
 	private Set<Player> friendOf = new HashSet<>();
 
 	//One-to-Many relationship to the games table using the transactions table
+
 	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Transaction> transactions = new HashSet<>();
 
 	//One-To-Many side of review relation
+
 	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Review> reviews = new HashSet<>();
 
@@ -138,14 +140,6 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 		this.language = Language;
 	}
 
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
 	public Set<Player> getFriends() {
 		return friends;
 	}
@@ -168,5 +162,22 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 
 	public void setTransactions(Set<Transaction> transactions) {
 		this.transactions = transactions;
+	}
+
+	public Set<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(Set<Review> reviews) {
+		this.reviews = reviews;
+	}
+
+	@Override
+	public String toString() {
+		return "Player{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", password='" + password + '\'' +
+				'}';
 	}
 }

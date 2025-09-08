@@ -3,6 +3,7 @@ package com.store.storefront.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -19,10 +20,12 @@ public class Transaction {
 
 	//The following 2 are the foreign keys for the games-players relation with extra attributes
 	//Using the transaction table as the middle man
+	@JsonIgnore //avoids looping
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "player_id")
 	private Player player;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "game_id")
 	private Game game;

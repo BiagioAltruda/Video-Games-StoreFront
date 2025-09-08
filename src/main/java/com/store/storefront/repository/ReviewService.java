@@ -21,14 +21,20 @@ public class ReviewService{
         this.gameRepo = gameRepo;
         this.playerRepo = playerRepo;
     }
-
+/*
     public Reviewable createReview(Review review){
-        if ("GAME".equals(review.getReviewedType().getValue()))
+        if ("GAME".equals(review.getReviewedType().getValue())){
             return gameRepo.findById(review.getReviewedId()).orElse(null);
+        }
+
         if ("PLAYER".equals(review.getReviewedType().getValue()))
             return playerRepo.findById(review.getReviewedId()).orElse(null);
         return null;
     }
+  */
+  public Review createReview(Review review) {
+      return reviewRepo.save(review);
+  }
     public List<Review> getAll(){
         return reviewRepo.findAll();
     }
