@@ -3,6 +3,8 @@ package com.store.storefront.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,11 +14,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+
 
 @Entity
 @Table(name = "transactions") // nome della tabella nel database
@@ -26,6 +29,7 @@ public class Transaction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment DB
 	@Positive(message = "id cannot be negative")
 	private Long id;
+
 
 	//The following 2 are the foreign keys for the games-players relation with extra attributes
 	//Using the transaction table as the middle man
@@ -47,6 +51,7 @@ public class Transaction {
 	@Column(name="transaction_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	@NotNull(message = "Account creation date cannot be null")
+
 	private LocalDateTime date;
 
 	//Constructors
