@@ -15,8 +15,9 @@
     async function getPlayerData(id) {
         URL = "http://localhost:8080/smoke/api/player/" + id;
         try{
-            const response =await fetch(URL);
+            const response =(await fetch(URL)).body;
 
+            const welcome =
         } catch (e) {
 
         }

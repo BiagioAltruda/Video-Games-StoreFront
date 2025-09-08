@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Friends {
+public class Friends { //support entity for the Many to Many relation to and from the players table
 
 	//Attributi 
 	@Id

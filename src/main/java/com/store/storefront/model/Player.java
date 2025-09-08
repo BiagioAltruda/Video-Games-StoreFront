@@ -2,25 +2,39 @@ package com.store.storefront.model;
 
 import java.sql.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.store.storefront.trending.Trending;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 @Entity
 @Table(name = "players")
-public class Player {
+public class Player implements Reviewable{ //Entity responsible for storing the player data
 	
 	//Attributi classe players
 	@Id
+	@Positive(message = "id cannot be negative")
 	private int id;
+	@NotBlank(message = "name cannot be blank")
 	private String name;
+	@JsonIgnore
+	@NotBlank(message = "password cannot be blank")
 	private String password;
-	private int games;
-	private int player_level;
-	private Date creation_date;
-	private String game_language;
-	@Transient
-	private String token;
+
+
+	@PositiveOrZero(message = "player level cannot be negative")
+	private int playerLevel;
+	@NotNull(message = "account creation date cannot be null")
+	private Date creationDate;
+
+	private String language;
+
 
 	@ManyToMany
 	@JoinTable(
@@ -30,20 +44,29 @@ public class Player {
 	)
 	private Set<Player> friends = new HashSet<>(); //Set containing friend list
 
+
 	@ManyToMany(mappedBy = "friends") //bidirectional relation with mappedby
 	private Set<Player> friendOf = new HashSet<>();
 
+	//One-to-Many relationship to the games table using the transactions table
 
+	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Transaction> transactions = new HashSet<>();
 
-	//Costruttore classe players
-	public Player(int id, String name, String password, int games, int player_livel, Date creation_date, String game_language) {
+	//One-To-Many side of review relation
+
+	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Review> reviews = new HashSet<>();
+
+	//Player class constructors
+	public Player(int id, String name, String password, int playerLevel, Date creation_date, String language, Set<Review> reviews) {
 		this.id=id;
 		this.name=name;
 		this.password=password;
-		this.games=games;
-		this.player_level =player_livel;
-		this.creation_date=creation_date;
-		this.game_language=game_language;		
+		this.playerLevel =playerLevel;
+		this.creationDate =creation_date;
+		this.language = language;
+		this.reviews = reviews;
 	}
 
 	public Player(String name, String password){
@@ -53,7 +76,22 @@ public class Player {
 	public Player(){}
 
 
-	//Metodi get e setter
+	@Override
+	public void addReview(Review review) {
+		this.reviews.add(review);
+	}
+
+	@Override
+	public String removeReview(Review review) {
+		if(this.reviews.contains(review)) {
+			this.reviews.remove(review);
+			return "200";
+		}
+		else
+			return "404";
+	}
+
+	//Getters and setters
 	public int getId() {
 		return id;
 	}
@@ -78,44 +116,28 @@ public class Player {
 		this.password = password;
 	}
 
-	public int getGames() {
-		return games;
+	public int getPlayerLevel() {
+		return playerLevel;
 	}
 
-	public void setGames(int games) {
-		this.games = games;
+	public void setPlayerLevel(int playerLevel) {
+		this.playerLevel = playerLevel;
 	}
 
-	public int getPlayer_level() {
-		return player_level;
+	public Date getCreationDate() {
+		return creationDate;
 	}
 
-	public void setPlayer_level(int player_level) {
-		this.player_level = player_level;
+	public void setCreationDate(Date creation_date) {
+		this.creationDate = creation_date;
 	}
 
-	public Date getCreation_date() {
-		return creation_date;
+	public String getLanguage() {
+		return language;
 	}
 
-	public void setCreation_date(Date creation_date) {
-		this.creation_date = creation_date;
-	}
-
-	public String getGame_language() {
-		return game_language;
-	}
-
-	public void setGame_language(String game_language) {
-		this.game_language = game_language;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
+	public void setLanguage(String Language) {
+		this.language = Language;
 	}
 
 	public Set<Player> getFriends() {
@@ -132,5 +154,30 @@ public class Player {
 
 	public void setFriendOf(Set<Player> friendOf) {
 		this.friendOf = friendOf;
+	}
+
+	public Set<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public void setTransactions(Set<Transaction> transactions) {
+		this.transactions = transactions;
+	}
+
+	public Set<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(Set<Review> reviews) {
+		this.reviews = reviews;
+	}
+
+	@Override
+	public String toString() {
+		return "Player{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", password='" + password + '\'' +
+				'}';
 	}
 }

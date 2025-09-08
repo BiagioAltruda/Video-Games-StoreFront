@@ -40,6 +40,9 @@ public class PlayerService {
 	public Player findByName(String name) {
 		return repo.findByName(name);
 	}
+	public Player findById(int id) {
+		return repo.findById(id).orElse(null);
+	}
 }
 
 	
