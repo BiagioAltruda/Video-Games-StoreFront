@@ -6,6 +6,7 @@ import com.store.storefront.model.Player;
 import com.store.storefront.service.PlayerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,13 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/api/player")
+@CrossOrigin(origins = "*") // Consente richieste CORS da qualsiasi origine (solo per sviluppo)
+@RestController // Indica che questa classe gestisce richieste REST
+@RequestMapping("/api/player") // Prefisso comune per tutti gli endpoint 
 public class PlayerController {
 		
 	//DEPENDENCY INJECTION
 	private final PlayerService service;
-	//Crea un'istanza di "LibroService" Classe dove all'interno ho i metodi 
+	//Crea un'istanza di "PlayerService" Classe dove all'interno ho i metodi 
 	
 	@Autowired
 	public PlayerController (PlayerService service) {
