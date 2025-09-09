@@ -33,31 +33,40 @@
     <div id="alerts"></div>
 
     <div class="row g-4">
-      <!-- Transaction Details -->
+      <!-- Transaction Form -->
       <div class="col-lg-6">
         <div class="card card-shadow">
           <div class="card-header bg-white">
             <h5 class="mb-0"><i class="fa-solid fa-receipt me-2"></i>Transaction Details</h5>
           </div>
           <div class="card-body">
-            <div class="d-flex justify-content-between border-bottom py-2">
-              <strong>Transaction ID</strong><span id="tx-id" class="text-muted">—</span>
-            </div>
-            <div class="d-flex justify-content-between border-bottom py-2">
-              <strong>Player</strong><span id="tx-player" class="text-muted">—</span>
-            </div>
-            <div class="d-flex justify-content-between border-bottom py-2">
-              <strong>Game</strong><span id="tx-game" class="text-muted">—</span>
-            </div>
-            <div class="d-flex justify-content-between border-bottom py-2">
-              <strong>Price Paid</strong><span id="tx-price" class="text-muted">—</span>
-            </div>
-            <div class="d-flex justify-content-between py-2">
-              <strong>Date</strong><span id="tx-date" class="text-muted">—</span>
-            </div>
+            <form id="transactionDetails">
+              <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                <strong>Transaction ID</strong>
+                <input type="text" id="tx-id" class="form-control form-control-sm text-muted" style="max-width: 200px; text-align: right;" placeholder="—">
+              </div>
+              <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                <strong>Player</strong>
+                <input type="text" id="tx-player" class="form-control form-control-sm text-muted" style="max-width: 200px; text-align: right;" placeholder="—">
+              </div>
+              <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                <strong>Game</strong>
+                <input type="text" id="tx-game" class="form-control form-control-sm text-muted" style="max-width: 200px; text-align: right;" placeholder="—">
+              </div>
+              <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                <strong>Price Paid</strong>
+                <input type="text" id="tx-price" class="form-control form-control-sm text-muted" style="max-width: 200px; text-align: right;" placeholder="—">
+              </div>
+              <div class="d-flex justify-content-between align-items-center py-2">
+                <strong>Date</strong>
+                <input type="text" id="tx-date" class="form-control form-control-sm text-muted" style="max-width: 200px; text-align: right;" placeholder="—">
+              </div>
+            </form>
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
       <!-- Payment Form -->
       <div class="col-lg-6">
@@ -129,29 +138,77 @@
   var IS_HTTP = (location.protocol === 'http:' || location.protocol === 'https:');
   var BASE = IS_HTTP ? '' : 'http://localhost:8080';
 
-  function getTransactionId() {
-    var hidden = $('input[name="transactionId"]');
-    if (hidden && hidden.value) return hidden.value.trim();
-    var qs = new URLSearchParams(location.search).get('id');
-    return qs ? qs.trim() : '';
-  }
-
   async function pay(id) {
+    //disable button after pressing it
     var btn = $('#payBtn') || $('#paymentForm button[type="submit"]');
     if (btn) btn.setAttribute('disabled', 'disabled');
 
     try {
-      var res = await fetch(BASE + '/transactions/pay/' + encodeURIComponent(id), { method: 'POST' });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      var msg = await res.text();
-      showAlert('success', msg);
-      var dateEl = $('#tx-date');
-      if (dateEl) dateEl.textContent = new Date().toLocaleString();
+      //get payment data from the form
+      const paymentDetails = document.getElementById('paymentForm');
+      paymentDetails.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const transaction = document.getElementById('transactionDetails');
+
+        const transactionDetails = new FormData(transaction);
+
+        const playerName =document.getElementById('tx-player').value;
+        const gameName = document.getElementById('tx-game').value;
+        const price = document.getElementById('tx-price').value;
+        const date = document.getElementById('tx-date').value;
+
+        const transactionData = {
+          "player": playerName,
+          "game": gameName,
+          "date": date,
+          "pricePaid": price,
+        };
+
+        const data = new FormData(paymentDetails);
+        const transactionId = data.get('transactionId');
+        const cardholderName = data.get('cardholderName');
+        const cardNumber = data.get('cardNumber');
+        const expirationDate = data.get('expirationDate');
+        const cvv = data.get('cvv');
+
+        const cardData = {
+          "transactionId": transactionId,
+          "cardholderName": cardholderName,
+          "cardNumber": cardNumber,
+          "expirationDate": expirationDate,
+          "cvv": cvv,
+        };
+
+        const payload = { transactionData, ...cardData};
+
+        var res = await fetch(BASE + '/transactions/pay/' + encodeURIComponent(id), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        var msg = await res.text();
+        showAlert('success', msg);
+        var dateEl = $('#tx-date');
+        if (dateEl) dateEl.textContent = new Date().toLocaleString();
+
+      });
     } catch (e) {
       showAlert('danger', 'Errore di connessione o server non disponibile');
     } finally {
       if (btn) btn.removeAttribute('disabled');
     }
+  }
+
+  function getTransactionId() {
+    var hidden = $('input[name="transactionId"]');
+    if (hidden && hidden.value) return hidden.value.trim();
+    var qs = new URLSearchParams(location.search).get('id');
+    return qs ? qs.trim() : '';
   }
 
   document.addEventListener('DOMContentLoaded', function () {

@@ -2,6 +2,8 @@ package com.store.storefront.controller;
 
 import java.util.List;
 
+import com.store.storefront.model.CardDetails;
+import com.store.storefront.model.PaymentProcessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -78,10 +80,13 @@ public class TransactionController {
 
 	// simulazione di pagamento (mock)
 	@PostMapping("/transactions/pay/{id}")
-	public String processPayment(@PathVariable Long id) {
-		
-		// transactionService.markAsPaid(id); // aggiorna la transazione (data/stato) e salva
-		// mock pagamento → qui potresti aggiornare lo stato della transazione se vuoi
-		return "Pagamento riuscito per transazione ID: " + id;
+	public String processPayment(@PathVariable Long id, @RequestBody CardDetails cardData, @RequestBody Transaction transactionData) {
+
+		if(PaymentProcessor.validate(cardData)){
+			transactionData = transactionService.createTransaction(transactionData);
+			return "Pagamento riuscito per transazione ID: " + transactionData.getId();
+		}
+		return "Pagamento fallito";
 	}
+
 }
