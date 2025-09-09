@@ -25,6 +25,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 @Table(name = "transactions") // nome della tabella nel database
 public class Transaction {
 
+	@JsonIgnore
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment DB
 	@Positive(message = "id cannot be negative")
@@ -33,12 +34,10 @@ public class Transaction {
 
 	//The following 2 are the foreign keys for the games-players relation with extra attributes
 	//Using the transaction table as the middle man
-	@JsonIgnore //avoids looping
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "player_id")
 	private Player player;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "game_id",nullable = false)
 	private Game game;
@@ -48,10 +47,9 @@ public class Transaction {
 	@PositiveOrZero(message = "Cannot pay a negative amount")
 	private double pricePaid;
 
+	@JsonIgnore
 	@Column(name="transaction_date")
 	@Temporal(TemporalType.TIMESTAMP)
-	@NotNull(message = "Account creation date cannot be null")
-
 	private LocalDateTime date;
 
 	//Constructors

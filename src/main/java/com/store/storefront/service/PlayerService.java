@@ -1,5 +1,6 @@
 package com.store.storefront.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.store.storefront.model.Player;
@@ -19,6 +20,9 @@ public class PlayerService {
 	private PlayerRepo repo;
 	
 	public Player newAccount(Player account) {
+		account.setPlayerLevel(0);
+		account.setCreationDate(LocalDate.now());
+		System.out.println(account.getName());
 		return repo.save(account);	}
 	//.save è un metodo preimpostato che salva gli oggetti "libro" nel database.
 	

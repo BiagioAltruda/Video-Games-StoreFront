@@ -2,8 +2,9 @@ package com.store.storefront.controller;
 
 import java.util.List;
 
-import com.store.storefront.model.CardDetails;
+import com.store.storefront.DTO.TransactionDTO;
 import com.store.storefront.model.PaymentProcessor;
+import com.store.storefront.service.PlayerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,15 +26,16 @@ import com.store.storefront.service.TransactionService;
 public class TransactionController {
 
 	private final TransactionService transactionService;
-
-	public TransactionController(TransactionService transactionService) {
+	private final PlayerService playerService;
+	public TransactionController(TransactionService transactionService, PlayerService  playerService) {
 		this.transactionService = transactionService;
+		this.playerService = playerService;
 	}
-	
-	 @GetMapping("/payment")
-	    public String paymentPage() {
-	        return "pages/Payment";  // -> src/main/resources/templates/pages/Payment.html
-	    }
+
+	@GetMapping("/payment")
+	public String paymentPage() {
+		return "pages/Payment";  // -> src/main/resources/templates/pages/Payment.html
+	}
 
 	// restituisce tutte le transazioni
 	@GetMapping("/transactions")
@@ -53,11 +55,11 @@ public class TransactionController {
 	}
 
 	// Crea (201 Created)
-	@PostMapping("/transactions")
+	@PostMapping("/transactions") //for debugging
 	public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction) {
 		Transaction saved = transactionService.createTransaction(transaction);
 		return ResponseEntity.status(HttpStatus.CREATED).body(saved); // costruisce una risposta http, la salva,
-																		// controlla lo status
+		// controlla lo status
 	}
 
 	// Aggiorna (404 se non esiste)
@@ -80,13 +82,16 @@ public class TransactionController {
 
 	// simulazione di pagamento (mock)
 	@PostMapping("/transactions/pay/{id}")
-	public String processPayment(@PathVariable Long id, @RequestBody CardDetails cardData, @RequestBody Transaction transactionData) {
+	public String processPayment(@PathVariable Integer id, @RequestBody TransactionDTO dto) {
 
-		if(PaymentProcessor.validate(cardData)){
-			transactionData = transactionService.createTransaction(transactionData);
-			return "Pagamento riuscito per transazione ID: " + transactionData.getId();
+		if(PaymentProcessor.validate(dto.getCardDetails())){
+			dto.getTransaction().setPlayer(playerService.findById(id));
+			System.out.println(id);
+			System.out.println(dto.getTransaction().getPlayer());
+			Transaction transaction = transactionService.createTransaction(dto.getTransaction());
+			return "Pagamento riuscito per transazione ID: " + transaction.getId();
 		}
 		return "Pagamento fallito";
 	}
 
-}
+	}

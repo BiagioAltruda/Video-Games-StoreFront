@@ -1,5 +1,6 @@
 package com.store.storefront.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +16,7 @@ import java.util.Set;
 public class Game implements Reviewable{
 
     @Id             //field with basic validation, not validated field are optional for game creation's sake
-    @GeneratedValue //can be added later with no issue
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //can be added later with no issue
     @Column(insertable = false,updatable = false, name = "appid")
     @Min(1)
     @Positive(message = "id has to be a positive number")
@@ -39,7 +40,7 @@ public class Game implements Reviewable{
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Trending> trending;
 
-
+    @JsonIgnore
     //One-to-Many relationship to the players table using the transactions table
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Transaction> transactions = new HashSet<>();

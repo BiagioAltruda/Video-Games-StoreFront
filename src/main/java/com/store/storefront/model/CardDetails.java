@@ -1,19 +1,22 @@
 package com.store.storefront.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class CardDetails {
     private int cardNumber;
     private String cardHolderName;
-    private Date cardExpiry;
+    private LocalDate cardExpiry;
     private int cardCVV;
 
-    public CardDetails(int cardNumber, String cardHolderName, Date cardExpiry, int cardCVV) {
+    public CardDetails(int cardNumber, String cardHolderName, LocalDate cardExpiry, int cardCVV) {
         this.cardNumber = cardNumber;
         this.cardHolderName = cardHolderName;
         this.cardExpiry = cardExpiry;
         this.cardCVV = cardCVV;
     }
+
+    public CardDetails() {}
+
 
     public int getCardNumber() {
         return cardNumber;
@@ -31,11 +34,11 @@ public class CardDetails {
         this.cardHolderName = cardHolderName;
     }
 
-    public Date getCardExpiry() {
+    public LocalDate getCardExpiry() {
         return cardExpiry;
     }
 
-    public void setCardExpiry(Date cardExpiry) {
+    public void setCardExpiry(LocalDate cardExpiry) {
         this.cardExpiry = cardExpiry;
     }
 

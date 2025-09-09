@@ -35,7 +35,7 @@ public class TransactionService {
 
 	// Metodo per creare una nuova transazione
 	public Transaction createTransaction(Transaction transaction) {
-		//transaction.setDate(java.time.LocalDateTime.now());
+		transaction.setDate(java.time.LocalDateTime.now());
 		return transactionRepo.save(transaction); //// save() inserisce un nuovo record se l'id è null,
 	}
 	

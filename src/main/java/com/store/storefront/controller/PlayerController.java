@@ -1,5 +1,6 @@
 package com.store.storefront.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import com.store.storefront.model.Player;
 import com.store.storefront.service.PlayerService;
@@ -32,12 +33,14 @@ public class PlayerController {
 		return service.getAll();
 	}
 	
-	@PostMapping("/new")
+	@PostMapping("/new") //For manual adding/debugging only
 	public Player newPlayer(@Validated @RequestBody Player account) {
+		System.out.println("test");
+		System.out.println(account);
 		return service.newAccount(account);
 	}
 	
-	@PostMapping("/update")
+	@PutMapping("/update")
 	public Player updatePlayer(@Validated @RequestBody Player p) {
 		return service.updateAccount(p);
 	}
@@ -46,5 +49,4 @@ public class PlayerController {
 	public void deleteAccount (@PathVariable int id) {
 		service.deleteAccount(id);
 	}
-
 }
