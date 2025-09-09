@@ -65,11 +65,6 @@ public class TransactionService {
 		transactionRepo.deleteById(id);
 
 	}
-//	//metta la data pagamento e salvo, Metodo usato dal controller /transactions/pay/{id}
-//	public Transaction markAsPaid(Long id) {
-//	    Transaction t = getTransactionById(id); 
-//	    t.setDate(java.time.LocalDateTime.now());
-//	    return transactionRepo.save(t);
-//	}
+
 
 }
