@@ -251,69 +251,67 @@
         </div>
       </div>
     </div>
+    
 
-    <div class="container-fluid mt-3">
-      <div class="row">
+<div class="container-fluid mt-3">
+    <div class="row">
         <!-- Menu laterale -->
         <div class="col-md-3">
-          <div
-            class="sidebar-menu main-color-1 p-4 ms-3 rounded"
-            style="margin-left: 20px !important"
-          >
-            <h5 class="text-white mb-4">MENU</h5>
-
-            <!-- Tutto il catalogo -->
-            <div class="mb-3">
-              <a
-                href="Catalogo.html"
-                class="btn btn-outline-light w-100 text-start"
-              >
-                <i class="fas fa-book me-2"></i>TUTTO IL CATALOGO
-              </a>
-            </div>
-
-            <!-- Cerca per nome -->
-            <div class="mb-4">
-              <h6 class="text-white mb-2">CERCA PER NOME</h6>
-              <form class="search-form">
-                <div class="input-group">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Inserisci nome..."
-                    aria-label="Cerca per nome"
-                  />
-                  <button class="btn btn-light" type="submit">
-                    <i class="fas fa-search"></i>
-                  </button>
+            <div class="sidebar-menu main-color-1 p-4 ms-3 rounded" style="margin-left: 20px !important">
+                <h5 class="text-white mb-4">MENU</h5>
+                <!-- Tutto il catalogo -->
+                <div class="mb-3">
+                    <a href="Catalogo.html" class="btn btn-outline-light w-100 text-start">
+                        <i class="fas fa-book me-2"></i>TUTTO IL CATALOGO
+                    </a>
                 </div>
-              </form>
-            </div>
 
-            <!-- Cerca per categoria -->
-            <div class="mb-3">
-              <h6 class="text-white mb-2">CERCA PER CATEGORIA</h6>
-              <div class="categorie-menu">
-                <div class="categoria-item" onclick="cercaCategoria('Horror')">
-                  <i class="fas fa-ghost me-2"></i>Horror
+                <!-- Cerca per nome -->
+                <div class="mb-4">
+                    <h6 class="text-white mb-2">CERCA PER NOME</h6>
+                    <form class="search-form">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Inserisci nome..." aria-label="Cerca per nome" />
+                            <button class="btn btn-light" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div
-                  class="categoria-item"
-                  onclick="cercaCategoria('Avventura')"
-                >
-                  <i class="fas fa-mountain me-2"></i>Avventura
+
+                <!-- Cerca per categoria -->
+                <div class="mb-3">
+                    <h6 class="text-white mb-2">CERCA PER CATEGORIA</h6>
+                    <div class="categorie-menu">
+                        <div class="categoria-item" onclick="cercaCategoria('Horror')">
+                            <i class="fas fa-ghost me-2"></i>Horror
+                        </div>
+                        <div class="categoria-item" onclick="cercaCategoria('Avventura')">
+                            <i class="fas fa-mountain me-2"></i>Avventura
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
 
-        <!-- Contenuto principale -->
+        <!-- Card Featured Grande al Centro -->
         <div class="col-md-9">
-          <!-- Il tuo contenuto esistente va qui -->
+            <h2 class="text-white mb-4">Gioco in Evidenza</h2>
+            
+            <div id="featured-game-container" class="d-flex justify-content-center">
+                <!-- La card featured verrà generata dinamicamente da JavaScript -->
+            </div>
+
+            <!-- Loading placeholder -->
+            <div id="featured-loading" class="text-center py-5">
+                <div class="spinner-border text-light" role="status">
+                    <span class="visually-hidden">Caricamento...</span>
+                </div>
+                <p class="text-white mt-3">Caricamento gioco in evidenza...</p>
+            </div>
         </div>
-      </div>
     </div>
+</div>
 
     <!-- Footer -->
     <footer class="footer mt-5 py-5 main-color-1">

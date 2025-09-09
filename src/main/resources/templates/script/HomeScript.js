@@ -107,4 +107,108 @@ function register() {
     });
 }
 
-       
+let currentFeaturedIndex = 0;
+let allGames = [];
+
+function showFeaturedGame(index) {
+    // Nascondi il placeholder di caricamento
+    document.getElementById('featured-loading').style.display = 'none';
+    
+    // Mostra il container
+    document.getElementById('featured-game-container').style.display = 'flex';
+    
+    const game = allGames[index];
+    
+    const featuredCard = `
+<div class="card featured-game-card" onclick="showGameDetails(${game.id})" style="cursor: pointer;">
+    <img src="${game.bannerPath ? game.bannerPath : 'https://via.placeholder.com/500x450/51073a/ecf0f1?text=No+Image'}" 
+         class="card-img-left" alt="${game.name}"
+         onerror="this.src='https://via.placeholder.com/500x450/51073a/ecf0f1?text=Image+Error'">
+    
+    <div class="card-content-right">
+        <div>
+            <h3 class="card-title">${game.name}</h3>
+            <p class="card-developer">${game.developer}</p>
+            <span class="card-genre">${game.genre}</span>
+            
+            <p class="card-description">${game.description || 'Nessuna descrizione disponibile.'}</p>
+        </div>
+        
+        <div class="card-price-section">
+            <p class="card-rating">${game.price ? '€' + game.price.toFixed(2) : 'GRATIS'}</p>
+        </div>
+    </div>
+    
+    <!-- FRECCETTE DENTRO LA CARD -->
+    <div class="carousel-arrows">
+        <div class="carousel-arrow carousel-arrow-prev" onclick="event.stopPropagation(); prevFeaturedGame()">
+            &#10094;
+        </div>
+        <div class="carousel-arrow carousel-arrow-next" onclick="event.stopPropagation(); nextFeaturedGame()">
+            &#10095;
+        </div>
+    </div>
+</div>
+`;
+
+    document.getElementById('featured-game-container').innerHTML = featuredCard;
+    currentFeaturedIndex = index;
+    
+    // Aggiorna il contatore
+    document.getElementById('current-game-number').textContent = index + 1;
+    document.getElementById('total-games').textContent = allGames.length;
+}
+
+// Funzione per il gioco successivo
+function nextFeaturedGame() {
+    const nextIndex = (currentFeaturedIndex + 1) % allGames.length;
+    showFeaturedGame(nextIndex);
+}
+
+// Funzione per il gioco precedente
+function prevFeaturedGame() {
+    const prevIndex = (currentFeaturedIndex - 1 + allGames.length) % allGames.length;
+    showFeaturedGame(prevIndex);
+}
+
+// Funzione che chiama il database
+async function loadGames() {
+    try {
+        const response = await fetch('http://localhost:8080/smoke/games/all');
+        
+        if (!response.ok) {
+            throw new Error(`Errore HTTP: ${response.status}`);
+        }
+        
+        allGames = await response.json();
+        
+        if (allGames.length > 0) {
+            showFeaturedGame(0); // Mostra il primo gioco
+        } else {
+            document.getElementById('featured-loading').innerHTML = `
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Nessun gioco disponibile.
+                </div>
+            `;
+        }
+        
+    } catch (error) {
+        console.error('Errore nel caricamento dal database:', error);
+        document.getElementById('featured-loading').innerHTML = `
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Impossibile caricare i giochi. Riprova più tardi.
+            </div>
+        `;
+    }
+}
+
+// Avvia il caricamento quando la pagina è pronta
+document.addEventListener('DOMContentLoaded', function() {
+    // Nascondi inizialmente il container
+    document.getElementById('featured-game-container').style.display = 'none';
+    
+    // Carica i giochi
+    loadGames();
+});
