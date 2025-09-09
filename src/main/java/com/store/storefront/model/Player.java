@@ -1,6 +1,7 @@
 package com.store.storefront.model;
  
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,19 +17,17 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
  
 	//Attributi classe players
 	@Id
-	@Positive(message = "id cannot be negative")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@NotBlank(message = "name cannot be blank")
 	private String name;
-	@JsonIgnore
 	@NotBlank(message = "password cannot be blank")
 	private String password;
  
  
 	@PositiveOrZero(message = "player level cannot be negative")
 	private int playerLevel;
-	@NotNull(message = "account creation date cannot be null")
-	private Date creationDate;
+	private LocalDate creationDate;
  
 	private String language;
  
@@ -46,7 +45,8 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 	private Set<Player> friendOf = new HashSet<>();
  
 	//One-to-Many relationship to the games table using the transactions table
- 
+
+	@JsonIgnore //avoids looping
 	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Transaction> transactions = new HashSet<>();
  
@@ -56,7 +56,7 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 	private Set<Review> reviews = new HashSet<>();
  
 	//Player class constructors
-	public Player(int id, String name, String password, int playerLevel, Date creation_date, String language, Set<Review> reviews) {
+	public Player(int id, String name, String password, int playerLevel, LocalDate creation_date, String language, Set<Review> reviews) {
 		this.id=id;
 		this.name=name;
 		this.password=password;
@@ -121,11 +121,11 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 		this.playerLevel = playerLevel;
 	}
  
-	public Date getCreationDate() {
+	public LocalDate getCreationDate() {
 		return creationDate;
 	}
  
-	public void setCreationDate(Date creation_date) {
+	public void setCreationDate(LocalDate creation_date) {
 		this.creationDate = creation_date;
 	}
  
