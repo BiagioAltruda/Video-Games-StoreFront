@@ -1,5 +1,5 @@
 package com.store.storefront.model;
-
+ 
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,11 +9,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
-
+ 
 @Entity
 @Table(name = "players")
 public class Player implements Reviewable{ //Entity responsible for storing the player data
-	
+ 
 	//Attributi classe players
 	@Id
 	@Positive(message = "id cannot be negative")
@@ -23,16 +23,16 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 	@JsonIgnore
 	@NotBlank(message = "password cannot be blank")
 	private String password;
-
-
+ 
+ 
 	@PositiveOrZero(message = "player level cannot be negative")
 	private int playerLevel;
 	@NotNull(message = "account creation date cannot be null")
 	private Date creationDate;
-
+ 
 	private String language;
-
-
+ 
+ 
 	@ManyToMany
 	@JoinTable(
 			name = "friends", //name of the relationships table
@@ -40,21 +40,21 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 			inverseJoinColumns = @JoinColumn(name = "player_2") //name of the other entity
 	)
 	private Set<Player> friends = new HashSet<>(); //Set containing friend list
-
-
+ 
+ 
 	@ManyToMany(mappedBy = "friends") //bidirectional relation with mappedby
 	private Set<Player> friendOf = new HashSet<>();
-
+ 
 	//One-to-Many relationship to the games table using the transactions table
-
+ 
 	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Transaction> transactions = new HashSet<>();
-
+ 
 	//One-To-Many side of review relation
-
+ 
 	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Review> reviews = new HashSet<>();
-
+ 
 	//Player class constructors
 	public Player(int id, String name, String password, int playerLevel, Date creation_date, String language, Set<Review> reviews) {
 		this.id=id;
@@ -65,19 +65,19 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 		this.language = language;
 		this.reviews = reviews;
 	}
-
+ 
 	public Player(String name, String password){
 		this.name=name;
 		this.password=password;
 	}
 	public Player(){}
-
-
+ 
+ 
 	@Override
 	public void addReview(Review review) {
 		this.reviews.add(review);
 	}
-
+ 
 	@Override
 	public String removeReview(Review review) {
 		if(this.reviews.contains(review)) {
@@ -87,88 +87,88 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 		else
 			return "404";
 	}
-
+ 
 	//Getters and setters
 	public int getId() {
 		return id;
 	}
-
+ 
 	public void setId(int id) {
 		this.id = id;
 	}
-
+ 
 	public String getName() {
 		return name;
 	}
-
+ 
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+ 
 	public String getPassword() {
 		return password;
 	}
-
+ 
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+ 
 	public int getPlayerLevel() {
 		return playerLevel;
 	}
-
+ 
 	public void setPlayerLevel(int playerLevel) {
 		this.playerLevel = playerLevel;
 	}
-
+ 
 	public Date getCreationDate() {
 		return creationDate;
 	}
-
+ 
 	public void setCreationDate(Date creation_date) {
 		this.creationDate = creation_date;
 	}
-
+ 
 	public String getLanguage() {
 		return language;
 	}
-
+ 
 	public void setLanguage(String Language) {
 		this.language = Language;
 	}
-
+ 
 	public Set<Player> getFriends() {
 		return friends;
 	}
-
+ 
 	public void setFriends(Set<Player> friends) {
 		this.friends = friends;
 	}
-
+ 
 	public Set<Player> getFriendOf() {
 		return friendOf;
 	}
-
+ 
 	public void setFriendOf(Set<Player> friendOf) {
 		this.friendOf = friendOf;
 	}
-
+ 
 	public Set<Transaction> getTransactions() {
 		return transactions;
 	}
-
+ 
 	public void setTransactions(Set<Transaction> transactions) {
 		this.transactions = transactions;
 	}
-
+ 
 	public Set<Review> getReviews() {
 		return reviews;
 	}
-
+ 
 	public void setReviews(Set<Review> reviews) {
 		this.reviews = reviews;
 	}
-
+ 
 	@Override
 	public String toString() {
 		return "Player{" +

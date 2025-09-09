@@ -64,3 +64,72 @@ function showGameDetails(gameId) {
     window.location.href = `dettagli.html?id=${gameId}`;
     // Oppure mostra un modal con i dettagli
 }
+
+//metodo per mostrare i dettagli del gioco
+function showGameDetails(gameId) {
+    const url = `http://localhost:8080/smoke/games/${gameId}`;
+
+    fetch(url)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Gioco non trovato');
+            }
+            return response.json();
+        })
+        .then((game) => {
+            const gameDetails = `
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="${game.bannerPath || 'https://via.placeholder.com/500x700/51073a/ecf0f1?text=No+Image'}" 
+                             class="img-fluid rounded" alt="${game.name}" 
+                             onerror="this.src='https://via.placeholder.com/500x700/51073a/ecf0f1?text=Image+Error'">
+                    </div>
+                    <div class="col-md-6">
+                        <h2 class="text-white">${game.name}</h2>
+                        <p class="text-light"><strong>Sviluppatore:</strong> ${game.developer}</p>
+                        <p class="text-light"><strong>Genere:</strong> ${game.genre}</p>
+                        <p class="text-light"><strong>Prezzo:</strong> ${game.price ? '€' + game.price.toFixed(2) : 'Gratis'}</p>
+                        <p class="text-light"><strong>Pegi:</strong> + ${game.rating || 'N/A'}</p>
+                        <p class="text-light"><strong>Data di rilascio:</strong> ${game.releaseDate || 'N/D'}</p>
+                        
+                        <div class="mt-4">
+                            <h5 class="text-white">Descrizione</h5>
+                            <p class="text-light">${game.description || 'Nessuna descrizione disponibile'}</p>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <button class="btn btn-primary me-2">
+                                <i class="fas fa-shopping-cart me-1"></i>Aggiungi al Carrello
+                            </button>
+                            <button class="btn btn-secondary" onclick="closeGameDetails()">
+                                <i class="fas fa-arrow-left me-1"></i>Torna indietro
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+
+            document.getElementById('cards-container').innerHTML = gameDetails;
+        })
+        .catch((error) => {
+            console.error("Errore durante il recupero dei dettagli", error);
+            document.getElementById('cards-container').innerHTML = `
+                <div class="col-12 text-center">
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        Errore nel caricamento dei dettagli: ${error.message}
+                    </div>
+                    <button class="btn btn-secondary" onclick="closeGameDetails()">
+                        Torna alla lista
+                    </button>
+                </div>
+            `;
+        });
+}
+
+// funzione per tornare alla lista giochi
+function closeGameDetails() {
+    loadGames(); // Richiama la funzione che carica tutti i giochi
+}
