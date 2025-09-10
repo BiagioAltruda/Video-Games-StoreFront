@@ -5,9 +5,7 @@ import java.util.List;
 import com.store.storefront.model.Friends;
 import com.store.storefront.repository.FriendsRepo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 public class FriendsService {
@@ -42,6 +40,6 @@ public class FriendsService {
 	}
 
 	public List<Friends> getFriendsList(int id) {
-		return repo.getFriendsByPlayer_1(id);
+		return repo.getFriendsByFirstPlayer(id);
 	}
 }

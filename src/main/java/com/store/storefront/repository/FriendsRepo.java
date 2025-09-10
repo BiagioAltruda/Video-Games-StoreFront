@@ -12,7 +12,7 @@ import java.util.List;
 public interface FriendsRepo extends JpaRepository <Friends, Integer>{
 	//estende l'interfaccia con JPARepositoryche è una generica di Spring e specifica l'entità Friends_Model e il tipo della chiave primaria
 
-    public List<Friends> getFriendsByPlayer_1(@RequestParam int id);
+    public List<Friends> getFriendsByFirstPlayer(@RequestParam int id);
 
     int id(int id);
 }

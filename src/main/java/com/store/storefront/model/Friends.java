@@ -1,7 +1,7 @@
 package com.store.storefront.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -12,16 +12,16 @@ public class Friends { //support entity for the Many to Many relation to and fro
 	@JsonIgnore
 	@Id
 	private int id;
-
-	private int player_1;
-
-	private int player_2;
+	@Column(name = "player_1")
+	private int firstPlayer;
+	@Column(name = "player_2")
+	private int secondPlayer;
 	
 	//Costruttore
-	public Friends(int id, int player_1, int player_2) {
+	public Friends(int id, int firstPlayer, int secondPlayer) {
 		this.id=id;
-		this.player_1=player_1;
-		this.player_2=player_2;
+		this.firstPlayer = firstPlayer;
+		this.secondPlayer = secondPlayer;
 	}
 
 	public Friends() {}
@@ -35,20 +35,20 @@ public class Friends { //support entity for the Many to Many relation to and fro
 		this.id = id;
 	}
 
-	public int getPlayer_1() {
-		return player_1;
+	public int getFirstPlayer() {
+		return firstPlayer;
 	}
 
-	public void setPlayer_1(int player_1) {
-		this.player_1 = player_1;
+	public void setFirstPlayer(int player_1) {
+		this.firstPlayer = player_1;
 	}
 
-	public int getPlayer_2() {
-		return player_2;
+	public int getSecondPlayer() {
+		return secondPlayer;
 	}
 
-	public void setPlayer_2(int player_2) {
-		this.player_2 = player_2;
+	public void setSecondPlayer(int player_2) {
+		this.secondPlayer = player_2;
 	}
 	
 	
