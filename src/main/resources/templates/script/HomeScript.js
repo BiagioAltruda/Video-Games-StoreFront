@@ -26,24 +26,24 @@ function login() {
     // Gestisce la risposta del server
     .then(response => {
         if (response.status === 200) {
-            // Converte la risposta in una stringa e la restituisce
-            return JSON.stringify(response);
+            // Converte la risposta in formato JSON e la restituisce
+            return response.json();
         } else {
             throw new Error('Login failed');
         }
     })
-    // Gestisce la stringa ricevuta dal server
-    .then(async token => {
+    // Gestisce i dati JSON ricevuti dal server
+    .then(player => {
         // Salva il token per le richieste successive
-        localStorage.setItem('token', token);
-
+        localStorage.setItem('token', player.token);
+        
         // Aggiorna l'interfaccia utente per mostrare un messaggio di successo
-        alert('Login OK. Token salvato.');
+        document.getElementById('authOut').textContent = 'Login OK. Token salvato.';
     })
     // Gestisce eventuali errori che si verificano durante il processo
     .catch(error => {
         // Aggiorna l'interfaccia utente per mostrare un messaggio di errore
-        alert('Login fallito');
+        document.getElementById('authOut').textContent = 'Login fallito';
     });
 }
 
@@ -262,7 +262,7 @@ function mostraRisultatiRicerca(giochi, titoloRicerca) {
                 return `
 <div class="col-md-4 mb-4">
     <div class="card game-card" onclick="showGameDetails(${game.id})" style="cursor: pointer;">
-        <img src="${game.bannerPath}" 
+        <img src="${game.bannerPath ? game.bannerPath : 'https://via.placeholder.com/300x450/51073a/ecf0f1?text=No+Image'}" 
              class="card-img-top" alt="${game.name}"
              onerror="this.src='https://via.placeholder.com/300x450/51073a/ecf0f1?text=Image+Error'">
         
