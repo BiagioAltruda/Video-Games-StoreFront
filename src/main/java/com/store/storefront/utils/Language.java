@@ -1,6 +1,6 @@
 package com.store.storefront.utils;
 
-public enum languages {
+public enum Language {
     ENGLISH("en"),
     SPANISH("es"),
     FRENCH("fr"),
@@ -28,11 +28,20 @@ public enum languages {
 
     private final String code;
 
-    languages(String code) {
+    Language(String code) {
         this.code = code;
     }
 
     public String getCode() {
         return code;
+    }
+
+    public static boolean fromCode(String code) {
+        for (Language lang : Language.values()) {
+            if (lang.code.equalsIgnoreCase(code)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
