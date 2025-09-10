@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/friends")
+@CrossOrigin(origins = "*")
 public class FriendsController {
 
 	// DEPENDENCY INJECTION
