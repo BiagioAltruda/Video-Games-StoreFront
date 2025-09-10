@@ -15,7 +15,7 @@ function login() {
     formData.append('password', p);
 
     // Esegue una richiesta HTTP POST all'endpoint di login
-    fetch(`${baseUrl}/login`, {
+    fetch(`/smoke/account/login`, {
         method: 'POST', 
         body: formData // Imposta il body con i dati del form
     })
