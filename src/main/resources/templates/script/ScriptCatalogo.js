@@ -58,14 +58,7 @@ async function loadGames() {
 // Avvia il caricamento quando la pagina è pronta
 document.addEventListener('DOMContentLoaded', loadGames);
 
-function showGameDetails(gameId) {
-    console.log('Apri dettagli gioco ID:', gameId);
-    // Reindirizza alla pagina dettagli
-    window.location.href = `dettagli.html?id=${gameId}`;
-    // Oppure mostra un modal con i dettagli
-}
 
-//metodo per mostrare i dettagli del gioco
 function showGameDetails(gameId) {
     const url = `http://localhost:8080/smoke/games/${gameId}`;
 
@@ -78,7 +71,7 @@ function showGameDetails(gameId) {
         })
         .then((game) => {
         const gameDetails = `
-        <div class="game-details-container"> <!-- Aggiungi questo wrapper -->
+        <div class="game-details-container">
             <div class="container mt-4">
                 <div class="row">
                     <div class="col-md-6">
@@ -100,12 +93,79 @@ function showGameDetails(gameId) {
                         </div>
                         
                         <div class="mt-4">
-                            <button class="btn btn-primary me-2">
-                                <i class="fas fa-shopping-cart me-1"></i>Acquista
+                           <button class="btn btn-primary me-2" onclick="window.location.href='Payment.html'">
+                            <i class="fas fa-shopping-cart me-1"></i>Acquista
                             </button>
                             <button class="btn btn-secondary" onclick="closeGameDetails()">
                                 <i class="fas fa-arrow-left me-1"></i>Torna indietro
                             </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Aggiunta della sezione recensioni -->
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <ul class="nav nav-tabs" id="gameTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="tab-details" data-bs-toggle="tab" 
+                                        data-bs-target="#tab-details-content" type="button" role="tab" 
+                                        aria-controls="tab-details-content" aria-selected="true">
+                                    Dettagli
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tab-review-btn" data-bs-toggle="tab" 
+                                        data-bs-target="#tab-review" type="button" role="tab" 
+                                        aria-controls="tab-review" aria-selected="false">
+                                    Recensioni
+                                </button>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab-content p-3 border border-top-0 rounded-bottom" id="gameTabsContent">
+                            <div class="tab-pane fade show active" id="tab-details-content" role="tabpanel" 
+                                 aria-labelledby="tab-details">
+                                <!-- I dettagli del gioco possono rimanere qui se vuoi -->
+                            </div>
+                            
+                            <div class="tab-pane fade" id="tab-review" role="tabpanel" aria-labelledby="tab-review-btn">
+                                <div class="card game-details-container">
+                                    <div class="card-header bg-main">
+                                        <h5 class="mb-0">Aggiungi recensione</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="reviewForm">
+                                            <div class="mb-3">
+                                                <label class="form-label">Valutazione</label>
+                                                <select class="form-control" name="rating" id="reviewRating">
+                                                    <option value="👍">👍</option>
+                                                    <option value="👎">👎</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Titolo (opzionale)</label>
+                                                <input type="text" class="form-control" name="title" placeholder="Titolo breve">
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Recensione</label>
+                                                <textarea class="form-control" name="content" rows="4" placeholder="Scrivi la tua recensione..."></textarea>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary" id="submitReviewBtn" disabled>Pubblica recensione</button>
+                                        </form>
+
+                                        <hr class="my-4">
+
+                                        <div id="reviewsList">
+                                            <h5>Recensioni degli utenti</h5>
+                                            <p class="text-muted">Ancora nessuna recensione. Sii il primo a recensire!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -114,21 +174,57 @@ function showGameDetails(gameId) {
         `;
         
         document.getElementById('cards-container').innerHTML = gameDetails;
+        
+        // Aggiungi gli event listener dopo che l'HTML è stato renderizzato
+        setTimeout(() => {
+            const reviewForm = document.getElementById('reviewForm');
+            const reviewTextarea = reviewForm.querySelector('textarea[name="content"]');
+            const submitBtn = document.getElementById('submitReviewBtn');
+            
+            // Abilita il pulsante solo se c'è del testo nella recensione
+            reviewTextarea.addEventListener('input', function() {
+                submitBtn.disabled = this.value.trim().length === 0;
+            });
+            
+            // Gestione dell'invio del form
+            reviewForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitReview(gameId);
+            });
+        }, 100);
     })
-        .catch((error) => {
-            console.error("Errore durante il recupero dei dettagli", error);
-            document.getElementById('cards-container').innerHTML = `
-                <div class="col-12 text-center">
-                    <div class="alert alert-danger">
-                        <i class="fas fa-exclamation-circle me-2"></i>
-                        Errore nel caricamento dei dettagli: ${error.message}
-                    </div>
-                    <button class="btn btn-secondary" onclick="closeGameDetails()">
-                        Torna alla lista
-                    </button>
+    .catch((error) => {
+        console.error("Errore durante il recupero dei dettagli", error);
+        document.getElementById('cards-container').innerHTML = `
+            <div class="col-12 text-center">
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    Errore nel caricamento dei dettagli: ${error.message}
                 </div>
-            `;
-        });
+                <button class="btn btn-secondary" onclick="closeGameDetails()">
+                    Torna alla lista
+                </button>
+            </div>
+        `;
+    });
+}
+
+// Funzione per inviare la recensione (da implementare)
+function submitReview(gameId) {
+    const form = document.getElementById('reviewForm');
+    const formData = new FormData(form);
+    
+    // Qui dovresti implementare la logica per inviare la recensione al server
+    console.log('Recensione per il gioco', gameId, ':', {
+        rating: formData.get('rating'),
+        title: formData.get('title'),
+        content: formData.get('content')
+    });
+    
+    // Esempio: mostra un messaggio di successo
+    alert('Recensione inviata con successo!');
+    form.reset();
+    document.getElementById('submitReviewBtn').disabled = true;
 }
 
 // funzione per tornare alla lista giochi
