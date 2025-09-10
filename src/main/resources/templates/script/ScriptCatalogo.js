@@ -100,8 +100,8 @@ function showGameDetails(gameId) {
                         </div>
                         
                         <div class="mt-4">
-                            <button class="btn btn-primary me-2">
-                                <i class="fas fa-shopping-cart me-1"></i>Acquista
+                           <button class="btn btn-primary me-2" onclick="window.location.href='Payment.html'">
+                            <i class="fas fa-shopping-cart me-1"></i>Acquista
                             </button>
                             <button class="btn btn-secondary" onclick="closeGameDetails()">
                                 <i class="fas fa-arrow-left me-1"></i>Torna indietro
