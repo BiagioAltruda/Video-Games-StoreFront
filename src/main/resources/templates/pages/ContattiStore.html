@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- CSS personalizzato -->
+    <link rel="stylesheet" href="../styles/StoreFrontStyleSheet.css" />
+
+    <title>Smoke Home - Contatti</title>
+  </head>
+  <body class="neutral-1">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg main-color-1 py-3">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="home.html">
+          <i class="fas fa-home me-2"></i>Smoke Home
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="Catalogo.html">
+                <i class="fas fa-book me-1"></i>Catalogo
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="Categorie.html">
+                <i class="fas fa-tags me-1"></i>Categorie
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="Trending.html">
+                <i class="fas fa-chart-line me-1"></i>Trends
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="Contatti.html">
+                <i class="fas fa-envelope me-1"></i>Contatti
+              </a>
+            </li>
+          </ul>
+          <form class="d-flex me-2">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Cerca..."
+            />
+            <button class="btn btn-outline-light" type="submit">
+              <i class="fas fa-search"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Titolo pagina -->
+    <header class="text-center my-5">
+      <h1 class="fw-bold text-dark">
+        <i class="fas fa-headset me-2"></i>Contattaci
+      </h1>
+      <p class="text-muted">Siamo sempre a disposizione per i gamer fumosi 🎮💨</p>
+    </header>
+
+    <!-- Contenuto -->
+    <div class="container my-5">
+      <div class="row">
+        <!-- Info contatti -->
+        <div class="col-md-6 mb-4">
+          <h3 class="mb-3">📍 Dove trovarci</h3>
+          <p>
+            Sede centrale di Smoke Home, il paradiso dei videogiochi fumosi.<br />
+            Vieni a trovarci oppure contattaci direttamente!
+          </p>
+
+          <div class="d-flex align-items-center mb-2">
+            <i class="fa-solid fa-location-dot fa-lg me-2"></i>
+            <span><strong>Via del Gaming 420, Milano</strong></span>
+          </div>
+          <div class="d-flex align-items-center mb-2">
+            <i class="fa-solid fa-phone fa-lg me-2"></i>
+            <span><strong>+39 02 1234 5678</strong></span>
+          </div>
+          <div class="d-flex align-items-center mb-4">
+            <i class="fa-solid fa-envelope fa-lg me-2"></i>
+            <span><strong>support@smokehome.it</strong></span>
+          </div>
+
+          <!-- Mappa Google -->
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2795.3227372993836!2d9.189982115800293!3d45.464203179101464!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4786c6aa0b4df62d%3A0xb02180c56d95a734!2sDuomo%20di%20Milano!5e0!3m2!1sit!2sit!4v1694529200000!5m2!1sit!2sit"
+            width="100%"
+            height="250"
+            style="border:0; border-radius: 12px"
+            allowfullscreen=""
+            loading="lazy"
+          ></iframe>
+        </div>
+
+        <!-- Form contatti -->
+        <div class="col-md-6">
+          <h3 class="mb-3">✉️ Scrivici</h3>
+          <form>
+            <div class="mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Nome"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <input
+                type="email"
+                class="form-control"
+                placeholder="Email"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Oggetto"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <textarea
+                class="form-control"
+                rows="4"
+                placeholder="Il tuo messaggio..."
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="fas fa-paper-plane me-2"></i>Invia
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-5 py-5 main-color-1">
+      <div class="container">
+        <div class="row">
+          <!-- Colonna sinistra -->
+          <div class="col-md-4">
+            <h5 class="text-white mb-3">🎮 Smoke Home</h5>
+            <p class="text-light">
+              Dal 2023 vendiamo videogiochi "fumosi" a prezzi incredibili!<br />
+              ⚡ Consegna in 3-5 giorni lavorativi<br />
+              🎯 Soddisfazione garantita o quasi!
+            </p>
+          </div>
+          <!-- Colonna centrale -->
+          <div class="col-md-4">
+            <h5 class="text-white mb-3">🔗 Link Utili</h5>
+            <ul class="list-unstyled">
+              <li><a href="#" class="text-light">FAQ</a></li>
+              <li><a href="#" class="text-light">Contatti</a></li>
+              <li><a href="#" class="text-light">Privacy Policy</a></li>
+            </ul>
+            <h6 class="text-white mt-4 mb-2">🌐 Seguici</h6>
+            <a href="#" class="text-light me-3"><i class="fab fa-discord"></i></a>
+            <a href="#" class="text-light me-3"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-light me-3"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="text-light"><i class="fab fa-youtube"></i></a>
+          </div>
+          <!-- Colonna destra -->
+          <div class="col-md-4">
+            <h5 class="text-white mb-3">📧 Newsletter</h5>
+            <form>
+              <div class="mb-3">
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Inserisci la tua email"
+                  required
+                />
+              </div>
+              <button class="btn btn-light w-100">
+                <i class="fas fa-paper-plane me-2"></i>Iscriviti
+              </button>
+            </form>
+          </div>
+        </div>
+        <hr class="footer-divider" />
+        <div class="text-center text-light">
+          &copy; 2025 Smoke Home - Tutti i diritti riservati
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
