@@ -187,6 +187,10 @@
       <!-- Messaggi -->
       <div id="friendAlerts" class="mb-3"></div>
 
+       <!-- tuo id (temporaneo finché non avete login) -->
+      <input type="hidden" id="myUserId" value="1">
+
+
       <!-- Form: SOLO FRIEND_ID -->
       <form class="row g-2 mb-3" id="addFriendForm" novalidate>
         <div class="col-md-4">
@@ -201,12 +205,14 @@
             required
           />
           <div class="invalid-feedback">Inserisci un ID valido (intero &gt; 0).</div>
+           <div class="form-text">Inserisci l’ID numerico del giocatore da aggiungere.</div>
         </div>
         <div class="col-auto d-flex align-items-end">
           <button type="submit" class="btn btn-primary" disabled>Aggiungi amico</button>
         </div>
       </form>
-
+<ul class="list-group" id="friendsList"></ul>
+      <div class="text-center text-muted mt-3" id="friendsEmpty">Nessun amico nella lista.</div>
       
     </div>
   </div>

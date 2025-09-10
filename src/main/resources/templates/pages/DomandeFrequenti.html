@@ -13,10 +13,18 @@
   <link rel="stylesheet" href="../styles/StoreFrontStyleSheet.css" />
 
   <style>
-    .card-shadow { box-shadow: 0 10px 25px rgba(0,0,0,.08); border-radius: 14px; }
     .faq-search { max-width: 520px; }
-    .filter-btns .btn { margin: .25rem; }
-    .highlight { background: #fff4cc; }
+    /* FAQ – armonizza l’accordion al tema */
+    .accordion-button:focus {
+      box-shadow: 0 0 0 0.2rem rgba(166,177,178,0.25);
+    }
+    .accordion-button:not(.collapsed) {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      border-bottom: 1px solid var(--secondary-color);
+    }
+    /* Opzionale: evidenziazioni coerenti con la palette */
+    .highlight { background: rgba(166,177,178,0.2); }
   </style>
 </head>
 <body class="bg-light">
@@ -51,7 +59,7 @@
     <!-- Header -->
     <div class="text-center mb-4">
       <h1 class="fw-bold mb-2"><i class="fa-solid fa-circle-question me-2"></i>Domande frequenti (FAQ)</h1>
-      <p class="text-muted mb-3">Hai dubbi su pagamenti, ordini, chiavi digitali o rimborsi? Trova subito la risposta 👇</p>
+      <p class="text-muted mb-3">Hai dubbi su pagamenti, ordini, chiavi digitali o rimborsi? Trova subito la risposta.</p>
 
       <!-- Ricerca -->
       <div class="mx-auto faq-search">
@@ -62,20 +70,20 @@
       </div>
 
       <!-- Filtri -->
-      <div class="filter-btns mt-3">
-        <button class="btn btn-sm btn-outline-primary active" data-filter="all"><i class="fa-solid fa-asterisk me-1"></i>Tutto</button>
-        <button class="btn btn-sm btn-outline-primary" data-filter="ordini"><i class="fa-solid fa-basket-shopping me-1"></i>Ordini</button>
-        <button class="btn btn-sm btn-outline-primary" data-filter="pagamenti"><i class="fa-solid fa-credit-card me-1"></i>Pagamenti</button>
-        <button class="btn btn-sm btn-outline-primary" data-filter="consegna"><i class="fa-solid fa-key me-1"></i>Consegna chiavi</button>
-        <button class="btn btn-sm btn-outline-primary" data-filter="rimborsi"><i class="fa-solid fa-rotate-left me-1"></i>Rimborsi</button>
-        <button class="btn btn-sm btn-outline-primary" data-filter="account"><i class="fa-solid fa-user-gear me-1"></i>Account</button>
-        <button class="btn btn-sm btn-outline-primary" data-filter="tecnico"><i class="fa-solid fa-screwdriver-wrench me-1"></i>Tecnico</button>
-        <button class="btn btn-sm btn-outline-primary" data-filter="privacy"><i class="fa-solid fa-shield-halved me-1"></i>Privacy</button>
+      <div class="filter-btns mt-3 bg-main p-2 rounded">
+        <button class="btn btn-sm btn-outline-light active" data-filter="all"><i class="fa-solid fa-asterisk me-1"></i>Tutto</button>
+        <button class="btn btn-sm btn-outline-light" data-filter="ordini"><i class="fa-solid fa-basket-shopping me-1"></i>Ordini</button>
+        <button class="btn btn-sm btn-outline-light" data-filter="pagamenti"><i class="fa-solid fa-credit-card me-1"></i>Pagamenti</button>
+        <button class="btn btn-sm btn-outline-light" data-filter="consegna"><i class="fa-solid fa-key me-1"></i>Consegna chiavi</button>
+        <button class="btn btn-sm btn-outline-light" data-filter="rimborsi"><i class="fa-solid fa-rotate-left me-1"></i>Rimborsi</button>
+        <button class="btn btn-sm btn-outline-light" data-filter="account"><i class="fa-solid fa-user-gear me-1"></i>Account</button>
+        <button class="btn btn-sm btn-outline-light" data-filter="tecnico"><i class="fa-solid fa-screwdriver-wrench me-1"></i>Tecnico</button>
+        <button class="btn btn-sm btn-outline-light" data-filter="privacy"><i class="fa-solid fa-shield-halved me-1"></i>Privacy</button>
       </div>
     </div>
 
     <!-- FAQ -->
-    <div class="accordion card-shadow" id="faqAccordion">
+    <div class="accordion game-details-container" id="faqAccordion">
       <!-- 1 -->
       <div class="accordion-item" data-topic="pagamenti ordini">
         <h2 class="accordion-header" id="h1">
@@ -252,10 +260,11 @@
     </div>
   </main>
 
-  <!-- Footer (uguale al tuo) -->
+  <!-- Footer -->
   <footer class="footer mt-5 py-5 main-color-1">
     <div class="container">
       <div class="row">
+        <!-- Chi siamo -->
         <div class="col-md-4">
           <div class="footer-section">
             <h5 class="text-white mb-3">🎮 Smoke Home</h5>
@@ -267,6 +276,7 @@
             </p>
           </div>
         </div>
+        <!-- Link utili -->
         <div class="col-md-4">
           <div class="footer-section">
             <h5 class="text-white mb-3">🔗 Link Utili</h5>
@@ -283,6 +293,7 @@
             </div>
           </div>
         </div>
+        <!-- Contatti -->
         <div class="col-md-4">
           <div class="footer-section">
             <h5 class="text-white mb-3">📧 Contattaci</h5>
@@ -294,7 +305,9 @@
           </div>
         </div>
       </div>
+      <!-- Divider -->
       <div class="row mt-4"><div class="col-12"><hr class="footer-divider"></div></div>
+      <!-- Copyright -->
       <div class="row mt-3">
         <div class="col-12 text-center">
           <p class="text-light mb-0">&copy; 2023 Smoke Home - Tutti i diritti riservati</p>
@@ -313,7 +326,7 @@
       {"@type":"Question","name":"Quando ricevo la chiave/il gioco digitale?","acceptedAnswer":{"@type":"Answer","text":"Di norma subito dopo il pagamento, nell'area ordini e via email. In rari casi possono servire alcuni minuti."}},
       {"@type":"Question","name":"Posso ottenere un rimborso?","acceptedAnswer":{"@type":"Answer","text":"Rimborsiamo gli ordini non ancora attivati o in caso di key non funzionante, previa verifica dal ticket di assistenza."}},
       {"@type":"Question","name":"Le chiavi hanno limitazioni regionali?","acceptedAnswer":{"@type":"Answer","text":"Eventuali limitazioni sono indicate nella pagina prodotto. In caso di dubbi contattaci prima dell'acquisto."}},
-      {"@type":"Question","name":"Come attivo una key su Steam/Ubisoft/Xbox/PlayStation?","acceptedAnswer":{"@type":"Answer","text":"Dal client ufficiale seleziona 'Attiva un prodotto' o 'Usa un codice' e segui le istruzioni mostrante nei dettagli dell'ordine."}},
+      {"@type":"Question","name":"Come attivo una key su Steam/Ubisoft/Xbox/PlayStation?","acceptedAnswer":{"@type":"Answer","text":"Dal client ufficiale seleziona 'Attiva un prodotto' o 'Usa un codice' e segui le istruzioni mostrate nei dettagli dell'ordine."}},
       {"@type":"Question","name":"I miei dati di pagamento sono al sicuro?","acceptedAnswer":{"@type":"Answer","text":"Usiamo connessioni HTTPS e provider di pagamento affidabili. Non archiviamo i dettagli completi della tua carta sul nostro server."}}
     ]
   }
@@ -334,8 +347,6 @@
         const activeBtn = btns.find(b => b.classList.contains('active'));
         const topic = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
 
-        let visibleCount = 0;
-
         items.forEach(it => {
           const txt = it.innerText.toLowerCase();
           const topics = (it.getAttribute('data-topic') || '').split(/\s+/);
@@ -343,18 +354,11 @@
           const matchTopic = (topic === 'all') || topics.includes(topic);
           const matchText  = !q || txt.includes(q);
 
-          if (matchTopic && matchText) {
-            it.style.display = '';
-            visibleCount++;
-          } else {
-            it.style.display = 'none';
-          }
+          it.style.display = (matchTopic && matchText) ? '' : 'none';
         });
-
-        // Se vuoi mostrare un messaggio “nessun risultato”, aggiungi un div e gestiscilo qui
       }
 
-      // search live
+      // ricerca live
       search.addEventListener('input', applyFilter);
 
       // filtri
