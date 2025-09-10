@@ -106,64 +106,38 @@ function showGameDetails(gameId) {
                 <!-- Aggiunta della sezione recensioni -->
                 <div class="row mt-5">
                     <div class="col-12">
-                        <ul class="nav nav-tabs" id="gameTabs" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="tab-details" data-bs-toggle="tab" 
-                                        data-bs-target="#tab-details-content" type="button" role="tab" 
-                                        aria-controls="tab-details-content" aria-selected="true">
-                                    Dettagli
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="tab-review-btn" data-bs-toggle="tab" 
-                                        data-bs-target="#tab-review" type="button" role="tab" 
-                                        aria-controls="tab-review" aria-selected="false">
-                                    Recensioni
-                                </button>
-                            </li>
-                        </ul>
-                        
-                        <div class="tab-content p-3 border border-top-0 rounded-bottom" id="gameTabsContent">
-                            <div class="tab-pane fade show active" id="tab-details-content" role="tabpanel" 
-                                 aria-labelledby="tab-details">
-                                <!-- I dettagli del gioco possono rimanere qui se vuoi -->
+                        <div class="card game-details-container">
+                            <div class="card-header bg-main">
+                                <h5 class="mb-0">Aggiungi recensione</h5>
                             </div>
-                            
-                            <div class="tab-pane fade" id="tab-review" role="tabpanel" aria-labelledby="tab-review-btn">
-                                <div class="card game-details-container">
-                                    <div class="card-header bg-main">
-                                        <h5 class="mb-0">Aggiungi recensione</h5>
+                            <div class="card-body">
+                                <form id="reviewForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Valutazione</label>
+                                        <select class="form-control" name="rating" id="reviewRating">
+                                            <option value="👍">👍</option>
+                                            <option value="👎">👎</option>
+                                        </select>
                                     </div>
-                                    <div class="card-body">
-                                        <form id="reviewForm">
-                                            <div class="mb-3">
-                                                <label class="form-label">Valutazione</label>
-                                                <select class="form-control" name="rating" id="reviewRating">
-                                                    <option value="👍">👍</option>
-                                                    <option value="👎">👎</option>
-                                                </select>
-                                            </div>
 
-                                            <div class="mb-3">
-                                                <label class="form-label">Titolo (opzionale)</label>
-                                                <input type="text" class="form-control" name="title" placeholder="Titolo breve">
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label class="form-label">Recensione</label>
-                                                <textarea class="form-control" name="content" rows="4" placeholder="Scrivi la tua recensione..."></textarea>
-                                            </div>
-
-                                            <button type="submit" class="btn btn-primary" id="submitReviewBtn" disabled>Pubblica recensione</button>
-                                        </form>
-
-                                        <hr class="my-4">
-
-                                        <div id="reviewsList">
-                                            <h5>Recensioni degli utenti</h5>
-                                            <p class="text-muted">Ancora nessuna recensione. Sii il primo a recensire!</p>
-                                        </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Titolo (opzionale)</label>
+                                        <input type="text" class="form-control" name="title" placeholder="Titolo breve">
                                     </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Recensione</label>
+                                        <textarea class="form-control" name="content" rows="4" placeholder="Scrivi la tua recensione..."></textarea>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary" id="submitReviewBtn" disabled>Pubblica recensione</button>
+                                </form>
+
+                                <hr class="my-4">
+
+                                <div id="reviewsList">
+                                    <h5>Recensioni degli utenti</h5>
+                                    <p class="text-muted">Ancora nessuna recensione. Sii il primo a recensire!</p>
                                 </div>
                             </div>
                         </div>
