@@ -20,7 +20,6 @@ public class FriendsController {
 
 	// DEPENDENCY INJECTION
 	private final FriendsService service;
-	// Crea un'istanza di "LibroService" Classe dove all'interno ho i metodi
 
 	@Autowired
 	public FriendsController(FriendsService service) {

@@ -10,12 +10,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FriendsService {
-	
-	@Autowired
+
 	//Annotazione che implementa le dependency injection, principio fondamentale dei framework
 	//Inietta automaticamente le dipendenze
 	//Elimina la necessità di creare manualmente le istanze
-	private FriendsRepo repo;
+	private final FriendsRepo repo;
+
+	public FriendsService(FriendsRepo repo) {
+		this.repo = repo;
+	}
 	
 	public List <Friends> getAll() {
 		return repo.findAll();

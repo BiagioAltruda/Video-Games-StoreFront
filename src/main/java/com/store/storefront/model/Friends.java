@@ -1,15 +1,20 @@
 package com.store.storefront.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
 public class Friends { //support entity for the Many to Many relation to and from the players table
 
-	//Attributi 
+	//Attributi
+	@JsonIgnore
 	@Id
 	private int id;
+
 	private int player_1;
+
 	private int player_2;
 	
 	//Costruttore
