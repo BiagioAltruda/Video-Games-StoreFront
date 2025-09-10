@@ -82,26 +82,26 @@ function showGameDetails(gameId) {
             <div class="container mt-4">
                 <div class="row">
                     <div class="col-md-6">
-                        <img src="${game.bannerPath || 'https://via.placeholder.com/500x700/51073a/ecf0f1?text=No+Image'}" 
+                        <img src="${game.bannerPath}" 
                              class="img-fluid rounded" alt="${game.name}" 
                              onerror="this.src='https://via.placeholder.com/500x700/51073a/ecf0f1?text=Image+Error'">
                     </div>
                     <div class="col-md-6">
-                        <h2 class="text-contrast">${game.name}</h2> <!-- Modificato -->
-                        <p class="text-contrast"><strong>Sviluppatore:</strong> ${game.developer}</p> <!-- Modificato -->
-                        <p class="text-contrast"><strong>Genere:</strong> ${game.genre}</p> <!-- Modificato -->
-                        <p class="text-contrast"><strong>Prezzo:</strong> ${game.price ? '€' + game.price.toFixed(2) : 'Gratis'}</p> <!-- Modificato -->
-                        <p class="text-contrast"><strong>Pegi:</strong> + ${game.rating || 'N/A'}</p> <!-- Modificato -->
-                        <p class="text-contrast"><strong>Data di rilascio:</strong> ${game.releaseDate || 'N/D'}</p> <!-- Modificato -->
+                        <h2 class="text-contrast">${game.name}</h2> 
+                        <p class="text-contrast"><strong>Sviluppatore:</strong> ${game.developer}</p> 
+                        <p class="text-contrast"><strong>Genere:</strong> ${game.genre}</p> 
+                        <p class="text-contrast"><strong>Prezzo:</strong> ${game.price ? '€' + game.price.toFixed(2) : 'Gratis'}</p> 
+                        <p class="text-contrast"><strong>Pegi:</strong> + ${game.rating || 'N/A'}</p> 
+                        <p class="text-contrast"><strong>Data di rilascio:</strong> ${game.releaseDate || 'N/D'}</p> 
                         
                         <div class="mt-4">
-                            <h5 class="text-contrast">Descrizione</h5> <!-- Modificato -->
-                            <p class="text-contrast">${game.description || 'Nessuna descrizione disponibile'}</p> <!-- Modificato -->
+                            <h5 class="text-contrast">Descrizione</h5> 
+                            <p class="text-contrast">${game.description || 'Nessuna descrizione disponibile'}</p> 
                         </div>
                         
                         <div class="mt-4">
                             <button class="btn btn-primary me-2">
-                                <i class="fas fa-shopping-cart me-1"></i>Aggiungi al Carrello
+                                <i class="fas fa-shopping-cart me-1"></i>Acquista
                             </button>
                             <button class="btn btn-secondary" onclick="closeGameDetails()">
                                 <i class="fas fa-arrow-left me-1"></i>Torna indietro
