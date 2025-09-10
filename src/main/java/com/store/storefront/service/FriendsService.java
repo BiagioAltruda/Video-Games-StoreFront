@@ -7,6 +7,7 @@ import com.store.storefront.repository.FriendsRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 public class FriendsService {
@@ -37,6 +38,10 @@ public class FriendsService {
 	}
 	
 	public Friends findById(int id) {
-		return repo.findById(id).get();
+		return repo.findById(id).orElse(null);
+	}
+
+	public List<Friends> getFriendsList(int id) {
+		return repo.getFriendsByPlayer_1(id);
 	}
 }
