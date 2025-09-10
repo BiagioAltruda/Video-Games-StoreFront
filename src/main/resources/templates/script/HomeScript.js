@@ -262,7 +262,7 @@ function mostraRisultatiRicerca(giochi, titoloRicerca) {
                 return `
 <div class="col-md-4 mb-4">
     <div class="card game-card" onclick="showGameDetails(${game.id})" style="cursor: pointer;">
-        <img src="${game.bannerPath ? game.bannerPath : 'https://via.placeholder.com/300x450/51073a/ecf0f1?text=No+Image'}" 
+        <img src="${game.bannerPath}" 
              class="card-img-top" alt="${game.name}"
              onerror="this.src='https://via.placeholder.com/300x450/51073a/ecf0f1?text=Image+Error'">
         

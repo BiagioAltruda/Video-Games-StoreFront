@@ -186,85 +186,119 @@ body {
             transform: translateX(5px);
         }
 
-        /* ===== GAME CARDS ===== */
-        .game-card {
-            border: none;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-            transition: all var(--transition-speed) ease;
-            background: var(--card-bg-gradient);
-            height: 480px;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-        }
+        /* ===== GAME CARDS MODIFICATE ===== */
+.game-card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transition: all var(--transition-speed) ease;
+    background: var(--card-bg-gradient);
+    height: auto;
+    min-height: 650px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
 
-        .game-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
-        }
+.game-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+}
 
-        .card-img-top {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
-            border-bottom: 3px solid var(--secondary-color);
-            transition: transform var(--transition-speed) ease;
-        }
+.card-img-container {
+    width: 100%;
+    height: 450px;
+    overflow: hidden;
+}
 
-        .game-card:hover .card-img-top {
-            transform: scale(1.05);
-        }
+.card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-bottom: 3px solid var(--secondary-color);
+    transition: transform var(--transition-speed) ease;
+}
 
-        .card-overlay {
-            padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+.game-card:hover .card-img-top {
+    transform: scale(1.05);
+}
 
-        .card-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--light-color);
-            margin-bottom: 8px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        }
+.card-content {
+    padding: 25px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
-        .card-developer {
-            font-size: 1rem;
-            color: var(--secondary-color);
-            margin-bottom: 12px;
-            font-weight: 500;
-        }
+.card-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--light-color);
+    margin-bottom: 12px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    padding: 0 5px;
+}
 
-        .card-genre {
-            font-size: 0.9rem;
-            color: var(--light-color);
-            background-color: rgba(166, 177, 178, 0.2);
-            padding: 6px 12px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
+.card-developer {
+    font-size: 1rem;
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    font-weight: 500;
+    padding: 0 5px;
+}
 
-        .card-body {
-            padding: 0 20px 20px;
-            background: rgba(81, 7, 58, 0.8);
-        }
+.card-genre {
+    font-size: 0.9rem;
+    color: var(--light-color);
+    background-color: rgba(166, 177, 178, 0.2);
+    padding: 8px 15px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 18px;
+    margin-left: 5px;
+}
 
-        .card-rating {
-            font-size: 1.1rem;
-            color: var(--light-color);
-            font-weight: 600;
-            text-align: center;
-            margin: 0;
-            padding: 10px;
-            background: rgba(236, 240, 241, 0.1);
-            border-radius: 10px;
-        }
+.card-description {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 18px;
+    line-height: 1.5;
+    padding: 0 5px;
+}
+
+.card-rating {
+    font-size: 1.1rem;
+    color: var(--light-color);
+    font-weight: 600;
+    text-align: center;
+    margin: 15px 0 0;
+    padding: 12px;
+    background: rgba(236, 240, 241, 0.1);
+    border-radius: 10px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 0 5px;
+}
+
+.card-price {
+    font-weight: 700;
+    color: var(--light-color);
+    background: var(--secondary-color);
+    padding: 7px 14px;
+    border-radius: 15px;
+}
+
+.card-platform {
+    font-size: 0.9rem;
+    color: var(--light-color);
+}
 
         /* ===== FEATURED GAME CARD ===== */
         .featured-game-card {
