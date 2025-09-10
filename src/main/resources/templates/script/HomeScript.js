@@ -26,24 +26,24 @@ function login() {
     // Gestisce la risposta del server
     .then(response => {
         if (response.status === 200) {
-            // Converte la risposta in formato JSON e la restituisce
-            return response.json();
+            // Converte la risposta in una stringa e la restituisce
+            return JSON.stringify(response);
         } else {
             throw new Error('Login failed');
         }
     })
-    // Gestisce i dati JSON ricevuti dal server
-    .then(player => {
+    // Gestisce la stringa ricevuta dal server
+    .then(async token => {
         // Salva il token per le richieste successive
-        localStorage.setItem('token', player.token);
-        
+        localStorage.setItem('token', token);
+
         // Aggiorna l'interfaccia utente per mostrare un messaggio di successo
-        document.getElementById('authOut').textContent = 'Login OK. Token salvato.';
+        alert('Login OK. Token salvato.');
     })
     // Gestisce eventuali errori che si verificano durante il processo
     .catch(error => {
         // Aggiorna l'interfaccia utente per mostrare un messaggio di errore
-        document.getElementById('authOut').textContent = 'Login fallito';
+        alert('Login fallito');
     });
 }
 
