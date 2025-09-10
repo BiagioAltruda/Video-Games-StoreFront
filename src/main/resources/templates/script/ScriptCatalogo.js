@@ -77,7 +77,8 @@ function showGameDetails(gameId) {
             return response.json();
         })
         .then((game) => {
-            const gameDetails = `
+        const gameDetails = `
+        <div class="game-details-container"> <!-- Aggiungi questo wrapper -->
             <div class="container mt-4">
                 <div class="row">
                     <div class="col-md-6">
@@ -86,16 +87,16 @@ function showGameDetails(gameId) {
                              onerror="this.src='https://via.placeholder.com/500x700/51073a/ecf0f1?text=Image+Error'">
                     </div>
                     <div class="col-md-6">
-                        <h2 class="text-white">${game.name}</h2>
-                        <p class="text-light"><strong>Sviluppatore:</strong> ${game.developer}</p>
-                        <p class="text-light"><strong>Genere:</strong> ${game.genre}</p>
-                        <p class="text-light"><strong>Prezzo:</strong> ${game.price ? '€' + game.price.toFixed(2) : 'Gratis'}</p>
-                        <p class="text-light"><strong>Pegi:</strong> + ${game.rating || 'N/A'}</p>
-                        <p class="text-light"><strong>Data di rilascio:</strong> ${game.releaseDate || 'N/D'}</p>
+                        <h2 class="text-contrast">${game.name}</h2> <!-- Modificato -->
+                        <p class="text-contrast"><strong>Sviluppatore:</strong> ${game.developer}</p> <!-- Modificato -->
+                        <p class="text-contrast"><strong>Genere:</strong> ${game.genre}</p> <!-- Modificato -->
+                        <p class="text-contrast"><strong>Prezzo:</strong> ${game.price ? '€' + game.price.toFixed(2) : 'Gratis'}</p> <!-- Modificato -->
+                        <p class="text-contrast"><strong>Pegi:</strong> + ${game.rating || 'N/A'}</p> <!-- Modificato -->
+                        <p class="text-contrast"><strong>Data di rilascio:</strong> ${game.releaseDate || 'N/D'}</p> <!-- Modificato -->
                         
                         <div class="mt-4">
-                            <h5 class="text-white">Descrizione</h5>
-                            <p class="text-light">${game.description || 'Nessuna descrizione disponibile'}</p>
+                            <h5 class="text-contrast">Descrizione</h5> <!-- Modificato -->
+                            <p class="text-contrast">${game.description || 'Nessuna descrizione disponibile'}</p> <!-- Modificato -->
                         </div>
                         
                         <div class="mt-4">
@@ -109,10 +110,11 @@ function showGameDetails(gameId) {
                     </div>
                 </div>
             </div>
-            `;
-
-            document.getElementById('cards-container').innerHTML = gameDetails;
-        })
+        </div>
+        `;
+        
+        document.getElementById('cards-container').innerHTML = gameDetails;
+    })
         .catch((error) => {
             console.error("Errore durante il recupero dei dettagli", error);
             document.getElementById('cards-container').innerHTML = `

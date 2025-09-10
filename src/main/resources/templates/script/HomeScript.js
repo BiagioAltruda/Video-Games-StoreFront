@@ -212,3 +212,91 @@ document.addEventListener('DOMContentLoaded', function() {
     // Carica i giochi
     loadGames();
 });
+
+// Funzione per filtrare i giochi per categoria
+function cercaCategoria(categoriaCercata) {
+    if (categoriaCercata === "TUTTE") {
+        mostraTuttiIGiochi();
+        return;
+    }
+    
+    const categoriaCercataLower = categoriaCercata.toLowerCase();
+    
+    const giochiFiltrati = allGames.filter(game => {
+        if (!game.genre) return false;
+        
+        // Dividi le categorie per virgola e pulisci gli spazi
+        const categorieGioco = game.genre.split(',')
+            .map(cat => cat.trim().toLowerCase());
+        
+        // Controlla se una delle categorie matcha
+        return categorieGioco.some(categoria => 
+            categoria === categoriaCercataLower
+        );
+    });
+    
+    mostraRisultatiRicerca(giochiFiltrati, `Categoria: ${categoriaCercata}`);
+}
+
+// Funzione per mostrare i risultati della ricerca
+function mostraRisultatiRicerca(giochi, titoloRicerca) {
+    // Nascondi il carosello
+    document.getElementById('featured-game-container').style.display = 'none';
+    
+    // Mostra la sezione risultati
+    document.getElementById('search-results-section').style.display = 'block';
+    
+    // Imposta il titolo della ricerca
+    document.getElementById('search-results-title').textContent = titoloRicerca;
+    
+    // Genera le card per i risultati
+    const cardsContainer = document.getElementById('cards-container');
+    
+    if (giochi.length > 0) {
+        // Nascondi il messaggio "nessun risultato"
+        document.getElementById('no-results-message').style.display = 'none';
+        
+        // Genera le card
+        const gameCards = giochi
+            .map((game) => {
+                return `
+<div class="col-md-4 mb-4">
+    <div class="card game-card" onclick="showGameDetails(${game.id})" style="cursor: pointer;">
+        <img src="${game.bannerPath ? game.bannerPath : 'https://via.placeholder.com/300x450/51073a/ecf0f1?text=No+Image'}" 
+             class="card-img-top" alt="${game.name}"
+             onerror="this.src='https://via.placeholder.com/300x450/51073a/ecf0f1?text=Image+Error'">
+        
+        <div class="card-overlay">
+            <h5 class="card-title">${game.name}</h5>
+            <p class="card-developer">${game.developer}</p>
+            <p class="card-genre">${game.genre}</p>
+        </div>
+        
+        <div class="card-body">
+            <p class="card-rating">${game.price ? '€' + game.price.toFixed(2) : 'Gratis'}</p>
+        </div>
+    </div>
+</div>
+`;
+            })
+            .join("");
+        
+        cardsContainer.innerHTML = gameCards;
+        cardsContainer.style.display = 'flex';
+    } else {
+        // Mostra messaggio "nessun risultato"
+        cardsContainer.style.display = 'none';
+        document.getElementById('no-results-message').style.display = 'block';
+    }
+}
+
+// Funzione per tornare al carosello
+function tornaAlCarosello() {
+    document.getElementById('search-results-section').style.display = 'none';
+    document.getElementById('featured-game-container').style.display = 'flex';
+}
+
+// Funzione per mostrare tutti i giochi (senza filtri)
+function mostraTuttiIGiochi() {
+    mostraRisultatiRicerca(allGames, "Tutti i giochi");
+}
