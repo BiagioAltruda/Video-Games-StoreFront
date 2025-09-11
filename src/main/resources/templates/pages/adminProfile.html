@@ -157,14 +157,36 @@
       </ul>
 
       <div class="tab-content pt-3">
-        <!-- GIOCHI - Aggiunto form inserimento gioco -->
-        <div class="tab-pane fade show active" id="tab-games">
-         <div class="card game-details-container">
-    <div class="card-header bg-main">
-        <h5 class="mb-0">Inserisci Nuovo Gioco</h5>
-    </div>
-    <div class="card-body text-contrast">
-        <form id="gameForm" class="row g-3">
+<!-- GIOCHI - Tab con sottomenù -->
+<div class="tab-pane fade show active" id="tab-games">
+  <!-- Sottomenù Giochi -->
+  <ul class="nav nav-pills mb-4">
+    <li class="nav-item">
+      <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#insert-game">
+        <i class="fas fa-plus-circle me-2"></i>Inserisci Gioco
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#edit-game">
+        <i class="fas fa-edit me-2"></i>Modifica Gioco
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#delete-game">
+        <i class="fas fa-trash me-2"></i>Rimuovi Gioco
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <!-- Sottotab Inserisci Gioco -->
+    <div class="tab-pane fade show active" id="insert-game">
+      <div class="card game-details-container">
+        <div class="card-header bg-main">
+          <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Inserisci Nuovo Gioco</h5>
+        </div>
+        <div class="card-body text-contrast">
+          <form id="gameForm" class="row g-3">
             <div class="col-md-6">
                 <label for="gameName" class="form-label">Nome del gioco</label>
                 <input type="text" class="form-control" id="gameName" required>
@@ -201,7 +223,7 @@
                 <textarea class="form-control" id="gameDescription" rows="4" required></textarea>
             </div>
             
-            <!-- QUI INSERISCI IL CAMPO IMMAGINE -->
+            <!-- Campo Immagine -->
             <div class="col-12">
                 <label for="gameImage" class="form-label">Immagine del gioco (300x450 px)</label>
                 <input type="file" class="form-control" id="gameImage" accept="image/*" required>
@@ -210,31 +232,172 @@
                     <img id="imagePreview" src="#" alt="Anteprima immagine" class="img-thumbnail d-none" style="max-width: 150px; max-height: 225px;">
                 </div>
             </div>
-            <!-- FINE CAMPO IMMAGINE -->
+            <!-- Fine Campo Immagine -->
             
             <div class="col-12 mt-4">
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-plus-circle me-2"></i>Importa Gioco
                 </button>
             </div>
-        </form>
+          </form>
+        </div>
+      </div>
     </div>
-</div>
+
+<!-- Sottotab Modifica Gioco -->
+<div class="tab-pane fade" id="edit-game">
+  <div class="card game-details-container">
+    <div class="card-header bg-main">
+      <h5 class="mb-0"><i class="fas fa-edit me-2"></i>Modifica Gioco Esistente</h5>
+    </div>
+    <div class="card-body text-contrast">
+      <!-- Selezione del gioco -->
+      <div class="row mb-4">
+        <div class="col-md-8">
+          <label for="selectGameToEdit" class="form-label">Seleziona il gioco da modificare</label>
+          <select class="form-select" id="selectGameToEdit" onchange="loadGameForEdit(this.value)">
+            <option value="">-- Seleziona un gioco --</option>
+            <!-- I giochi verranno popolati dinamicamente via JavaScript -->
+          </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button class="btn btn-outline-secondary" onclick="refreshGamesList()">
+            <i class="fas fa-sync-alt me-2"></i>Aggiorna lista
+          </button>
+        </div>
+      </div>
+
+      <!-- Form di modifica (nascosto inizialmente) -->
+      <div id="editGameFormContainer" style="display: none;">
+        <form id="editGameForm" class="row g-3">
+          <input type="hidden" id="editGameId">
           
-          <!-- Libreria giochi esistente -->
-          <div class="card game-details-container mt-4">
-            <div class="card-header bg-main">
-              <h5 class="mb-0">La tua libreria</h5>
+          <div class="col-md-6">
+            <label for="editGameName" class="form-label">Nome del gioco</label>
+            <input type="text" class="form-control" id="editGameName" required>
+          </div>
+          <div class="col-md-6">
+            <label for="editGameDeveloper" class="form-label">Sviluppatore</label>
+            <input type="text" class="form-control" id="editGameDeveloper" required>
+          </div>
+          <div class="col-md-4">
+            <label for="editGameGenre" class="form-label">Genere</label>
+            <input type="text" class="form-control" id="editGameGenre" required>
+          </div>
+          <div class="col-md-4">
+            <label for="editGamePrice" class="form-label">Prezzo (€)</label>
+            <input type="number" class="form-control" id="editGamePrice" min="0" step="0.01" required>
+          </div>
+          <div class="col-md-4">
+            <label for="editGamePegi" class="form-label">PEGI</label>
+            <select class="form-select" id="editGamePegi" required>
+              <option value="">Seleziona PEGI</option>
+              <option value="3">PEGI 3</option>
+              <option value="7">PEGI 7</option>
+              <option value="12">PEGI 12</option>
+              <option value="16">PEGI 16</option>
+              <option value="18">PEGI 18</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="editGameReleaseDate" class="form-label">Data di rilascio</label>
+            <input type="date" class="form-control" id="editGameReleaseDate" required>
+          </div>
+          <div class="col-12">
+            <label for="editGameDescription" class="form-label">Descrizione</label>
+            <textarea class="form-control" id="editGameDescription" rows="4" required></textarea>
+          </div>
+          
+          <!-- Campo Immagine -->
+          <div class="col-12">
+            <label for="editGameImage" class="form-label">Immagine del gioco (300x450 px)</label>
+            <input type="file" class="form-control" id="editGameImage" accept="image/*">
+            <div class="form-text">Seleziona una nuova immagine (300x450 pixel) o mantieni quella esistente</div>
+            <div class="mt-2">
+              <img id="editImagePreview" src="#" alt="Anteprima immagine" class="img-thumbnail" style="max-width: 150px; max-height: 225px;">
+              <div id="currentImageInfo" class="form-text mt-1"></div>
             </div>
-            <div class="card-body text-contrast">
-              <div id="gamesEmpty" class="text-center mb-3">
-                <p class="mb-2">Nessun gioco in libreria.</p>
-                <a href="#" class="btn btn-primary disabled">Vai al catalogo</a>
+          </div>
+          <!-- Fine Campo Immagine -->
+          
+          <div class="col-12 mt-4">
+            <button type="submit" class="btn btn-warning">
+              <i class="fas fa-save me-2"></i>Salva Modifiche
+            </button>
+            <button type="button" class="btn btn-secondary ms-2" onclick="cancelEdit()">
+              <i class="fas fa-times me-2"></i>Annulla
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Messaggio iniziale -->
+      <div id="editGamePlaceholder">
+        <p class="text-center text-muted">Seleziona un gioco dall'elenco per modificarlo</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Sottotab Rimuovi Gioco -->
+    <div class="tab-pane fade" id="delete-game">
+  <div class="card game-details-container">
+    <div class="card-header bg-main">
+      <h5 class="mb-0"><i class="fas fa-trash me-2"></i>Rimuovi Gioco dal Catalogo</h5>
+    </div>
+    <div class="card-body text-contrast">
+      <div class="row mb-4">
+        <div class="col-md-8">
+          <label for="selectGameToDelete" class="form-label">Seleziona il gioco da rimuovere</label>
+          <select class="form-select" id="selectGameToDelete" onchange="loadGameForDelete(this.value)">
+            <option value="">-- Seleziona un gioco --</option>
+            <!-- I giochi verranno popolati dinamicamente via JavaScript -->
+          </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button class="btn btn-outline-secondary" onclick="refreshDeleteGamesList()">
+            <i class="fas fa-sync-alt me-2"></i>Aggiorna lista
+          </button>
+        </div>
+      </div>
+      
+      <div id="deleteGamePreview" class="d-none">
+        <div class="card border-danger">
+          <div class="card-header bg-danger text-white">
+            <h6 class="mb-0">Conferma Rimozione</h6>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3">
+                <img id="deleteGameImage" src="" class="img-fluid rounded" alt="Game banner" style="max-width: 150px;">
               </div>
-              <div class="row g-3" id="gamesList"></div>
+              <div class="col-md-9">
+                <h5 id="deleteGameTitle" class="text-danger"></h5>
+                <p id="deleteGameDetails" class="mb-2"></p>
+                <p id="deleteGameDescription" class="text-muted small"></p>
+                <div class="mt-3">
+                  <button class="btn btn-danger me-2" onclick="confirmDelete()">
+                    <i class="fas fa-trash me-1"></i>Conferma Eliminazione
+                  </button>
+                  <button class="btn btn-secondary" onclick="cancelDelete()">
+                    <i class="fas fa-times me-1"></i>Annulla
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+      
+      <div id="deleteGamePlaceholder" class="text-center py-4">
+        <i class="fas fa-gamepad fa-3x text-muted mb-3"></i>
+        <p class="text-muted">Seleziona un gioco dall'elenco per visualizzare i dettagli e procedere all'eliminazione</p>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
 
         <!-- UTENTI - Sostituito Amici con Utenti -->
         <div class="tab-pane fade" id="tab-users">
