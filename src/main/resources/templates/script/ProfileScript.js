@@ -90,3 +90,12 @@
     }
   });
 })();
+document.addEventListener('DOMContentLoaded', () => {
+  const name = localStorage.getItem('playerName');
+  if (name) {
+    const authBox = document.getElementById('authOut');
+    if (authBox) {
+      authBox.textContent = '👋 Bentornato, ' + name;
+    }
+  }
+});

@@ -27,14 +27,15 @@ public class TransactionController {
 
 	private final TransactionService transactionService;
 	private final PlayerService playerService;
-	public TransactionController(TransactionService transactionService, PlayerService  playerService) {
+
+	public TransactionController(TransactionService transactionService, PlayerService playerService) {
 		this.transactionService = transactionService;
 		this.playerService = playerService;
 	}
 
 	@GetMapping("/payment")
 	public String paymentPage() {
-		return "pages/Payment";  // -> src/main/resources/templates/pages/Payment.html
+		return "pages/Payment"; // -> src/main/resources/templates/pages/Payment.html
 	}
 
 	// restituisce tutte le transazioni
@@ -42,7 +43,6 @@ public class TransactionController {
 	public List<Transaction> getAllTransaction() {
 		return transactionService.getAllTransactions();
 	}
-
 
 	// restituisce transazione per id
 	// Una transazione per id (404 se non esiste)
@@ -55,7 +55,7 @@ public class TransactionController {
 	}
 
 	// Crea (201 Created)
-	@PostMapping("/transactions") //for debugging
+	@PostMapping("/transactions") // for debugging
 	public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction) {
 		Transaction saved = transactionService.createTransaction(transaction);
 		return ResponseEntity.status(HttpStatus.CREATED).body(saved); // costruisce una risposta http, la salva,
@@ -81,17 +81,25 @@ public class TransactionController {
 	}
 
 	// simulazione di pagamento (mock)
-	@PostMapping("/transactions/pay/{id}")
-	public String processPayment(@PathVariable Integer id, @RequestBody TransactionDTO dto) {
 
-		if(PaymentProcessor.validate(dto.getCardDetails())){
-			dto.getTransaction().setPlayer(playerService.findById(id));
-			System.out.println(id);
-			System.out.println(dto.getTransaction().getPlayer());
-			Transaction transaction = transactionService.createTransaction(dto.getTransaction());
-			return "Pagamento riuscito per transazione ID: " + transaction.getId();
-		}
-		return "Pagamento fallito";
-	}
+	
+	@PostMapping("/transactions/pay/{playerId}")
+	public ResponseEntity<String> processPayment(@PathVariable Integer playerId,
+	                                             @RequestBody TransactionDTO dto) {
+	    System.out.println("Ricevuto DTO: " + dto);
 
+	    if (dto.getTransaction() == null) {
+	        return ResponseEntity.badRequest().body("❌ Transaction mancante");
+	    }
+	    if (dto.getCardDetails() == null) {
+	        return ResponseEntity.badRequest().body("❌ Dati carta mancanti");
+	    }
+
+	    if (PaymentProcessor.validate(dto.getCardDetails())) {
+	        dto.getTransaction().setPlayer(playerService.findById(playerId));
+	        Transaction transaction = transactionService.createTransaction(dto.getTransaction());
+	        return ResponseEntity.ok("✅ Pagamento riuscito per transazione ID: " + transaction.getId());
+	    }
+	    return ResponseEntity.badRequest().body("❌ Pagamento fallito: carta non valida");
 	}
+}
