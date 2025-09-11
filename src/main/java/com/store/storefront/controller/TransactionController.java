@@ -21,7 +21,7 @@ import com.store.storefront.model.Transaction;
 import com.store.storefront.service.TransactionService;
 
 @RestController
-@RequestMapping
+@RequestMapping("smoke/transactions")
 @CrossOrigin("*")
 public class TransactionController {
 
@@ -39,14 +39,14 @@ public class TransactionController {
 	}
 
 	// restituisce tutte le transazioni
-	@GetMapping("/transactions")
+	@GetMapping
 	public List<Transaction> getAllTransaction() {
 		return transactionService.getAllTransactions();
 	}
 
 	// restituisce transazione per id
 	// Una transazione per id (404 se non esiste)
-	@GetMapping("/transactions/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Transaction> getTransactionById(@PathVariable Long id) {
 		Transaction trans = transactionService.getTransactionById(id); // nel service ora può tornare null
 		if (trans == null)
@@ -63,7 +63,7 @@ public class TransactionController {
 	}
 
 	// Aggiorna (404 se non esiste)
-	@PutMapping("/transactions/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<Transaction> updateTransaction(@PathVariable Long id, @RequestBody Transaction transaction) {
 		try {
 			Transaction updated = transactionService.updateTransaction(id, transaction);
@@ -83,7 +83,7 @@ public class TransactionController {
 	// simulazione di pagamento (mock)
 
 	
-	@PostMapping("/transactions/pay/{playerId}")
+	@PostMapping("/pay/{playerId}")
 	public ResponseEntity<String> processPayment(@PathVariable Integer playerId,
 	                                             @RequestBody TransactionDTO dto) {
 	    System.out.println("Ricevuto DTO: " + dto);

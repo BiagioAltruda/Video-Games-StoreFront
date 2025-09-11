@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*") // Consente richieste CORS da qualsiasi origine (solo per sviluppo)
 @RestController // Indica che questa classe gestisce richieste REST
-@RequestMapping("/api/player") // Prefisso comune per tutti gli endpoint 
+@RequestMapping("/smoke/player") // Prefisso comune per tutti gli endpoint
 public class PlayerController {
 		
 	//DEPENDENCY INJECTION

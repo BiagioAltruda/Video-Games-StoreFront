@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @CrossOrigin(value = "*")
 @RestController
-@RequestMapping("/smoke/games")
+@RequestMapping("smoke/games")
 public class GameController { //Restful controller for the Games table
 
     GameService service;

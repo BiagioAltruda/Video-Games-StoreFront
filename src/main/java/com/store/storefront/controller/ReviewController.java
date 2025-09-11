@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("smoke.com/review")
+@RequestMapping("smoke/review")
 public class ReviewController {
     private final ReviewService reviewService;
     private final PlayerService playerService;

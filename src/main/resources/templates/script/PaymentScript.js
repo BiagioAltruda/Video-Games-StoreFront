@@ -39,7 +39,7 @@ async function pay(gameId) {
 
 let playerId = getPlayerId();
 
-let res = await fetch("http://localhost:8080/transactions/pay/" + playerId, {
+let res = await fetch("http://localhost:8080/smoke/transactions/pay/" + playerId, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(dto)
