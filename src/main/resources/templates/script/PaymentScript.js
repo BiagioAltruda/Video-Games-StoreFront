@@ -15,24 +15,18 @@ function showAlert(type, message) {
   }
 }
 
-// Ottieni ID transazione dall'hidden input o da querystring
-function getTransactionId() {
-  let hidden = $('input[name="transactionId"]');
-  if (hidden && hidden.value) return hidden.value.trim();
-  let qs = new URLSearchParams(location.search).get('id');
-  return qs ? qs.trim() : '';
-}
 
 // Funzione principale di pagamento
-async function pay(playerId) {
+async function pay(gameId) {
   let btn = $("#payBtn");
   if (btn) btn.setAttribute("disabled", "disabled");
 
+  const game = await getGameData();
   try {
     // Costruzione DTO come atteso da TransactionDTO
    const dto = {
   transaction: {
-    amount: parseFloat($("#tx-price")?.value || "49.99"),
+    amount: parseFloat($("#tx-price")?.value || game.price),
     date: new Date().toISOString().slice(0,19) // senza Z
   },
   cardDetails: {
@@ -43,8 +37,7 @@ async function pay(playerId) {
   }
 };
 
-    // Usa sempre un playerId valido (per ora fisso 1, poi dinamico da login)
-let playerId = 1;
+let playerId = getPlayerId();
 
 let res = await fetch("http://localhost:8080/transactions/pay/" + playerId, {
     method: "POST",
@@ -99,3 +92,15 @@ document.addEventListener("DOMContentLoaded", function () {
     pay(txId); // id player
   });
 });
+
+async function getGameData(id) {
+  try {
+    await fetch("smoke/games/" + id)
+        .then(res => {
+          return res.json()
+        })
+  }
+  catch (e) {
+    console.error(e);
+  }
+}

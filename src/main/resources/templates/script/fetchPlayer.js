@@ -1,4 +1,4 @@
-export async function getPlayerId() {
+async function getPlayerId() {
     let token = localStorage.getItem('token');
     let options = {method : 'GET' , headers : {'X-Token': token}};
     try {
