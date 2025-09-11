@@ -58,7 +58,6 @@ public class LoginController {
     public ResponseEntity<Player> profile(@RequestHeader(value = "X-Token", required = false) String token) {
         System.out.println(token);
         if (token != null) {
-
             System.out.println(validSessions.containsKey(token));
             if (!validSessions.containsKey(token))
                 return ResponseEntity.status(404).build();

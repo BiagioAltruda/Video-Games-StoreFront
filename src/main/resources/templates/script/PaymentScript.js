@@ -3,6 +3,8 @@ function $(selector) {
   return document.querySelector(selector);
 }
 
+const playerId = getPlayerId();
+console.log(playerId);
 // Mostra messaggi (puoi sostituire alert con div styled bootstrap)
 function showAlert(type, message) {
   const resultDiv = $("#paymentResult");
@@ -21,12 +23,10 @@ async function pay() {
   let btn = $("#payBtn");
   if (btn) btn.setAttribute("disabled", "disabled");
 
-  const game = await getGameData();
-  try {
     // Costruzione DTO come atteso da TransactionDTO
    const dto = {
   transaction: {
-    amount: parseFloat($("#tx-price")?.value || game.price),
+    amount: localStorage.getItem("productData"),
     date: new Date().toISOString().slice(0,19) // senza Z
   },
   cardDetails: {
@@ -37,8 +37,8 @@ async function pay() {
   }
 };
 
-let playerId = getPlayerId();
-
+console.log(JSON.stringify(dto))
+    try{
 let res = await fetch("http://localhost:8080/smoke/transactions/pay/" + playerId, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -60,38 +60,38 @@ let res = await fetch("http://localhost:8080/smoke/transactions/pay/" + playerId
 }
 
 // Inizializzazione quando la pagina è pronta
-document.addEventListener("DOMContentLoaded", function () {
-  const form = $("#paymentForm");
-  if (!form) return;
-
-  let txId = getTransactionId();
-  if (!txId) {
-    showAlert("danger", "Manca l’ID della transazione.");
-    return;
-  }
-
-  // Aggiungi hidden input se manca
-  if (!$('input[name="transactionId"]')) {
-    let hidden = document.createElement("input");
-    hidden.type = "hidden";
-    hidden.name = "transactionId";
-    hidden.value = txId;
-    form.appendChild(hidden);
-  }
-
-  // Dati placeholder (in futuro puoi popolarli da backend con GET)
-  if ($("#tx-id")) $("#tx-id").textContent = txId;
-  if ($("#tx-player")) $("#tx-player").textContent = "Player Name";
-  if ($("#tx-game")) $("#tx-game").textContent = "Game Title";
-  if ($("#tx-price")) $("#tx-price").textContent = "49.99";
-  if ($("#tx-date")) $("#tx-date").textContent = new Date().toLocaleString();
-
-  // Intercetta il submit
-  form.addEventListener("submit", function (e) {
+// document.addEventListener("DOMContentLoaded", function () {
+//   const form = $("#paymentForm");
+//   if (!form) return;
+//
+//   let txId = getTransactionId();
+//   if (!txId) {
+//     showAlert("danger", "Manca l’ID della transazione.");
+//     return;
+//   }
+//
+//   // Aggiungi hidden input se manca
+//   if (!$('input[name="transactionId"]')) {
+//     let hidden = document.createElement("input");
+//     hidden.type = "hidden";
+//     hidden.name = "transactionId";
+//     hidden.value = txId;
+//     form.appendChild(hidden);
+//   }
+//
+//   // Dati placeholder (in futuro puoi popolarli da backend con GET)
+//   if ($("#tx-id")) $("#tx-id").textContent = txId;
+//   if ($("#tx-player")) $("#tx-player").textContent = "Player Name";
+//   if ($("#tx-game")) $("#tx-game").textContent = "Game Title";
+//   if ($("#tx-price")) $("#tx-price").textContent = "49.99";
+//   if ($("#tx-date")) $("#tx-date").textContent = new Date().toLocaleString();
+//
+//   // Intercetta il submit
+  addEventListener("submit", function (e) {
     e.preventDefault();
-    pay(txId); // id player
+    pay(playerId); // id player
   });
-});
+// });
 
 async function getGameData(id) {
   try {
@@ -103,4 +103,37 @@ async function getGameData(id) {
   catch (e) {
     console.error(e);
   }
+}
+
+async function getPlayerId() {
+    const token = localStorage.getItem('X-Token');
+    const options = {
+        method: 'GET',
+        headers: { 'X-Token': token }
+    };
+
+    try {
+        // Await the fetch call to get the response
+        const response = await fetch(`http://localhost:8080/smoke/accounts/profile`, options);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Await the response.json() call to get the parsed data
+        const data = await response.json();
+
+        // Check if the data has an 'id' property
+        if (data && data.id) {
+            const playerId = data.id;
+            console.log(`The player ID is: ${playerId}`);
+            return playerId;
+        } else {
+            throw new Error("Player ID not found in response data.");
+        }
+
+    } catch (err) {
+        console.error("Failed to fetch player ID:", err);
+        return null; // Return null or re-throw the error
+    }
 }
