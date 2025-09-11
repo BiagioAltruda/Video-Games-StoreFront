@@ -213,8 +213,38 @@ document.addEventListener('DOMContentLoaded', function() {
     loadGames();
 });
 
+// Funzione per tornare al carosello
+function tornaAlCarosello() {
+    document.getElementById('search-results-section').style.display = 'none';
+    document.getElementById('featured-game-container').style.display = 'flex';
+}
+
+let categoriaSelezionata = null;
+let ultimiGiochiVisualizzati = [];
+
 // Funzione per filtrare i giochi per categoria
 function cercaCategoria(categoriaCercata) {
+    // Se clicchi sulla stessa categoria, deseleziona/nascondi
+    if (categoriaSelezionata === categoriaCercata) {
+        nascondiGiochi();
+        return;
+    }
+    
+    // Aggiorna la categoria selezionata
+    categoriaSelezionata = categoriaCercata;
+    
+    // Rimuovi la classe active da tutte le categorie
+    const tutteLeCategorie = document.querySelectorAll('.categoria-item');
+    tutteLeCategorie.forEach(cat => cat.classList.remove('active'));
+    
+    // Aggiungi la classe active alla categoria cliccata
+    const categoriaCliccata = Array.from(tutteLeCategorie).find(cat => 
+        cat.textContent.includes(categoriaCercata)
+    );
+    if (categoriaCliccata) {
+        categoriaCliccata.classList.add('active');
+    }
+    
     if (categoriaCercata === "TUTTE") {
         mostraTuttiIGiochi();
         return;
@@ -235,7 +265,35 @@ function cercaCategoria(categoriaCercata) {
         );
     });
     
+    // Salva i giochi visualizzati
+    ultimiGiochiVisualizzati = giochiFiltrati;
+    
     mostraRisultatiRicerca(giochiFiltrati, `Categoria: ${categoriaCercata}`);
+}
+
+// Funzione per nascondere i giochi (deselezionare)
+function nascondiGiochi() {
+    categoriaSelezionata = null;
+    
+    // Rimuovi la classe active da tutte le categorie
+    const tutteLeCategorie = document.querySelectorAll('.categoria-item');
+    tutteLeCategorie.forEach(cat => cat.classList.remove('active'));
+    
+    // Nascondi la sezione risultati e mostra il carosello
+    document.getElementById('search-results-section').style.display = 'none';
+    document.getElementById('featured-game-container').style.display = 'block';
+    
+    // Svuota il container delle card
+    const cardsContainer = document.getElementById('cards-container');
+    cardsContainer.innerHTML = '';
+    cardsContainer.style.display = 'none';
+    
+    // Mostra il messaggio di nessun gioco visibile
+    document.getElementById('no-results-message').style.display = 'block';
+    document.getElementById('no-results-message').innerHTML = `
+        <i class="fas fa-info-circle me-2"></i>
+        Nessuna categoria selezionata. Scegli una categoria per visualizzare i giochi.
+    `;
 }
 
 // Funzione per mostrare i risultati della ricerca
@@ -247,7 +305,13 @@ function mostraRisultatiRicerca(giochi, titoloRicerca) {
     document.getElementById('search-results-section').style.display = 'block';
     
     // Imposta il titolo della ricerca
-    document.getElementById('search-results-title').textContent = titoloRicerca;
+    document.getElementById('search-results-title').innerHTML = `<h2 class="text-contrast mb-4">${titoloRicerca}</h2>`;
+    
+    // Aggiungi pulsante deseleziona
+    const deselezionaBtn = `<button class="btn btn-sm btn-outline-secondary ms-3" onclick="nascondiGiochi()">
+        <i class="fas fa-times me-1"></i>
+    </button>`;
+    document.getElementById('search-results-title').innerHTML += deselezionaBtn;
     
     // Genera le card per i risultati
     const cardsContainer = document.getElementById('cards-container');
@@ -287,16 +351,19 @@ function mostraRisultatiRicerca(giochi, titoloRicerca) {
         // Mostra messaggio "nessun risultato"
         cardsContainer.style.display = 'none';
         document.getElementById('no-results-message').style.display = 'block';
+        document.getElementById('no-results-message').innerHTML = `
+            <i class="fas fa-info-circle me-2"></i>
+            Nessun gioco trovato in questa categoria.
+            <br><button class="btn btn-primary mt-3" onclick="nascondiGiochi()">
+                <i class="fas fa-times me-1"></i>Nascondi
+            </button>
+        `;
     }
-}
-
-// Funzione per tornare al carosello
-function tornaAlCarosello() {
-    document.getElementById('search-results-section').style.display = 'none';
-    document.getElementById('featured-game-container').style.display = 'flex';
 }
 
 // Funzione per mostrare tutti i giochi (senza filtri)
 function mostraTuttiIGiochi() {
+    categoriaSelezionata = "TUTTE";
+    ultimiGiochiVisualizzati = allGames;
     mostraRisultatiRicerca(allGames, "Tutti i giochi");
 }

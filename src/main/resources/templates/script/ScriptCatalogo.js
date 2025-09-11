@@ -205,3 +205,179 @@ function submitReview(gameId) {
 function closeGameDetails() {
     loadGames(); // Richiama la funzione che carica tutti i giochi
 }
+
+// Variabile globale per memorizzare tutti i giochi
+let allGames = [];
+let categoriaSelezionata = null;
+
+// Funzione per filtrare per categoria (adattata per il tuo HTML)
+function cercaCategoria(categoriaCercata) {
+    // Se clicchi sulla stessa categoria, deseleziona
+    if (categoriaSelezionata === categoriaCercata) {
+        deselezionaCategoria();
+        return;
+    }
+    
+    // Aggiorna la categoria selezionata
+    categoriaSelezionata = categoriaCercata;
+    
+    // Rimuovi la classe active da tutte le categorie
+    const tutteLeCategorie = document.querySelectorAll('.categoria-item');
+    tutteLeCategorie.forEach(cat => cat.classList.remove('active'));
+    
+    // Aggiungi la classe active alla categoria cliccata
+    const categoriaCliccata = Array.from(tutteLeCategorie).find(cat => 
+        cat.textContent.includes(categoriaCercata)
+    );
+    if (categoriaCliccata) {
+        categoriaCliccata.classList.add('active');
+    }
+    
+    if (categoriaCercata === "TUTTE LE CATEGORIE") {
+        mostraTuttiIGiochi();
+        return;
+    }
+    
+    const categoriaCercataLower = categoriaCercata.toLowerCase();
+    
+    const giochiFiltrati = allGames.filter(game => {
+        if (!game.genre) return false;
+        
+        // Dividi le categorie per virgola e pulisci gli spazi
+        const categorieGioco = game.genre.split(',')
+            .map(cat => cat.trim().toLowerCase());
+        
+        // Controlla se una delle categorie matcha
+        return categorieGioco.some(categoria => 
+            categoria === categoriaCercataLower
+        );
+    });
+    
+    mostraRisultatiRicerca(giochiFiltrati, `Categoria: ${categoriaCercata}`);
+}
+
+// Funzione per deselezionare la categoria
+function deselezionaCategoria() {
+    categoriaSelezionata = null;
+    
+    // Rimuovi la classe active da tutte le categorie
+    const tutteLeCategorie = document.querySelectorAll('.categoria-item');
+    tutteLeCategorie.forEach(cat => cat.classList.remove('active'));
+    
+    // Mostra tutti i giochi
+    mostraTuttiIGiochi();
+}
+
+// Funzione per mostrare i risultati della ricerca (adattata)
+function mostraRisultatiRicerca(giochi, titoloRicerca) {
+    const cardsContainer = document.getElementById('cards-container');
+    
+    if (giochi.length > 0) {
+        // Genera le card usando la tua funzione esistente showAllGames
+        showAllGames(giochi);
+        
+        // Aggiungi il titolo della ricerca sopra le card
+        cardsContainer.innerHTML = `
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="text-contrast">${titoloRicerca}</h4>
+                    <p class="text-muted">Trovati ${giochi.length} giochi</p>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="deselezionaCategoria()">
+                        <i class="fas fa-times me-1"></i>Deseleziona filtro
+                    </button>
+                </div>
+            </div>
+            ${cardsContainer.innerHTML}
+        `;
+        
+    } else {
+        // Mostra messaggio "nessun risultato"
+        cardsContainer.innerHTML = `
+            <div class="col-12 text-center">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Nessun gioco trovato nella categoria "${titoloRicerca.replace('Categoria: ', '')}"
+                </div>
+                <button class="btn btn-primary" onclick="deselezionaCategoria()">
+                    <i class="fas fa-arrow-left me-1"></i>Vedi tutti i giochi
+                </button>
+            </div>
+        `;
+    }
+}
+
+// Funzione per mostrare tutti i giochi (adattata)
+function mostraTuttiIGiochi() {
+    showAllGames(allGames);
+    
+    // Rimuovi eventuali titoli di ricerca precedenti
+    const cardsContainer = document.getElementById('cards-container');
+    const existingTitle = cardsContainer.querySelector('.row.mb-4');
+    if (existingTitle) {
+        existingTitle.remove();
+    }
+}
+
+// Modifica la funzione loadGames per salvare i giochi nella variabile globale
+async function loadGames() {
+    try {
+        const response = await fetch('http://localhost:8080/smoke/games/all');
+        
+        if (!response.ok) {
+            throw new Error(`Errore HTTP: ${response.status}`);
+        }
+        
+        const games = await response.json();
+        allGames = games; // Salva nella variabile globale
+        showAllGames(games);
+        
+    } catch (error) {
+        console.error('Errore nel caricamento dal database:', error);
+        const container = document.getElementById('cards-container');
+        container.innerHTML = `
+            <div class="col-12 text-center">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Impossibile caricare i giochi. Riprova più tardi.
+                </div>
+            </div>
+        `;
+    }
+}
+
+// Aggiungi anche la funzione per la ricerca per nome dal menu laterale
+function setupSearchForm() {
+    const searchForm = document.querySelector('.search-form');
+    if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const searchInput = this.querySelector('input[type="text"]');
+            cercaPerNome(searchInput.value.trim());
+        });
+    }
+}
+
+// Funzione per cercare per nome
+function cercaPerNome(nomeCercato) {
+    if (!nomeCercato) {
+        mostraTuttiIGiochi();
+        return;
+    }
+    
+    // Deseleziona eventuali categorie selezionate
+    deselezionaCategoria();
+    
+    const nomeCercatoLower = nomeCercato.toLowerCase();
+    
+    const giochiFiltrati = allGames.filter(game => {
+        return game.name && game.name.toLowerCase().includes(nomeCercatoLower);
+    });
+    
+    mostraRisultatiRicerca(giochiFiltrati, `Risultati per: "${nomeCercato}"`);
+}
+
+// Inizializza i form di ricerca quando la pagina è carica
+document.addEventListener('DOMContentLoaded', function() {
+    loadGames();
+    setTimeout(setupSearchForm, 100); // Aspetta che il DOM sia completamente renderizzato
+});
