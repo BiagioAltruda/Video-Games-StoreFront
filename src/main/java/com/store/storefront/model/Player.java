@@ -4,7 +4,11 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -30,8 +34,8 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 	private LocalDate creationDate;
  
 	private String language;
- 
- 
+
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(
 			name = "friends", //name of the relationships table
@@ -39,8 +43,8 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 			inverseJoinColumns = @JoinColumn(name = "player_2") //name of the other entity
 	)
 	private Set<Player> friends = new HashSet<>(); //Set containing friend list
- 
- 
+
+	@JsonIgnore
 	@ManyToMany(mappedBy = "friends") //bidirectional relation with mappedby
 	private Set<Player> friendOf = new HashSet<>();
  
@@ -134,6 +138,7 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 	}
  
 	public void setLanguage(String Language) {
+
 		this.language = Language;
 	}
  

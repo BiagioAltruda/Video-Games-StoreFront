@@ -28,12 +28,18 @@ public class PlayerController {
 	public PlayerController (PlayerService service) {
 		this.service = service;
 	}
-	
+
+
 	@GetMapping
 	public List<Player> getAll(){
 		return service.getAll();
 	}
-	
+
+	@GetMapping("/{id}")
+	public Player getById(@PathVariable int id){
+		return service.findById(id);
+	}
+
 	@PostMapping("/new") //For manual adding/debugging only
 	public Player newPlayer(@Validated @RequestBody Player account) {
 		System.out.println("test");
@@ -50,4 +56,6 @@ public class PlayerController {
 	public void deleteAccount (@PathVariable int id) {
 		service.deleteAccount(id);
 	}
+
+
 }
