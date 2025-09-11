@@ -17,7 +17,7 @@ import com.store.storefront.service.TrendingService;
 
 @CrossOrigin(value = "*") // per connettere fronte4nd
 @RestController
-@RequestMapping("/api/trending")
+@RequestMapping("/smoke/trending")
 public class TrendingController {
 
 	TrendingService service;

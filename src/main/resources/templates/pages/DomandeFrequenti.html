@@ -51,6 +51,12 @@
           <input class="form-control me-2" type="search" placeholder="Cerca...">
           <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
         </form>
+        <button id="login-button" style="display: block" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+          <i class="fas fa-sign-in-alt me-1"></i>Login
+        </button>
+        <button id="logout-button" style="display: none"  type="button" class="btn btn-primary " onclick="logout()">
+          <i class="fas fa-sign-in-alt me-1"></i>Logout
+        </button>
       </div>
     </div>
   </nav>
@@ -66,6 +72,7 @@
         <div class="input-group">
           <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
           <input id="faqSearch" type="text" class="form-control" placeholder="Cerca una domanda (es: rimborso, Steam, pagamento)..." />
+
         </div>
       </div>
 
@@ -378,5 +385,6 @@
       }
     })();
   </script>
+  <script src="../script/RegisterScript.js"></script>
 </body>
 </html>

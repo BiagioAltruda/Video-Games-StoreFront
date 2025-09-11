@@ -62,7 +62,7 @@
       const payload = { player_1: myId, player_2: friendId };
 
       // Chiamata al backend
-      const res = await fetch(`${API}/api/friends`, {
+      const res = await fetch(`${API}/smoke/friends`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },              // invio JSON
         body: JSON.stringify(payload)
@@ -90,3 +90,12 @@
     }
   });
 })();
+document.addEventListener('DOMContentLoaded', () => {
+  const name = localStorage.getItem('playerName');
+  if (name) {
+    const authBox = document.getElementById('authOut');
+    if (authBox) {
+      authBox.textContent = '👋 Bentornato, ' + name;
+    }
+  }
+});
