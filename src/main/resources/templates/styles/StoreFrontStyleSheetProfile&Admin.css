@@ -1,0 +1,224 @@
+/* ===== VARIABLES ===== */
+:root {
+    --main-color: #51073a;
+    --secondary-color: #a6b1b2;
+    --light-color: #ecf0f1;
+    --text-dark: #2c3e50;
+    --text-light: #ecf0f1;
+    --bg-light: #f8f9fa;
+    --bg-dark: #51073a;
+    --transition-speed: 0.3s;
+}
+
+/* ===== CONTEXTUAL BACKGROUNDS ===== */
+.bg-main {
+    background-color: var(--main-color) !important;
+}
+
+/* ===== CONTEXTUAL TEXT COLORS ===== */
+.text-contrast {
+    color: var(--text-dark) !important;
+}
+
+.text-contrast-light {
+    color: var(--text-light) !important;
+}
+
+/* Override for problematic elements */
+.bg-main h2,
+.bg-main h3,
+.bg-main h5,
+.bg-main p {
+    color: var(--text-light) !important;
+}
+
+/* ===== GENERAL STYLES ===== */
+body {
+    background-color: var(--bg-light);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: var(--text-dark);
+}
+
+/* ===== GAME DETAILS SPECIFIC STYLES ===== */
+.game-details-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== UTILITY CLASSES ===== */
+.context-aware-text {
+    color: var(--text-dark);
+}
+
+.bg-main .context-aware-text {
+    color: var(--text-light) !important;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .game-details-container {
+        padding: 15px;
+    }
+}
+
+/* ===== NAVBAR ===== */
+.main-color-1 {
+    background-color: var(--main-color) !important;
+}
+
+.main-color-1 .navbar-brand,
+.main-color-1 .nav-link,
+.main-color-1 .btn-outline-dark {
+    color: var(--light-color) !important;
+    transition: all var(--transition-speed) ease;
+}
+
+.main-color-1 .navbar-brand:hover,
+.main-color-1 .nav-link:hover {
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+.main-color-1 .navbar-toggler {
+    border-color: var(--light-color);
+}
+
+.main-color-1 .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* ===== BUTTONS ===== */
+.btn-primary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: var(--main-color);
+    font-weight: 600;
+    transition: all var(--transition-speed) ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--light-color);
+    border-color: var(--light-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--light-color);
+}
+
+/* ===== MODALS ===== */
+.modal-header {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.modal-content {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    background-color: var(--main-color);
+    border-top: 3px solid var(--secondary-color);
+    margin-top: auto;
+}
+
+.footer-section {
+    padding: 20px;
+    height: 100%;
+}
+
+.footer-divider {
+    border-color: var(--secondary-color);
+    opacity: 0.3;
+    margin: 20px 0;
+}
+
+.footer a.text-light {
+    transition: all var(--transition-speed) ease;
+    opacity: 0.9;
+}
+
+.footer a.text-light:hover {
+    color: var(--secondary-color) !important;
+    opacity: 1;
+    transform: translateX(5px);
+}
+
+/* Contact Form */
+.contact-form .form-control {
+    background-color: rgba(236, 240, 241, 0.1);
+    border: 1px solid var(--secondary-color);
+    color: var(--light-color);
+    transition: all var(--transition-speed) ease;
+}
+
+.contact-form .form-control::placeholder {
+    color: rgba(236, 240, 241, 0.7);
+}
+
+.contact-form .form-control:focus {
+    background-color: rgba(236, 240, 241, 0.2);
+    border-color: var(--light-color);
+    box-shadow: 0 0 0 0.2rem rgba(166, 177, 178, 0.25);
+    color: var(--light-color);
+}
+
+.contact-form .btn-light {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: var(--main-color);
+    font-weight: 600;
+    transition: all var(--transition-speed) ease;
+}
+
+.contact-form .btn-light:hover {
+    background-color: var(--light-color);
+    border-color: var(--light-color);
+    transform: translateY(-2px);
+}
+
+/* Social Icons */
+.social-links a {
+    transition: all var(--transition-speed) ease;
+    display: inline-block;
+}
+
+.social-links a:hover {
+    transform: translateY(-3px) scale(1.1);
+    color: var(--secondary-color) !important;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .footer-section {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .social-links {
+        justify-content: center;
+        display: flex;
+        gap: 15px;
+    }
+}
+
+/* ===== UTILITY CLASSES ===== */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

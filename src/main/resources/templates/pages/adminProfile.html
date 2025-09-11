@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Smoke Home – Profilo personale</title>
+    <title>Smoke Home – Profilo Admin</title>
 
     <!-- Bootstrap & Font Awesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
     <!-- CSS del progetto -->
-    <link rel="stylesheet" href="../styles/StoreFrontStyleSheetProfile&Admin.css" />
+    <link rel="stylesheet" href="../styles/StoreFrontStyleSheet.css" />
   </head>
   <body>
 
@@ -18,7 +18,7 @@
     <nav class="navbar navbar-expand-lg main-color-1 py-3">
       <div class="container">
         <a class="navbar-brand fw-bold" href="home.html">
-          <i class="fas fa-home me-2"></i>Profilo personale
+          <i class="fas fa-home me-2"></i>Profilo Admin
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
           <span class="navbar-toggler-icon"></span>
@@ -141,8 +141,8 @@
       <!-- Header profilo -->
       <div class="d-flex align-items-center gap-3 mb-4 text-contrast">
         <div>
-          <h4 class="mb-0 context-aware-text" id="profileUsername">Username</h4>
-          <small class="text-muted" id="profileEmail">user@example.com</small>
+          <h4 class="mb-0 context-aware-text">Bentornato Admin</h4>
+          <small class="text-muted" id="profileEmail">admin@smokehome.com</small>
         </div>
       </div>
 
@@ -152,17 +152,77 @@
           <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-games" type="button">Giochi</button>
         </li>
         <li class="nav-item">
-          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-friends" type="button">Amici</button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-password" type="button">Cambio password</button>
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-users" type="button">Utenti</button>
         </li>
       </ul>
 
       <div class="tab-content pt-3">
-        <!-- GIOCHI (invariato) -->
+        <!-- GIOCHI - Aggiunto form inserimento gioco -->
         <div class="tab-pane fade show active" id="tab-games">
-          <div class="card game-details-container">
+         <div class="card game-details-container">
+    <div class="card-header bg-main">
+        <h5 class="mb-0">Inserisci Nuovo Gioco</h5>
+    </div>
+    <div class="card-body text-contrast">
+        <form id="gameForm" class="row g-3">
+            <div class="col-md-6">
+                <label for="gameName" class="form-label">Nome del gioco</label>
+                <input type="text" class="form-control" id="gameName" required>
+            </div>
+            <div class="col-md-6">
+                <label for="gameDeveloper" class="form-label">Sviluppatore</label>
+                <input type="text" class="form-control" id="gameDeveloper" required>
+            </div>
+            <div class="col-md-4">
+                <label for="gameGenre" class="form-label">Genere</label>
+                <input type="text" class="form-control" id="gameGenre" required>
+            </div>
+            <div class="col-md-4">
+                <label for="gamePrice" class="form-label">Prezzo (€)</label>
+                <input type="number" class="form-control" id="gamePrice" min="0" step="0.01" required>
+            </div>
+            <div class="col-md-4">
+                <label for="gamePegi" class="form-label">PEGI</label>
+                <select class="form-select" id="gamePegi" required>
+                    <option value="">Seleziona PEGI</option>
+                    <option value="3">PEGI 3</option>
+                    <option value="7">PEGI 7</option>
+                    <option value="12">PEGI 12</option>
+                    <option value="16">PEGI 16</option>
+                    <option value="18">PEGI 18</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="gameReleaseDate" class="form-label">Data di rilascio</label>
+                <input type="date" class="form-control" id="gameReleaseDate" required>
+            </div>
+            <div class="col-12">
+                <label for="gameDescription" class="form-label">Descrizione</label>
+                <textarea class="form-control" id="gameDescription" rows="4" required></textarea>
+            </div>
+            
+            <!-- QUI INSERISCI IL CAMPO IMMAGINE -->
+            <div class="col-12">
+                <label for="gameImage" class="form-label">Immagine del gioco (300x450 px)</label>
+                <input type="file" class="form-control" id="gameImage" accept="image/*" required>
+                <div class="form-text">Seleziona un'immagine con dimensioni 300x450 pixel</div>
+                <div class="mt-2">
+                    <img id="imagePreview" src="#" alt="Anteprima immagine" class="img-thumbnail d-none" style="max-width: 150px; max-height: 225px;">
+                </div>
+            </div>
+            <!-- FINE CAMPO IMMAGINE -->
+            
+            <div class="col-12 mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus-circle me-2"></i>Importa Gioco
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+          
+          <!-- Libreria giochi esistente -->
+          <div class="card game-details-container mt-4">
             <div class="card-header bg-main">
               <h5 class="mb-0">La tua libreria</h5>
             </div>
@@ -176,76 +236,169 @@
           </div>
         </div>
 
-        <!-- AMICI -->
-<div class="tab-pane fade" id="tab-friends">
-  <div class="card game-details-container">
-    <div class="card-header bg-main">
-      <h5 class="mb-0">I tuoi amici</h5>
-    </div>
-
-    <div class="card-body text-contrast">
-      <!-- Messaggi -->
-      <div id="friendAlerts" class="mb-3"></div>
-
-       <!-- tuo id (temporaneo finché non avete login) -->
-      <input type="hidden" id="myUserId" value="1">
-
-
-      <!-- Form: SOLO FRIEND_ID -->
-      <form class="row g-2 mb-3" id="addFriendForm" novalidate>
-        <div class="col-md-4">
-          <label for="friendId" class="form-label mb-1">FRIEND_ID (amico)</label>
-          <input
-            type="number"
-            class="form-control"
-            id="friendId"
-            placeholder="Es. 123"
-            min="1"
-            step="1"
-            required
-          />
-          <div class="invalid-feedback">Inserisci un ID valido (intero &gt; 0).</div>
-           <div class="form-text">Inserisci l’ID numerico del giocatore da aggiungere.</div>
-        </div>
-        <div class="col-auto d-flex align-items-end">
-          <button type="submit" class="btn btn-primary" disabled>Aggiungi amico</button>
-        </div>
-      </form>
-<ul class="list-group" id="friendsList"></ul>
-      <div class="text-center text-muted mt-3" id="friendsEmpty">Nessun amico nella lista.</div>
-      
-    </div>
-  </div>
-</div>
-       
-
-
-        <!-- CAMBIO PASSWORD (invariato) -->
-        <div class="tab-pane fade" id="tab-password">
+        <!-- UTENTI - Sostituito Amici con Utenti -->
+        <div class="tab-pane fade" id="tab-users">
           <div class="card game-details-container">
             <div class="card-header bg-main">
-              <h5 class="mb-0">Cambio password</h5>
+              <h5 class="mb-0">Gestione Utenti</h5>
             </div>
+
             <div class="card-body text-contrast">
-              <form class="col-12 col-md-6 col-lg-5" id="changePasswordForm">
-                <div class="mb-3">
-                  <label class="form-label">Password attuale</label>
-                  <input type="password" class="form-control" name="currentPassword" placeholder="••••••••">
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Nuova password</label>
-                  <input type="password" class="form-control" name="newPassword" placeholder="Aggiungi nuova password">
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Conferma nuova password</label>
-                  <input type="password" class="form-control" name="confirmPassword" placeholder="Ripeti nuova password">
-                </div>
-                <button type="submit" class="btn btn-primary" disabled>Cambia password</button>
-              </form>
+              <div class="d-grid gap-2 d-md-flex mb-4">
+                <button class="btn btn-success me-md-2" data-bs-toggle="modal" data-bs-target="#createUserModal">
+                  <i class="fas fa-user-plus me-2"></i>Crea nuovo utente
+                </button>
+                <button class="btn btn-warning me-md-2" data-bs-toggle="modal" data-bs-target="#editUserModal">
+                  <i class="fas fa-user-edit me-2"></i>Modifica Utente
+                </button>
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
+                  <i class="fas fa-user-times me-2"></i>Elimina utente
+                </button>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Username</th>
+                      <th>Email</th>
+                      <th>Ruolo</th>
+                      <th>Data Registrazione</th>
+                    </tr>
+                  </thead>
+                  <tbody id="usersTableBody">
+                    <tr>
+                      <td>1</td>
+                      <td>admin</td>
+                      <td>admin@smokehome.com</td>
+                      <td><span class="badge bg-danger">Amministratore</span></td>
+                      <td>01/01/2023</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>mario_rossi</td>
+                      <td>mario.rossi@example.com</td>
+                      <td><span class="badge bg-primary">Utente</span></td>
+                      <td>15/03/2023</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
+    <!-- Modale Crea Utente -->
+    <div class="modal fade" id="createUserModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Crea Nuovo Utente</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Ruolo</label>
+                <select class="form-select">
+                  <option value="user">Utente</option>
+                  <option value="admin">Amministratore</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+            <button type="button" class="btn btn-success">Crea Utente</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modale Modifica Utente -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modifica Utente</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label class="form-label">Seleziona Utente</label>
+                <select class="form-select">
+                  <option value="1">admin</option>
+                  <option value="2">mario_rossi</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Nuovo Username</label>
+                <input type="text" class="form-control">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Nuova Email</label>
+                <input type="email" class="form-control">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Nuovo Ruolo</label>
+                <select class="form-select">
+                  <option value="user">Utente</option>
+                  <option value="admin">Amministratore</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+            <button type="button" class="btn btn-warning">Salva Modifiche</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modale Elimina Utente -->
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Elimina Utente</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                                <label class="form-label">Seleziona Utente da eliminare</label>
+                <select class="form-select">
+                  <option value="2">mario_rossi (Utente)</option>
+                </select>
+              </div>
+              <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Attenzione: Questa operazione non può essere annullata.
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+            <button type="button" class="btn btn-danger">Elimina Definitivamente</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -297,12 +450,9 @@
       </div>
     </footer>
 
-    <!-- JS: Amici (semplice, niente jQuery) -->
-    
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-     <script src="../script/ProfileScript.js"></script>
-       <script src="../script/RegisterScript.js"></script>
+    <script src="../script/AdminScript.js"></script>
+    <script src="../script/RegisterScript.js"></script>
   </body>
 </html>
