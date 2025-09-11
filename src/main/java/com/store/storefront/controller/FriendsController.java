@@ -7,9 +7,10 @@ import com.store.storefront.service.FriendsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/friends")
+
 public class FriendsController {
 
 	// DEPENDENCY INJECTION
