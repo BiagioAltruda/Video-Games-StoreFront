@@ -1,5 +1,6 @@
 // Funzione principale che crea le card
 function showAllGames(games) {
+    // Crea l'HTML delle card mappando l'array dei giochi
     const gameCards = games
         .map((game) => {
             return `
@@ -22,8 +23,9 @@ function showAllGames(games) {
 </div>
 `;
         })
-        .join("");
+        .join(""); // Unisce tutte le stringhe in un unico blocco HTML
 
+    // Inserisce le card dentro il container
     const productContainer = document.getElementById('cards-container');
     productContainer.innerHTML = `<div class="row">${gameCards}</div>`;
 }
@@ -31,16 +33,21 @@ function showAllGames(games) {
 // Funzione che chiama il TUO database
 async function loadGames() {
     try {
+        // Richiesta per ottenere tutti i giochi
         const response = await fetch('http://localhost:8080/smoke/games/all');
         
+        // Se la risposta non è OK, lancia un errore
         if (!response.ok) {
             throw new Error(`Errore HTTP: ${response.status}`);
         }
         
+        // Converte la risposta in JSON (array di giochi)
         const games = await response.json();
+        // Mostra tutte le card
         showAllGames(games);
         
     } catch (error) {
+        // In caso di errore, logga e mostra un messaggio all'utente
         console.error('Errore nel caricamento dal database:', error);
         // Mostra un messaggio di errore all'utente
         const container = document.getElementById('cards-container');
@@ -56,20 +63,23 @@ async function loadGames() {
 }
 
 // Avvia il caricamento quando la pagina è pronta
-document.addEventListener('DOMContentLoaded', loadGames);
+document.addEventListener('DOMContentLoaded', loadGames); // Al DOM pronto, carica i giochi
 
-
+// Mostra i dettagli di un gioco quando si clicca sulla card
 function showGameDetails(gameId) {
+    // Costruisce l'URL per il dettaglio del gioco
     const url = `http://localhost:8080/smoke/games/${gameId}`;
 
+    // Effettua la fetch dei dettagli del gioco
     fetch(url)
         .then((response) => {
             if (!response.ok) {
-                throw new Error('Gioco non trovato');
+                throw new Error('Gioco non trovato'); // Errore se non ok
             }
-            return response.json();
+            return response.json(); // Converte in JSON
         })
         .then((game) => {
+        // Template HTML con i dettagli del gioco e form recensione
         const gameDetails = `
         <div class="game-details-container">
             <div class="container mt-4">
@@ -147,10 +157,12 @@ function showGameDetails(gameId) {
         </div>
         `;
         
+        // Sostituisce le card con i dettagli del gioco
         document.getElementById('cards-container').innerHTML = gameDetails;
         
         // Aggiungi gli event listener dopo che l'HTML è stato renderizzato
         setTimeout(() => {
+            // Recupera il form recensione appena inserito
             const reviewForm = document.getElementById('reviewForm');
             const reviewTextarea = reviewForm.querySelector('textarea[name="content"]');
             const submitBtn = document.getElementById('submitReviewBtn');
@@ -163,12 +175,14 @@ function showGameDetails(gameId) {
             // Gestione dell'invio del form
             reviewForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                submitReview(gameId);
+                submitReview(gameId); // Chiama la funzione di invio recensione
             });
-        }, 100);
+        }, 100); // timeout per assicurare il DOM aggiornato
     })
     .catch((error) => {
+        // Gestione errori nel recupero dettagli
         console.error("Errore durante il recupero dei dettagli", error);
+        // Messaggio di errore + pulsante per tornare alla lista
         document.getElementById('cards-container').innerHTML = `
             <div class="col-12 text-center">
                 <div class="alert alert-danger">
@@ -185,6 +199,7 @@ function showGameDetails(gameId) {
 
 // Funzione per inviare la recensione (da implementare)
 function submitReview(gameId) {
+    // Recupera il form e i suoi dati
     const form = document.getElementById('reviewForm');
     const formData = new FormData(form);
     
@@ -197,8 +212,8 @@ function submitReview(gameId) {
     
     // Esempio: mostra un messaggio di successo
     alert('Recensione inviata con successo!');
-    form.reset();
-    document.getElementById('submitReviewBtn').disabled = true;
+    form.reset(); // Resetta il form
+    document.getElementById('submitReviewBtn').disabled = true; // Disabilita il bottone finché non c'è nuovo testo
 }
 
 // funzione per tornare alla lista giochi
@@ -208,6 +223,7 @@ function closeGameDetails() {
 
 // Variabile globale per memorizzare tutti i giochi
 let allGames = [];
+// Variabile per memorizzare la categoria selezionata
 let categoriaSelezionata = null;
 
 // Funzione per filtrare per categoria (adattata per il tuo HTML)
@@ -225,7 +241,7 @@ function cercaCategoria(categoriaCercata) {
     const tutteLeCategorie = document.querySelectorAll('.categoria-item');
     tutteLeCategorie.forEach(cat => cat.classList.remove('active'));
     
-    // Aggiungi la classe active alla categoria cliccata
+    // Aggiungi la classe active alla categoria cliccata (in base al testo)
     const categoriaCliccata = Array.from(tutteLeCategorie).find(cat => 
         cat.textContent.includes(categoriaCercata)
     );
@@ -233,13 +249,16 @@ function cercaCategoria(categoriaCercata) {
         categoriaCliccata.classList.add('active');
     }
     
+    // Se è stato selezionato "TUTTE LE CATEGORIE" mostra tutto
     if (categoriaCercata === "TUTTE LE CATEGORIE") {
         mostraTuttiIGiochi();
         return;
     }
     
+    // Normalizza la categoria cercata
     const categoriaCercataLower = categoriaCercata.toLowerCase();
     
+    // Filtra i giochi in base al genere
     const giochiFiltrati = allGames.filter(game => {
         if (!game.genre) return false;
         
@@ -247,18 +266,19 @@ function cercaCategoria(categoriaCercata) {
         const categorieGioco = game.genre.split(',')
             .map(cat => cat.trim().toLowerCase());
         
-        // Controlla se una delle categorie matcha
+        // Controlla se una delle categorie combacia
         return categorieGioco.some(categoria => 
             categoria === categoriaCercataLower
         );
     });
     
+    // Mostra i risultati della ricerca per categoria
     mostraRisultatiRicerca(giochiFiltrati, `Categoria: ${categoriaCercata}`);
 }
 
 // Funzione per deselezionare la categoria
 function deselezionaCategoria() {
-    categoriaSelezionata = null;
+    categoriaSelezionata = null; // Reset selezione
     
     // Rimuovi la classe active da tutte le categorie
     const tutteLeCategorie = document.querySelectorAll('.categoria-item');
@@ -270,7 +290,7 @@ function deselezionaCategoria() {
 
 // Funzione per mostrare i risultati della ricerca (adattata)
 function mostraRisultatiRicerca(giochi, titoloRicerca) {
-    const cardsContainer = document.getElementById('cards-container');
+    const cardsContainer = document.getElementById('cards-container'); // Container principale
     
     if (giochi.length > 0) {
         // Genera le card usando la tua funzione esistente showAllGames
@@ -308,6 +328,7 @@ function mostraRisultatiRicerca(giochi, titoloRicerca) {
 
 // Funzione per mostrare tutti i giochi (adattata)
 function mostraTuttiIGiochi() {
+    // Mostra tutte le card a partire dall'array globale
     showAllGames(allGames);
     
     // Rimuovi eventuali titoli di ricerca precedenti
@@ -321,17 +342,21 @@ function mostraTuttiIGiochi() {
 // Modifica la funzione loadGames per salvare i giochi nella variabile globale
 async function loadGames() {
     try {
+        // Fetch verso il backend per tutti i giochi
         const response = await fetch('http://localhost:8080/smoke/games/all');
         
+        // Se non ok, lancia errore
         if (!response.ok) {
             throw new Error(`Errore HTTP: ${response.status}`);
         }
         
+        // Converte a JSON
         const games = await response.json();
         allGames = games; // Salva nella variabile globale
-        showAllGames(games);
+        showAllGames(games); // Mostra le card
         
     } catch (error) {
+        // Gestione errore caricamento
         console.error('Errore nel caricamento dal database:', error);
         const container = document.getElementById('cards-container');
         container.innerHTML = `
@@ -347,18 +372,20 @@ async function loadGames() {
 
 // Aggiungi anche la funzione per la ricerca per nome dal menu laterale
 function setupSearchForm() {
-    const searchForm = document.querySelector('.search-form');
+    const searchForm = document.querySelector('.search-form'); // Seleziona il form di ricerca
     if (searchForm) {
+        // Intercetta il submit e avvia la ricerca
         searchForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            const searchInput = this.querySelector('input[type="text"]');
-            cercaPerNome(searchInput.value.trim());
+            const searchInput = this.querySelector('input[type="text"]'); // Campo di input testo
+            cercaPerNome(searchInput.value.trim()); // Chiama la ricerca per nome
         });
     }
 }
 
 // Funzione per cercare per nome
 function cercaPerNome(nomeCercato) {
+    // Se input vuoto, mostra tutti i giochi
     if (!nomeCercato) {
         mostraTuttiIGiochi();
         return;
@@ -367,17 +394,20 @@ function cercaPerNome(nomeCercato) {
     // Deseleziona eventuali categorie selezionate
     deselezionaCategoria();
     
+    // Normalizza il testo cercato
     const nomeCercatoLower = nomeCercato.toLowerCase();
     
+    // Filtra i giochi il cui nome include il testo cercato
     const giochiFiltrati = allGames.filter(game => {
         return game.name && game.name.toLowerCase().includes(nomeCercatoLower);
     });
     
+    // Mostra i risultati per nome
     mostraRisultatiRicerca(giochiFiltrati, `Risultati per: "${nomeCercato}"`);
 }
 
 // Inizializza i form di ricerca quando la pagina è carica
 document.addEventListener('DOMContentLoaded', function() {
-    loadGames();
-    setTimeout(setupSearchForm, 100); // Aspetta che il DOM sia completamente renderizzato
+    loadGames(); // Carica la lista giochi all'avvio
+    setTimeout(setupSearchForm, 100); // Aspetta un attimo e poi configura il form di ricerca
 });

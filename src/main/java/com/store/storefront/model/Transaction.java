@@ -32,10 +32,15 @@ public class Transaction {
 	private Long id;
 
 
-	//The following 2 are the foreign keys for the games-players relation with extra attributes
-	//Using the transaction table as the middle man
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "player_id")
+	// Relazione Many-to-One: molte transazioni possono appartenere a un singolo player
+	// fetch = FetchType.LAZY -> il Player associato verrà caricato dal DB solo quando richiesto
+	@ManyToOne(fetch = FetchType.LAZY)  
+
+	// Specifica la colonna di join nella tabella 'transaction' che fa da foreign key verso la tabella 'player'
+	// In questo caso la colonna 'player_id' nella tabella 'transaction' referenzia la primary key di 'player'
+	@JoinColumn(name = "player_id")  
+
+	// Rappresenta il riferimento all'entità Player collegata a questa transazione
 	private Player player;
 
 	@ManyToOne
