@@ -93,9 +93,12 @@ function showGameDetails(gameId) {
                         </div>
                         
                         <div class="mt-4">
-                           <button class="btn btn-primary me-2" onclick="window.location.href='Payment.html'">
-                            <i class="fas fa-shopping-cart me-1"></i>Acquista
-                            </button>
+                           <form method="POST" id="paymentForm">
+                           <input hidden type="text" name="playerId" value="">
+                                <submit class="btn btn-primary me-2" id="paymentRedirect" onclick="goToPayment(${game})">
+                                <i class="fas fa-shopping-cart me-1"></i>Acquista
+                            </submit>
+                            </form>
                             <button class="btn btn-secondary" onclick="closeGameDetails()">
                                 <i class="fas fa-arrow-left me-1"></i>Torna indietro
                             </button>
@@ -375,6 +378,30 @@ function cercaPerNome(nomeCercato) {
     
     mostraRisultatiRicerca(giochiFiltrati, `Risultati per: "${nomeCercato}"`);
 }
+async function goToPayment(game) {
+    document.addEventListener('paymentRedirect', async function () {
+        const loggedIn = require(checkLoggedIn());
+
+        if (!loggedIn) {
+            alert("Esegui prima il login per poter acquistare un gioco");
+            return;
+        }
+        const playerID = require(await getPlayerId());
+            const productData =  {
+                "playerID": playerID,
+                "gameName": game.name,
+                "gamePrice": game.price,
+        }
+        localStorage.setItem('productData', JSON.stringify(productData));
+    })
+}
+// function goToPayment(){
+//     if(!localStorage.getItem('X-Token')){
+//         alert("Esegui prima il login per poter acquistare un gioco")
+//         return;
+//     }
+//     const redirectUrl = "http://localhost:8080/Payment.html/?player_id=${playerId}&game_id=${gameId}&}";
+// }
 
 // Inizializza i form di ricerca quando la pagina è carica
 document.addEventListener('DOMContentLoaded', function() {

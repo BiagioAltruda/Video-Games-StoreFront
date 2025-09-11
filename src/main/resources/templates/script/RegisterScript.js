@@ -3,10 +3,12 @@ function checkLoggedIn(){
   if(localStorage.getItem("X-Token")){
     document.getElementById("login-button").style.display = "none";
     document.getElementById("logout-button").style.display = "block";
+    return true;
   }
   else{
     document.getElementById("logout-button").style.display = "none";
     document.getElementById("login-button").style.display = "block";
+    return false;
   }
 }
 

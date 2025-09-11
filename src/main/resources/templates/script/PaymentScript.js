@@ -17,7 +17,7 @@ function showAlert(type, message) {
 
 
 // Funzione principale di pagamento
-async function pay(gameId) {
+async function pay() {
   let btn = $("#payBtn");
   if (btn) btn.setAttribute("disabled", "disabled");
 
