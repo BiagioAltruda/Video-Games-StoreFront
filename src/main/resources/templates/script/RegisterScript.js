@@ -18,8 +18,10 @@ function login() {
     // Salva il token
     localStorage.setItem('token', token);
 
-    document.getElementById('authOut').textContent =
-      '✅ Login OK. Token salvato.';
+    window.location.href= "profile.html"
+
+    // document.getElementById('authOut').textContent =
+    //   '✅ Login OK. Token salvato.';
   })
   .catch(error => {
     console.error("Login error:", error);
