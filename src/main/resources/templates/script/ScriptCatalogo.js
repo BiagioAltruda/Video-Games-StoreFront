@@ -1,3 +1,4 @@
+//addEventListener("DOMContentLoaded", checkLoggedIn)
 // Funzione principale che crea le card
 function showAllGames(games) {
     const gameCards = games
@@ -92,8 +93,8 @@ function showGameDetails(gameId) {
                             <p class="text-contrast">${game.description || 'Nessuna descrizione disponibile'}</p> 
                         </div>
                         
-                        <div class="mt-4">
-                           <button class="btn btn-primary me-2" onclick="window.location.href='Payment.html'">
+                        <div class="mt-4">  <!--allows html to properly read the function signature-->
+                           <button class="btn btn-primary me-2" onclick="goToPayment(JSON.parse('${JSON.stringify(game).replace(/'/g, "&apos;")}'))">
                             <i class="fas fa-shopping-cart me-1"></i>Acquista
                             </button>
                             <button class="btn btn-secondary" onclick="closeGameDetails()">
@@ -381,3 +382,54 @@ document.addEventListener('DOMContentLoaded', function() {
     loadGames();
     setTimeout(setupSearchForm, 100); // Aspetta che il DOM sia completamente renderizzato
 });
+
+async function goToPayment(game){
+    if(!checkLoggedIn()){
+        alert("Devi essere loggato prima di poter procede all'acquisto");
+        return;
+    }
+    const playerId = await getPlayerId();
+    const transactionData = {
+        "playerId": playerId,
+        "gameId": game.id,
+        "gameName": game.name,
+        "gamePrice": game.price
+    }.json();
+    localStorage.setItem("data", transactionData);
+    window.location.assign("Payment.html")
+}
+
+
+function checkLoggedIn(){
+    if(localStorage.getItem("X-Token")){
+        document.getElementById("login-button").style.display = "none";
+        document.getElementById("logout-button").style.display = "block";
+        return true;
+    }
+    else{
+        document.getElementById("logout-button").style.display = "none";
+        document.getElementById("login-button").style.display = "block";
+        return false;
+    }
+}
+
+async function getPlayerId() {
+    let token = localStorage.getItem('X-Token');
+    let options = {method : 'GET' , headers : {'X-Token': token}};
+    try {
+        const response = await fetch(`http://localhost:8080/smoke/accounts/profile`, options);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const playerId = data.id;
+
+        console.log(`The player ID is: ${playerId}`);
+        return playerId; // You can now return the ID from the function
+    } catch (err) {
+        console.error("Failed to fetch player ID:", err);
+        return null; // Or throw the error to the caller
+    }
+}

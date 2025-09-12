@@ -1,5 +1,5 @@
 async function getPlayerId() {
-    let token = localStorage.getItem('token');
+    let token = localStorage.getItem('X-Token');
     let options = {method : 'GET' , headers : {'X-Token': token}};
     try {
         const response = await fetch(`http://localhost:8080/smoke/accounts/profile`, options);
