@@ -1,4 +1,4 @@
-//addEventListener("DOMContentLoaded", checkLoggedIn)
+addEventListener("DOMContentLoaded", checkLoggedIn)
 // Funzione principale che crea le card
 function showAllGames(games) {
     const gameCards = games
@@ -94,7 +94,7 @@ function showGameDetails(gameId) {
                         </div>
                         
                         <div class="mt-4">  <!--allows html to properly read the function signature-->
-                           <button class="btn btn-primary me-2" onclick="goToPayment(JSON.parse('${JSON.stringify(game).replace(/'/g, "&apos;")}'))">
+                           <button class="btn btn-primary me-2" data-game='${JSON.stringify(game)}' onclick="goToPayment(JSON.parse(this.dataset.game))">
                             <i class="fas fa-shopping-cart me-1"></i>Acquista
                             </button>
                             <button class="btn btn-secondary" onclick="closeGameDetails()">
@@ -383,25 +383,13 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(setupSearchForm, 100); // Aspetta che il DOM sia completamente renderizzato
 });
 
-async function goToPayment(game){
-    if(!checkLoggedIn()){
-        alert("Devi essere loggato prima di poter procede all'acquisto");
-        return;
-    }
-    const playerId = await getPlayerId();
-    const transactionData = {
-        "playerId": playerId,
-        "gameId": game.id,
-        "gameName": game.name,
-        "gamePrice": game.price
-    }.json();
-    localStorage.setItem("data", transactionData);
-    window.location.assign("Payment.html")
-}
-
-
 function checkLoggedIn(){
-    if(localStorage.getItem("X-Token")){
+    const token = localStorage.getItem("X-Token");
+    console.log("Token value:", token);
+    console.log("Token type:", typeof token);
+    console.log("Token exists:", !!token);
+
+    if(token){
         document.getElementById("login-button").style.display = "none";
         document.getElementById("logout-button").style.display = "block";
         return true;
@@ -412,6 +400,117 @@ function checkLoggedIn(){
         return false;
     }
 }
+async function login() {
+    const u = document.getElementById('user').value;
+    const p = document.getElementById('pass').value;
+
+    fetch(`http://localhost:8080/smoke/accounts/login?username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`, {
+        method: 'POST'
+    })
+        .then(response => {
+            if (response.status === 200) {
+                return response.text(); // ritorna token come stringa
+            } else {
+                throw new Error('Login failed');
+            }
+        })
+        .then(async token => {
+            console.log("Login response token:", token);
+
+            // Salva il token
+            localStorage.setItem('X-Token', await token);
+
+            window.location.href = "profile.html"
+
+            // document.getElementById('authOut').textContent =
+            //   '✅ Login OK. Token salvato.';
+        })
+        .catch(error => {
+            console.error("Login error:", error);
+            document.getElementById('authOut').textContent = 'Login fallito';
+        });
+}
+async function register() {
+    const username = document.getElementById('newUsername').value;
+    const password = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    if (password !== confirmPassword) {
+        alert('Le password non coincidono!');
+        return;
+    }
+
+    if (password.length < 4) {
+        alert('La password deve essere di almeno 4 caratteri!');
+        return;
+    }
+
+    fetch(`http://localhost:8080/smoke/accounts/register?name=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
+        method: 'POST'
+    })
+        .then(response => {
+            if (response.status === 200) {
+                return response.text();
+            } else {
+                throw new Error('Errore durante la registrazione');
+            }
+        })
+        .then(message => {
+            alert(message);
+
+            if (message === 'Account created successfully') {
+                const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                registerModal.hide();
+
+                document.getElementById('newUsername').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+
+                const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                loginModal.show();
+            }
+        })
+        .catch(error => {
+            alert('Si è verificato un errore durante la registrazione: ' + error.message);
+        });
+}
+
+async function logout(){
+    const token = localStorage.getItem('X-Token');
+    await fetch(`http://localhost:8080/smoke/accounts/logout?token=${token}`, {
+        method: 'POST',
+        headers: {'X-Token' : token}
+    })
+        .then(response => {
+            if (response.status === 200) {
+                localStorage.removeItem('X-Token');
+                alert("Logout eseguito con successo");
+            }
+            else{
+                alert("Errore durante il logout");
+            }
+            checkLoggedIn();
+        })
+}
+
+async function goToPayment(game){
+    if(!checkLoggedIn()){
+        alert("Devi essere loggato prima di poter procede all'acquisto");
+        return;
+    }
+    const playerId = await getPlayerId();
+    const transactionData = JSON.stringify({
+        "playerId": playerId,
+        "gameId": game.id,
+        "gameName": game.name,
+        "gamePrice": game.price
+    });
+    localStorage.setItem("data", transactionData);
+    window.location.assign("Payment.html")
+}
+
+
+
 
 async function getPlayerId() {
     let token = localStorage.getItem('X-Token');
