@@ -1,11 +1,5 @@
-  //Creazione della costante per il fetch della pagina
-  const baseUrl = 'http://localhost:8080/smoke/accounts';
-
-
-
-
-
-
+ //Creazione della costante per il fetch della pagina
+const baseUrl = 'http://localhost:8080/smoke/accounts';
 let currentFeaturedIndex = 0;
 let allGames = [];
 
@@ -265,4 +259,202 @@ function mostraTuttiIGiochi() {
     categoriaSelezionata = "TUTTE";
     ultimiGiochiVisualizzati = allGames;
     mostraRisultatiRicerca(allGames, "Tutti i giochi");
+}
+
+function showGameDetails(gameId) {
+    const url = `http://localhost:8080/smoke/games/${gameId}`;
+
+    fetch(url)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Gioco non trovato');
+            }
+            return response.json();
+        })
+        .then((game) => {
+        const gameDetails = `
+        <div class="game-details-container">
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="${game.bannerPath}" 
+                             class="img-fluid rounded" alt="${game.name}" 
+                             onerror="this.src='https://via.placeholder.com/500x700/51073a/ecf0f1?text=Image+Error'">
+                    </div>
+                    <div class="col-md-6">
+                        <h2 class="text-contrast">${game.name}</h2> 
+                        <p class="text-contrast"><strong>Sviluppatore:</strong> ${game.developer}</p> 
+                        <p class="text-contrast"><strong>Genere:</strong> ${game.genre}</p> 
+                        <p class="text-contrast"><strong>Prezzo:</strong> ${game.price ? '€' + game.price.toFixed(2) : 'Gratis'}</p> 
+                        <p class="text-contrast"><strong>Pegi:</strong> + ${game.rating || 'N/A'}</p> 
+                        <p class="text-contrast"><strong>Data di rilascio:</strong> ${game.releaseDate || 'N/D'}</p> 
+                        
+                        <div class="mt-4">
+                            <h5 class="text-contrast">Descrizione</h5> 
+                            <p class="text-contrast">${game.description || 'Nessuna descrizione disponibile'}</p> 
+                        </div>
+                        
+                        <div class="mt-4">
+                           <button class="btn btn-primary me-2" onclick="window.location.href='Payment.html'">
+                            <i class="fas fa-shopping-cart me-1"></i>Acquista
+                            </button>
+                            <button class="btn btn-secondary" onclick="closeGameDetails()">
+                                <i class="fas fa-arrow-left me-1"></i>Torna indietro
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        `;
+        
+        document.getElementById('cards-container').innerHTML = gameDetails;
+        
+        // Aggiungi gli event listener dopo che l'HTML è stato renderizzato
+        setTimeout(() => {
+            const reviewForm = document.getElementById('reviewForm');
+            const reviewTextarea = reviewForm.querySelector('textarea[name="content"]');
+            const submitBtn = document.getElementById('submitReviewBtn');
+            
+            // Abilita il pulsante solo se c'è del testo nella recensione
+            reviewTextarea.addEventListener('input', function() {
+                submitBtn.disabled = this.value.trim().length === 0;
+            });
+            
+            // Gestione dell'invio del form
+            reviewForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitReview(gameId);
+            });
+        }, 100);
+    })
+    .catch((error) => {
+        console.error("Errore durante il recupero dei dettagli", error);
+        document.getElementById('cards-container').innerHTML = `
+            <div class="col-12 text-center">
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    Errore nel caricamento dei dettagli: ${error.message}
+                </div>
+                <button class="btn btn-secondary" onclick="closeGameDetails()">
+                    Torna alla lista
+                </button>
+            </div>
+        `;
+    });
+}
+
+function closeGameDetails() {
+   tornaAlCarosello(); // Richiama la funzione che carica tutti i giochi
+}
+
+
+
+// Funzione per popolare la sezione offerte speciali
+function populateSpecialOffers(games) {
+    // Seleziona casualmente 3 giochi dalla lista
+    const randomGames = getRandomGamesWithDiscount(games, 3);
+    
+    const offersContainer = document.getElementById('special-offers-container');
+    
+    if (!offersContainer) {
+        console.error("Container delle offerte speciali non trovato!");
+        return;
+    }
+    
+    if (randomGames.length === 0) {
+        offersContainer.innerHTML = `
+            <div class="col-12 text-center">
+                <p class="text-light">Nessuna offerta speciale al momento</p>
+            </div>
+        `;
+        return;
+    }
+    
+    const offersHTML = randomGames.map(game => {
+        const originalPrice = game.price || 29.99;
+        const discountPercentage = Math.floor(Math.random() * 41) + 10; // Sconto tra 10% e 50%
+        const discountedPrice = (originalPrice * (1 - discountPercentage/100)).toFixed(2);
+        
+        return `
+        <div class="col-md-4 mb-4">
+            <div class="card offer-card h-100" onclick="showGameDetails(${game.id})" style="cursor: pointer;">
+                <div class="discount-badge">-${discountPercentage}%</div>
+                <img src="${game.bannerPath ? game.bannerPath : 'https://via.placeholder.com/300x450/2c3e50/ecf0f1?text=No+Image'}" 
+                     class="card-img-top" alt="${game.name}"
+                     onerror="this.src='https://via.placeholder.com/300x450/2c3e50/ecf0f1?text=Image+Error'">
+                
+                <div class="card-body">
+                    <h5 class="card-title text-white">${game.name}</h5>
+                    <p class="card-text text-light">${game.genre}</p>
+                    <div class="price-container">
+                        <span class="original-price">€${originalPrice.toFixed(2)}</span>
+                        <span class="discounted-price">€${discountedPrice}</span>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                    <small class="text-warning"><i class="fas fa-clock me-1"></i>Offerta limitata</small>
+                </div>
+            </div>
+        </div>
+        `;
+    }).join('');
+    
+    offersContainer.innerHTML = offersHTML;
+}
+
+// Funzione per selezionare giochi casuali con sconto
+function getRandomGamesWithDiscount(games, count) {
+    if (!games || games.length === 0) return [];
+    
+    // Filtra giochi con prezzo (escludendo quelli gratuiti)
+    const paidGames = games.filter(game => game.price && game.price > 0);
+    
+    if (paidGames.length === 0) return [];
+    
+    // Seleziona casualmente fino a 'count' giochi
+    const shuffled = [...paidGames].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, Math.min(count, shuffled.length));
+}
+
+// Funzione per aggiornare le offerte
+function refreshOffers() {
+    if (allGames && allGames.length > 0) {
+        populateSpecialOffers(allGames);
+    }
+}
+
+// Modifica la funzione loadGames per includere il popolamento delle offerte
+async function loadGames() {
+    try {
+        const response = await fetch('http://localhost:8080/smoke/games/all');
+        
+        if (!response.ok) {
+            throw new Error(`Errore HTTP: ${response.status}`);
+        }
+        
+        allGames = await response.json();
+        
+        if (allGames.length > 0) {
+            showFeaturedGame(0); // Mostra il primo gioco
+            populateSpecialOffers(allGames); // Popola le offerte speciali
+        } else {
+            document.getElementById('featured-loading').innerHTML = `
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Nessun gioco disponibile.
+                </div>
+            `;
+        }
+        
+    } catch (error) {
+        console.error('Errore nel caricamento dal database:', error);
+        document.getElementById('featured-loading').innerHTML = `
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Impossibile caricare i giochi. Riprova più tardi.
+            </div>
+        `;
+    }
 }
