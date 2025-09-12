@@ -16,82 +16,54 @@ function showAlert(type, message) {
 }
 
 
+
 // Funzione principale di pagamento
-async function pay(gameId) {
+async function pay() {
   let btn = $("#payBtn");
   if (btn) btn.setAttribute("disabled", "disabled");
 
-  const game = await getGameData();
-  try {
-    // Costruzione DTO come atteso da TransactionDTO
-   const dto = {
-  transaction: {
-    amount: parseFloat($("#tx-price")?.value || game.price),
-    date: new Date().toISOString().slice(0,19) // senza Z
-  },
-  cardDetails: {
-    cardholderName: $("#cardholderName").value,
+  const expiration =convertDateFormat('01/' + $("#expirationDate").value);
+  console.log(expiration);
+  const cardDetails = {
     cardNumber: $("#cardNumber").value,
-    expirationDate: $("#expirationDate").value,
-    cvv: $("#cvv").value
+    cardHolderName: $("#cardholderName").value,
+    cardExpiry: expiration,
+    cardCVV: $("#cvv").value
   }
-};
 
-let playerId = getPlayerId();
+  console.log(cardDetails);
+  console.log(transaction); //{player, game, gameName,pricePaid,date}
+  delete transaction.gameName;
 
-let res = await fetch("http://localhost:8080/smoke/transactions/pay/" + playerId, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(dto)
-});
+
+  const dto = {cardDetails , transaction};
+  console.log(JSON.stringify(dto));
+  try{
+    let res = await fetch("http://localhost:8080/smoke/transactions/pay/" + transaction.player, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dto)
+    });
 
     if (!res.ok) throw new Error("HTTP " + res.status);
     let msg = await res.text();
     showAlert("success", msg);
-
-    if ($("#tx-date")) $("#tx-date").textContent = new Date().toLocaleString();
 
   } catch (e) {
     console.error(e);
     showAlert("danger", "❌ Errore di connessione o server non disponibile");
   } finally {
     if (btn) btn.removeAttribute("disabled");
+
   }
 }
 
-// Inizializzazione quando la pagina è pronta
-document.addEventListener("DOMContentLoaded", function () {
-  const form = $("#paymentForm");
-  if (!form) return;
-
-  let txId = getTransactionId();
-  if (!txId) {
-    showAlert("danger", "Manca l’ID della transazione.");
-    return;
-  }
-
-  // Aggiungi hidden input se manca
-  if (!$('input[name="transactionId"]')) {
-    let hidden = document.createElement("input");
-    hidden.type = "hidden";
-    hidden.name = "transactionId";
-    hidden.value = txId;
-    form.appendChild(hidden);
-  }
-
-  // Dati placeholder (in futuro puoi popolarli da backend con GET)
-  if ($("#tx-id")) $("#tx-id").textContent = txId;
-  if ($("#tx-player")) $("#tx-player").textContent = "Player Name";
-  if ($("#tx-game")) $("#tx-game").textContent = "Game Title";
-  if ($("#tx-price")) $("#tx-price").textContent = "49.99";
-  if ($("#tx-date")) $("#tx-date").textContent = new Date().toLocaleString();
-
   // Intercetta il submit
+const form = document.getElementById("paymentForm");
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    pay(txId); // id player
+    pay();
   });
-});
 
 async function getGameData(id) {
   try {
@@ -104,23 +76,26 @@ async function getGameData(id) {
     console.error(e);
   }
 }
-async function getPlayerId() {
-  let token = localStorage.getItem('X-Token');
-  let options = {method : 'GET' , headers : {'X-Token': token}};
-  try {
-    const response = await fetch(`http://localhost:8080/smoke/accounts/profile`, options);
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+function convertDateFormat(date) {
+  const parts = date.split('/');
+  const day = parts[0];
+  const month = parts[1];
+  const year = parts[2];
+  return `${month}/${day}/${year}`;
+}
 
-    const data = await response.json();
-    const playerId = data.id;
-
-    console.log(`The player ID is: ${playerId}`);
-    return playerId; // You can now return the ID from the function
-  } catch (err) {
-    console.error("Failed to fetch player ID:", err);
-    return null; // Or throw the error to the caller
+addEventListener('DOMContentLoaded', checkLoggedIn);
+function checkLoggedIn(){
+  const token = localStorage.getItem("X-Token");
+  if(token){
+    document.getElementById("login-button").style.display = "none";
+    document.getElementById("logout-button").style.display = "block";
+    return true;
+  }
+  else{
+    document.getElementById("logout-button").style.display = "none";
+    document.getElementById("login-button").style.display = "block";
+    return false;
   }
 }

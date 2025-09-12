@@ -252,8 +252,15 @@
     <!-- Contenitore messaggi (success/error) -->
     <div id="alerts"></div>
 
-    <div class="row g-4">
-      <!-- Transaction Form -->
+    <div id="transactionForm" class="row g-4">
+      <script>
+
+        const transaction = JSON.parse(localStorage.getItem("data"));
+
+        transaction.date = new Date().toLocaleDateString('en-US');
+
+        document.getElementById("transactionForm").innerHTML = `
+        <!-- Transaction Form -->
       <div class="col-lg-6">
         <div class="card card-shadow">
           <div class="card-header bg-white">
@@ -262,32 +269,28 @@
           <div class="card-body">
             <form id="transactionDetails">
               <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-
-                <label for="tx-id"><strong>Transaction ID</strong>
-                </label><input type="text" id="tx-id" class="form-control form-control-sm text-muted" style="max-width: 200px; text-align: right;" placeholder="—">
-              </div>
-              <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-
                 <label for="tx-player"><strong>Player</strong></label>
-                <input type="text" id="tx-player" class="form-control form-control-sm text-muted" style="max-width: 200px; text-align: right;" placeholder="—">
+                <input type="text" id="tx-player" class="form-control form-control-sm text-muted" value="${transaction.player}" readonly disabled>
               </div>
               <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-                <label for="tx-game"><strong>Game</strong></label><input type="text" id="tx-game" class="form-control form-control-sm text-muted" style="max-width: 200px; text-align: right;" placeholder="—">
+                <label for="tx-game"><strong>Game</strong></label><input type="text" id="tx-game" class="form-control form-control-sm text-muted" style="max-width: 200px; text-align: right;" value="${transaction.gameName}" readonly disabled>
               </div>
               <div class="d-flex justify-content-between align-items-center border-bottom py-2">
                 <label for="tx-price"><strong>Price Paid</strong></label>
-                <input type="text" id="tx-price" class="form-control form-control-sm text-muted" style="max-width: 200px; text-align: right;" placeholder="—">
+                <input type="text" id="tx-price" class="form-control form-control-sm text-muted" style="max-width: 200px; text-align: right;" value="${transaction.gamePrice}" readonly disabled>
               </div>
               <div class="d-flex justify-content-between align-items-center py-2">
 
                 <label for="tx-date"><strong>Date</strong></label>
-                <input type="text" id="tx-date" class="form-control form-control-sm text-muted" style="max-width: 200px; text-align: right;" placeholder="—">
+                <input type="text" id="tx-date" class="form-control form-control-sm text-muted" style="max-width: 200px; text-align: right;" value="${transaction.date}" readonly disabled>
               </div>
             </form>
           </div>
         </div>
       </div>
     </div>
+        `
+      </script>
   </div>
 
      <!-- Payment Form -->

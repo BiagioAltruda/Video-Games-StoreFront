@@ -500,10 +500,11 @@ async function goToPayment(game){
     }
     const playerId = await getPlayerId();
     const transactionData = JSON.stringify({
-        "playerId": playerId,
-        "gameId": game.id,
+        "player": playerId,
+        "game": game.id,
         "gameName": game.name,
-        "gamePrice": game.price
+        "pricePaid": game.price,
+        "date" : new Date().toLocaleDateString('en-US')
     });
     localStorage.setItem("data", transactionData);
     window.location.assign("Payment.html")

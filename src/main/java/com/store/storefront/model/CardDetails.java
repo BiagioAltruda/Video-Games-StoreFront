@@ -1,10 +1,13 @@
 package com.store.storefront.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 
 public class CardDetails {
     private int cardNumber;
     private String cardHolderName;
+    @JsonFormat(pattern = "M/d/yyyy")
     private LocalDate cardExpiry;
     private int cardCVV;
 

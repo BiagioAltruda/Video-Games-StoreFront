@@ -84,8 +84,7 @@ public class TransactionController {
 
 	
 	@PostMapping("/pay/{playerId}")
-	public ResponseEntity<String> processPayment(@PathVariable Integer playerId,
-	                                             @RequestBody TransactionDTO dto) {
+	public ResponseEntity<String> processPayment(@PathVariable Integer playerId, @RequestBody TransactionDTO dto) {
 	    System.out.println("Ricevuto DTO: " + dto);
 
 	    if (dto.getTransaction() == null) {
