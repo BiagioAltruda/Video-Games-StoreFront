@@ -23,23 +23,27 @@ public class GameController { //Restful controller for the Games table
     public List<Game> getAllGames(){
         return service.getAllGames();
     }
-
+    //da gioco per id
     @GetMapping("/{id}")
     public Game getGame(@PathVariable int id){
         return service.getGameById(id);
     }
+    // prende il gioco per titolo
     @GetMapping("/title/{name}")
     public Game getGamesByName(@PathVariable String name){
         return service.getGameByName(name);
     }
+    //aggiungi gioco
     @PostMapping("/add")
     public Game addGame(@Validated @RequestBody Game game){
         return service.save(game);
     }
+    //aggiorna gioco
     @PutMapping("/update")
     public Game updateGame(@Validated @RequestBody Game game){
         return service.save(game);
     }
+    //elimina
     @DeleteMapping("/delete/{id}")
     public String deleteGame(@PathVariable int id){
         return service.deleteGameById(id);

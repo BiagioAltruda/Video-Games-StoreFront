@@ -1,8 +1,10 @@
  //Creazione della costante per il fetch della pagina
 const baseUrl = 'http://localhost:8080/smoke/accounts';
 let currentFeaturedIndex = 0;
+// Array che conterrà tutti i giochi caricati
 let allGames = [];
 
+// Funzione che mostra il gioco in evidenza
 function showFeaturedGame(index) {
     // Nascondi il placeholder di caricamento
     document.getElementById('featured-loading').style.display = 'none';
@@ -10,8 +12,10 @@ function showFeaturedGame(index) {
     // Mostra il container
     document.getElementById('featured-game-container').style.display = 'flex';
     
+    // Prendi il gioco corrispondente all'indice
     const game = allGames[index];
     
+    // Template HTML della card del gioco in evidenza
     const featuredCard = `
 <div class="card featured-game-card" onclick="showGameDetails(${game.id})" style="cursor: pointer;">
     <img src="${game.bannerPath ? game.bannerPath : 'https://via.placeholder.com/500x450/51073a/ecf0f1?text=No+Image'}" 
@@ -44,10 +48,12 @@ function showFeaturedGame(index) {
 </div>
 `;
 
+    // Inserisci la card nel container
     document.getElementById('featured-game-container').innerHTML = featuredCard;
+    // Aggiorna l'indice corrente
     currentFeaturedIndex = index;
     
-    // Aggiorna il contatore
+    // Aggiorna il contatore giochi
     document.getElementById('current-game-number').textContent = index + 1;
     document.getElementById('total-games').textContent = allGames.length;
 }
@@ -73,11 +79,13 @@ async function loadGames() {
             throw new Error(`Errore HTTP: ${response.status}`);
         }
         
+        // Salva i giochi caricati in allGames
         allGames = await response.json();
         
         if (allGames.length > 0) {
             showFeaturedGame(0); // Mostra il primo gioco
         } else {
+            // Mostra un messaggio se non ci sono giochi
             document.getElementById('featured-loading').innerHTML = `
                 <div class="alert alert-warning">
                     <i class="fas fa-exclamation-triangle me-2"></i>
@@ -88,6 +96,7 @@ async function loadGames() {
         
     } catch (error) {
         console.error('Errore nel caricamento dal database:', error);
+        // Mostra messaggio di errore se la fetch fallisce
         document.getElementById('featured-loading').innerHTML = `
             <div class="alert alert-warning">
                 <i class="fas fa-exclamation-triangle me-2"></i>
@@ -112,7 +121,9 @@ function tornaAlCarosello() {
     document.getElementById('featured-game-container').style.display = 'flex';
 }
 
+// Variabile per memorizzare la categoria selezionata
 let categoriaSelezionata = null;
+// Variabile per memorizzare i giochi filtrati
 let ultimiGiochiVisualizzati = [];
 
 // Funzione per filtrare i giochi per categoria
@@ -138,6 +149,7 @@ function cercaCategoria(categoriaCercata) {
         categoriaCliccata.classList.add('active');
     }
     
+    // Se la categoria è TUTTE mostra tutti i giochi
     if (categoriaCercata === "TUTTE") {
         mostraTuttiIGiochi();
         return;
@@ -145,6 +157,7 @@ function cercaCategoria(categoriaCercata) {
     
     const categoriaCercataLower = categoriaCercata.toLowerCase();
     
+    // Filtra i giochi in base alla categoria
     const giochiFiltrati = allGames.filter(game => {
         if (!game.genre) return false;
         
@@ -161,6 +174,7 @@ function cercaCategoria(categoriaCercata) {
     // Salva i giochi visualizzati
     ultimiGiochiVisualizzati = giochiFiltrati;
     
+    // Mostra i risultati filtrati
     mostraRisultatiRicerca(giochiFiltrati, `Categoria: ${categoriaCercata}`);
 }
 
@@ -213,7 +227,7 @@ function mostraRisultatiRicerca(giochi, titoloRicerca) {
         // Nascondi il messaggio "nessun risultato"
         document.getElementById('no-results-message').style.display = 'none';
         
-        // Genera le card
+        // Genera le card dei giochi
         const gameCards = giochi
             .map((game) => {
                 return `

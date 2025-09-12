@@ -20,27 +20,27 @@ public class FriendsController {
 	public FriendsController(FriendsService service) {
 		this.service = service;
 	}
-	
+	//da tutti gli amicii
 	@GetMapping
 	public List<Friends> getAll(){
 		return service.getAll();
 	}
-	
+	//aggiunge nuovi amici 
 	@PostMapping
 	public Friends newFriends(@RequestBody Friends amico) {
 		return service.newFriends(amico);
 	}
-	
+	//elimina gli amici
 	@DeleteMapping("/{id}")
 	public void deleteFriends(@PathVariable int id) {
 		service.deleteFriends(id);
 	}
-	
+	//cerca per id
 	@GetMapping("/{id}")
 	public Friends findById(@PathVariable int id) {
 		return service.findById(id);
 	}
-
+//fa vedere lista amici
 	@GetMapping("friend-list")
 	public List<Friends> getFriendsList(@RequestParam int id) {
 		return service.getFriendsList(id);
