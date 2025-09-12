@@ -1,26 +1,36 @@
- //Creazione della costante per il fetch della pagina
-const baseUrl = 'http://localhost:8080/smoke/accounts';
-let currentFeaturedIndex = 0;
-// Array che conterrà tutti i giochi caricati
-let allGames = [];
+ // Costanti
+const baseUrl = 'http://localhost:8080/smoke';
+const gamesUrl = `${baseUrl}/games`;
+const placeholderImage = 'https://via.placeholder.com/500x450/51073a/ecf0f1?text=No+Image';
+const errorImage = 'https://via.placeholder.com/500x450/51073a/ecf0f1?text=Image+Error';
 
-// Funzione che mostra il gioco in evidenza
+// Variabili globali
+let currentFeaturedIndex = 0;
+let allGames = [];
+let categoriaSelezionata = null;
+let ultimiGiochiVisualizzati = [];
+
+// Funzione per gestire gli errori delle immagini
+function handleImageError(img) {
+    img.src = errorImage;
+}
+
+// Funzione per formattare il prezzo
+function formatPrice(price) {
+    return price ? '€' + price.toFixed(2) : 'GRATIS';
+}
+
+// Funzioni per il carosello principale
 function showFeaturedGame(index) {
-    // Nascondi il placeholder di caricamento
     document.getElementById('featured-loading').style.display = 'none';
-    
-    // Mostra il container
     document.getElementById('featured-game-container').style.display = 'flex';
     
-    // Prendi il gioco corrispondente all'indice
     const game = allGames[index];
-    
-    // Template HTML della card del gioco in evidenza
     const featuredCard = `
 <div class="card featured-game-card" onclick="showGameDetails(${game.id})" style="cursor: pointer;">
-    <img src="${game.bannerPath ? game.bannerPath : 'https://via.placeholder.com/500x450/51073a/ecf0f1?text=No+Image'}" 
+    <img src="${game.bannerPath ? game.bannerPath : placeholderImage}" 
          class="card-img-left" alt="${game.name}"
-         onerror="this.src='https://via.placeholder.com/500x450/51073a/ecf0f1?text=Image+Error'">
+         onerror="handleImageError(this)">
     
     <div class="card-content-right">
         <div>
@@ -32,11 +42,10 @@ function showFeaturedGame(index) {
         </div>
         
         <div class="card-price-section">
-            <p class="card-rating">${game.price ? '€' + game.price.toFixed(2) : 'GRATIS'}</p>
+            <p class="card-rating">${formatPrice(game.price)}</p>
         </div>
     </div>
     
-    <!-- FRECCETTE DENTRO LA CARD -->
     <div class="carousel-arrows">
         <div class="carousel-arrow carousel-arrow-prev" onclick="event.stopPropagation(); prevFeaturedGame()">
             &#10094;
@@ -47,30 +56,25 @@ function showFeaturedGame(index) {
     </div>
 </div>
 `;
-
-    // Inserisci la card nel container
+    
     document.getElementById('featured-game-container').innerHTML = featuredCard;
-    // Aggiorna l'indice corrente
     currentFeaturedIndex = index;
     
-    // Aggiorna il contatore giochi
     document.getElementById('current-game-number').textContent = index + 1;
     document.getElementById('total-games').textContent = allGames.length;
 }
 
-// Funzione per il gioco successivo
 function nextFeaturedGame() {
     const nextIndex = (currentFeaturedIndex + 1) % allGames.length;
     showFeaturedGame(nextIndex);
 }
 
-// Funzione per il gioco precedente
 function prevFeaturedGame() {
     const prevIndex = (currentFeaturedIndex - 1 + allGames.length) % allGames.length;
     showFeaturedGame(prevIndex);
 }
 
-// Funzione che chiama il database
+// Funzioni per il caricamento dei giochi
 async function loadGames() {
     try {
         const response = await fetch('http://localhost:8080/smoke/games/all');
@@ -79,13 +83,15 @@ async function loadGames() {
             throw new Error(`Errore HTTP: ${response.status}`);
         }
         
-        // Salva i giochi caricati in allGames
         allGames = await response.json();
         
         if (allGames.length > 0) {
-            showFeaturedGame(0); // Mostra il primo gioco
+            showFeaturedGame(0);
+            // Popola le offerte speciali dopo un breve ritardo
+            setTimeout(() => {
+                populateSpecialOffers(allGames);
+            }, 100);
         } else {
-            // Mostra un messaggio se non ci sono giochi
             document.getElementById('featured-loading').innerHTML = `
                 <div class="alert alert-warning">
                     <i class="fas fa-exclamation-triangle me-2"></i>
@@ -96,7 +102,6 @@ async function loadGames() {
         
     } catch (error) {
         console.error('Errore nel caricamento dal database:', error);
-        // Mostra messaggio di errore se la fetch fallisce
         document.getElementById('featured-loading').innerHTML = `
             <div class="alert alert-warning">
                 <i class="fas fa-exclamation-triangle me-2"></i>
@@ -106,42 +111,28 @@ async function loadGames() {
     }
 }
 
-// Avvia il caricamento quando la pagina è pronta
-document.addEventListener('DOMContentLoaded', function() {
-    // Nascondi inizialmente il container
-    document.getElementById('featured-game-container').style.display = 'none';
-    
-    // Carica i giochi
-    loadGames();
-});
-
-// Funzione per tornare al carosello
+// Funzioni per la navigazione
 function tornaAlCarosello() {
     document.getElementById('search-results-section').style.display = 'none';
     document.getElementById('featured-game-container').style.display = 'flex';
 }
 
-// Variabile per memorizzare la categoria selezionata
-let categoriaSelezionata = null;
-// Variabile per memorizzare i giochi filtrati
-let ultimiGiochiVisualizzati = [];
+function closeGameDetails() {
+    tornaAlCarosello();
+}
 
-// Funzione per filtrare i giochi per categoria
+// Funzioni per il filtro per categoria
 function cercaCategoria(categoriaCercata) {
-    // Se clicchi sulla stessa categoria, deseleziona/nascondi
     if (categoriaSelezionata === categoriaCercata) {
         nascondiGiochi();
         return;
     }
     
-    // Aggiorna la categoria selezionata
     categoriaSelezionata = categoriaCercata;
     
-    // Rimuovi la classe active da tutte le categorie
     const tutteLeCategorie = document.querySelectorAll('.categoria-item');
     tutteLeCategorie.forEach(cat => cat.classList.remove('active'));
     
-    // Aggiungi la classe active alla categoria cliccata
     const categoriaCliccata = Array.from(tutteLeCategorie).find(cat => 
         cat.textContent.includes(categoriaCercata)
     );
@@ -149,7 +140,6 @@ function cercaCategoria(categoriaCercata) {
         categoriaCliccata.classList.add('active');
     }
     
-    // Se la categoria è TUTTE mostra tutti i giochi
     if (categoriaCercata === "TUTTE") {
         mostraTuttiIGiochi();
         return;
@@ -157,45 +147,35 @@ function cercaCategoria(categoriaCercata) {
     
     const categoriaCercataLower = categoriaCercata.toLowerCase();
     
-    // Filtra i giochi in base alla categoria
     const giochiFiltrati = allGames.filter(game => {
         if (!game.genre) return false;
         
-        // Dividi le categorie per virgola e pulisci gli spazi
         const categorieGioco = game.genre.split(',')
             .map(cat => cat.trim().toLowerCase());
         
-        // Controlla se una delle categorie matcha
         return categorieGioco.some(categoria => 
             categoria === categoriaCercataLower
         );
     });
     
-    // Salva i giochi visualizzati
     ultimiGiochiVisualizzati = giochiFiltrati;
     
-    // Mostra i risultati filtrati
     mostraRisultatiRicerca(giochiFiltrati, `Categoria: ${categoriaCercata}`);
 }
 
-// Funzione per nascondere i giochi (deselezionare)
 function nascondiGiochi() {
     categoriaSelezionata = null;
     
-    // Rimuovi la classe active da tutte le categorie
     const tutteLeCategorie = document.querySelectorAll('.categoria-item');
     tutteLeCategorie.forEach(cat => cat.classList.remove('active'));
     
-    // Nascondi la sezione risultati e mostra il carosello
     document.getElementById('search-results-section').style.display = 'none';
     document.getElementById('featured-game-container').style.display = 'block';
     
-    // Svuota il container delle card
     const cardsContainer = document.getElementById('cards-container');
     cardsContainer.innerHTML = '';
     cardsContainer.style.display = 'none';
     
-    // Mostra il messaggio di nessun gioco visibile
     document.getElementById('no-results-message').style.display = 'block';
     document.getElementById('no-results-message').innerHTML = `
         <i class="fas fa-info-circle me-2"></i>
@@ -203,31 +183,29 @@ function nascondiGiochi() {
     `;
 }
 
-// Funzione per mostrare i risultati della ricerca
+function mostraTuttiIGiochi() {
+    categoriaSelezionata = "TUTTE";
+    ultimiGiochiVisualizzati = allGames;
+    mostraRisultatiRicerca(allGames, "Tutti i giochi");
+}
+
+// Funzioni per la visualizzazione dei risultati
 function mostraRisultatiRicerca(giochi, titoloRicerca) {
-    // Nascondi il carosello
     document.getElementById('featured-game-container').style.display = 'none';
-    
-    // Mostra la sezione risultati
     document.getElementById('search-results-section').style.display = 'block';
     
-    // Imposta il titolo della ricerca
     document.getElementById('search-results-title').innerHTML = `<h2 class="text-contrast mb-4">${titoloRicerca}</h2>`;
     
-    // Aggiungi pulsante deseleziona
     const deselezionaBtn = `<button class="btn btn-sm btn-outline-secondary ms-3" onclick="nascondiGiochi()">
         <i class="fas fa-times me-1"></i>
     </button>`;
     document.getElementById('search-results-title').innerHTML += deselezionaBtn;
     
-    // Genera le card per i risultati
     const cardsContainer = document.getElementById('cards-container');
     
     if (giochi.length > 0) {
-        // Nascondi il messaggio "nessun risultato"
         document.getElementById('no-results-message').style.display = 'none';
         
-        // Genera le card dei giochi
         const gameCards = giochi
             .map((game) => {
                 return `
@@ -255,7 +233,6 @@ function mostraRisultatiRicerca(giochi, titoloRicerca) {
         cardsContainer.innerHTML = gameCards;
         cardsContainer.style.display = 'flex';
     } else {
-        // Mostra messaggio "nessun risultato"
         cardsContainer.style.display = 'none';
         document.getElementById('no-results-message').style.display = 'block';
         document.getElementById('no-results-message').innerHTML = `
@@ -268,13 +245,7 @@ function mostraRisultatiRicerca(giochi, titoloRicerca) {
     }
 }
 
-// Funzione per mostrare tutti i giochi (senza filtri)
-function mostraTuttiIGiochi() {
-    categoriaSelezionata = "TUTTE";
-    ultimiGiochiVisualizzati = allGames;
-    mostraRisultatiRicerca(allGames, "Tutti i giochi");
-}
-
+// Funzioni per i dettagli del gioco
 function showGameDetails(gameId) {
     const url = `http://localhost:8080/smoke/games/${gameId}`;
 
@@ -324,24 +295,6 @@ function showGameDetails(gameId) {
         `;
         
         document.getElementById('cards-container').innerHTML = gameDetails;
-        
-        // Aggiungi gli event listener dopo che l'HTML è stato renderizzato
-        setTimeout(() => {
-            const reviewForm = document.getElementById('reviewForm');
-            const reviewTextarea = reviewForm.querySelector('textarea[name="content"]');
-            const submitBtn = document.getElementById('submitReviewBtn');
-            
-            // Abilita il pulsante solo se c'è del testo nella recensione
-            reviewTextarea.addEventListener('input', function() {
-                submitBtn.disabled = this.value.trim().length === 0;
-            });
-            
-            // Gestione dell'invio del form
-            reviewForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                submitReview(gameId);
-            });
-        }, 100);
     })
     .catch((error) => {
         console.error("Errore durante il recupero dei dettagli", error);
@@ -359,23 +312,17 @@ function showGameDetails(gameId) {
     });
 }
 
-function closeGameDetails() {
-   tornaAlCarosello(); // Richiama la funzione che carica tutti i giochi
-}
-
-
-
-// Funzione per popolare la sezione offerte speciali
+// Funzioni per le offerte speciali
 function populateSpecialOffers(games) {
-    // Seleziona casualmente 3 giochi dalla lista
-    const randomGames = getRandomGamesWithDiscount(games, 3);
-    
     const offersContainer = document.getElementById('special-offers-container');
     
     if (!offersContainer) {
         console.error("Container delle offerte speciali non trovato!");
         return;
     }
+    
+    // Seleziona casualmente 3 giochi dalla lista
+    const randomGames = getRandomGamesWithDiscount(games, 3);
     
     if (randomGames.length === 0) {
         offersContainer.innerHTML = `
@@ -439,36 +386,11 @@ function refreshOffers() {
     }
 }
 
-// Modifica la funzione loadGames per includere il popolamento delle offerte
-async function loadGames() {
-    try {
-        const response = await fetch('http://localhost:8080/smoke/games/all');
-        
-        if (!response.ok) {
-            throw new Error(`Errore HTTP: ${response.status}`);
-        }
-        
-        allGames = await response.json();
-        
-        if (allGames.length > 0) {
-            showFeaturedGame(0); // Mostra il primo gioco
-            populateSpecialOffers(allGames); // Popola le offerte speciali
-        } else {
-            document.getElementById('featured-loading').innerHTML = `
-                <div class="alert alert-warning">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    Nessun gioco disponibile.
-                </div>
-            `;
-        }
-        
-    } catch (error) {
-        console.error('Errore nel caricamento dal database:', error);
-        document.getElementById('featured-loading').innerHTML = `
-            <div class="alert alert-warning">
-                <i class="fas fa-exclamation-triangle me-2"></i>
-                Impossibile caricare i giochi. Riprova più tardi.
-            </div>
-        `;
-    }
-}
+// Avvia il caricamento quando la pagina è pronta
+document.addEventListener('DOMContentLoaded', function() {
+    // Nascondi inizialmente il container
+    document.getElementById('featured-game-container').style.display = 'none';
+    
+    // Carica i giochi
+    loadGames();
+});

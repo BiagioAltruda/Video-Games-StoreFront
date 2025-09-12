@@ -68,12 +68,25 @@
               <i class="fas fa-search"></i>
             </button>
           </form>
-            <button id="login-button" style="display: block" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
-                <i class="fas fa-sign-in-alt me-1"></i>Login
-            </button>
-            <button id="logout-button" style="display: none"  type="button" class="btn btn-primary " onclick="logout()">
-                <i class="fas fa-sign-in-alt me-1"></i>Logout
-            </button>
+          <button
+            id="login-button"
+            style="display: block"
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#loginModal"
+          >
+            <i class="fas fa-sign-in-alt me-1"></i>Login
+          </button>
+          <button
+            id="logout-button"
+            style="display: none"
+            type="button"
+            class="btn btn-primary"
+            onclick="logout()"
+          >
+            <i class="fas fa-sign-in-alt me-1"></i>Logout
+          </button>
         </div>
       </div>
     </nav>
@@ -249,152 +262,197 @@
         </div>
       </div>
     </div>
-    
 
-<div class="container-fluid mt-3">
-    <div class="row">
+    <div class="container-fluid mt-3">
+      <div class="row">
         <!-- Menu laterale -->
         <div class="col-md-3">
-            <div class="sidebar-menu main-color-1 p-4 ms-3 rounded" style="margin-left: 20px !important">
-                <h5 class="text-white mb-4">MENU</h5>
-                <!-- Tutto il catalogo -->
-                <div class="mb-3">
-                    <a href="Catalogo.html" class="btn btn-outline-light w-100 text-start">
-                        <i class="fas fa-book me-2"></i>TUTTO IL CATALOGO
-                    </a>
-                </div>
-
-                <!-- Cerca per nome -->
-                <div class="mb-4">
-                    <h6 class="text-white mb-2">CERCA PER NOME</h6>
-                    <form class="search-form">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Inserisci nome..." aria-label="Cerca per nome" />
-                            <button class="btn btn-light" type="submit">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Cerca per categoria -->
-                <div class="mb-3">
-                    <h6 class="text-white mb-2">CERCA PER CATEGORIA</h6>
-                    <div class="categorie-menu">
-                        <div class="categoria-item" onclick="mostraTuttiIGiochi()">
-                            <i class="fas fa-star me-2"></i>TUTTE LE CATEGORIE
-                        </div>
-                        <div class="categoria-item" onclick="cercaCategoria('ACTION')">
-                            <i class="fas fa-fist-raised me-2"></i>ACTION
-                        </div>
-                        <div class="categoria-item" onclick="cercaCategoria('ADVENTURE')">
-                            <i class="fas fa-mountain me-2"></i>ADVENTURE
-                        </div>
-                        <div class="categoria-item" onclick="cercaCategoria('CASUAL')">
-                            <i class="fas fa-gamepad me-2"></i>CASUAL
-                        </div>
-                        <div class="categoria-item" onclick="cercaCategoria('FREE TO PLAY')">
-                            <i class="fas fa-coins me-2"></i>FREE TO PLAY
-                        </div>
-                        <div class="categoria-item" onclick="cercaCategoria('INDIE')">
-                            <i class="fas fa-leaf me-2"></i>INDIE
-                        </div>
-                        <div class="categoria-item" onclick="cercaCategoria('MASSIVELY MULTIPLAYER')">
-                            <i class="fas fa-users me-2"></i>MULTIPLAYER
-                        </div>
-                        <div class="categoria-item" onclick="cercaCategoria('RPG')">
-                            <i class="fas fa-dragon me-2"></i>RPG
-                        </div>
-                        <div class="categoria-item" onclick="cercaCategoria('SPORTS')">
-                            <i class="fas fa-running me-2"></i>SPORTS
-                        </div>
-                        <div class="categoria-item" onclick="cercaCategoria('STRATEGY')">
-                            <i class="fas fa-chess me-2"></i>STRATEGY
-                        </div>
-                    </div>
-                </div>
+          <div
+            class="sidebar-menu main-color-1 p-4 ms-3 rounded"
+            style="margin-left: 20px !important"
+          >
+            <h5 class="text-white mb-4">MENU</h5>
+            <!-- Tutto il catalogo -->
+            <div class="mb-3">
+              <a
+                href="Catalogo.html"
+                class="btn btn-outline-light w-100 text-start"
+              >
+                <i class="fas fa-book me-2"></i>TUTTO IL CATALOGO
+              </a>
             </div>
+
+            <!-- Cerca per nome -->
+            <div class="mb-4">
+              <h6 class="text-white mb-2">CERCA PER NOME</h6>
+              <form class="search-form">
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Inserisci nome..."
+                    aria-label="Cerca per nome"
+                  />
+                  <button class="btn btn-light" type="submit">
+                    <i class="fas fa-search"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Cerca per categoria -->
+            <div class="mb-3">
+              <h6 class="text-white mb-2">CERCA PER CATEGORIA</h6>
+              <div class="categorie-menu">
+                <div class="categoria-item" onclick="mostraTuttiIGiochi()">
+                  <i class="fas fa-star me-2"></i>TUTTE LE CATEGORIE
+                </div>
+                <div class="categoria-item" onclick="cercaCategoria('ACTION')">
+                  <i class="fas fa-fist-raised me-2"></i>ACTION
+                </div>
+                <div
+                  class="categoria-item"
+                  onclick="cercaCategoria('ADVENTURE')"
+                >
+                  <i class="fas fa-mountain me-2"></i>ADVENTURE
+                </div>
+                <div class="categoria-item" onclick="cercaCategoria('CASUAL')">
+                  <i class="fas fa-gamepad me-2"></i>CASUAL
+                </div>
+                <div
+                  class="categoria-item"
+                  onclick="cercaCategoria('FREE TO PLAY')"
+                >
+                  <i class="fas fa-coins me-2"></i>FREE TO PLAY
+                </div>
+                <div class="categoria-item" onclick="cercaCategoria('INDIE')">
+                  <i class="fas fa-leaf me-2"></i>INDIE
+                </div>
+                <div
+                  class="categoria-item"
+                  onclick="cercaCategoria('MASSIVELY MULTIPLAYER')"
+                >
+                  <i class="fas fa-users me-2"></i>MULTIPLAYER
+                </div>
+                <div class="categoria-item" onclick="cercaCategoria('RPG')">
+                  <i class="fas fa-dragon me-2"></i>RPG
+                </div>
+                <div class="categoria-item" onclick="cercaCategoria('SPORTS')">
+                  <i class="fas fa-running me-2"></i>SPORTS
+                </div>
+                <div
+                  class="categoria-item"
+                  onclick="cercaCategoria('STRATEGY')"
+                >
+                  <i class="fas fa-chess me-2"></i>STRATEGY
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Card Featured Grande al Centro -->
         <div class="col-md-9">
-            <h2 class="text-contrast mb-4">Gioco in Evidenza</h2>
-            
-            <div id="featured-game-container" class="d-flex justify-content-center">
-                <!-- La card featured verrà generata dinamicamente da JavaScript -->
+          <h2 class="text-contrast mb-4">Gioco in Evidenza</h2>
+
+          <div
+            id="featured-game-container"
+            class="d-flex justify-content-center"
+          >
+            <!-- La card featured verrà generata dinamicamente da JavaScript -->
+          </div>
+
+          <!-- Loading placeholder -->
+          <div id="featured-loading" class="text-center py-5">
+            <div class="spinner-border text-light" role="status">
+              <span class="visually-hidden">Caricamento...</span>
+            </div>
+            <p class="text-white mt-3">Caricamento gioco in evidenza...</p>
+          </div>
+
+          <!-- NUOVA CARD AGGIUNTA -->
+          <div
+            class="card mt-4 main-color-2 border-0"
+            style="background: var(--card-bg-gradient)"
+          >
+            <div class="card-body p-4">
+              <h3 class="card-title text-contrast-light mb-3">
+                Offerte Speciali
+              </h3>
+              <p class="card-text text-contrast-light">
+                Scopri le offerte imperdibili di questa settimana! Sconti fino
+                al 70% sui titoli più popolari.
+              </p>
+
+              <!-- Contenitore per le card delle offerte -->
+              <div id="special-offers-container" class="row mt-3">
+                <!-- Le card delle offerte appariranno qui -->
+              </div>
+
+              <div
+                class="d-flex justify-content-between align-items-center mt-4"
+              >
+                <span class="badge bg-warning text-dark">LIMITATE</span>
+                <button class="btn btn-light" onclick="refreshOffers()">
+                  <i class="fas fa-sync-alt me-2"></i>Aggiorna offerte
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- FINE NUOVA CARD -->
+
+          <!-- SEZIONE RISULTATI RICERCA (inizialmente nascosta) -->
+          <div id="search-results-section" class="mt-5" style="display: none">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h3 class="text-white" id="search-results-title">
+                Risultati della ricerca
+              </h3>
+              <button
+                class="btn btn-outline-light btn-sm"
+                onclick="tornaAlCarosello()"
+              >
+                <i class="fas fa-arrow-left me-1"></i>Torna al carosello
+              </button>
             </div>
 
-            <!-- Loading placeholder -->
-            <div id="featured-loading" class="text-center py-5">
-                <div class="spinner-border text-light" role="status">
-                    <span class="visually-hidden">Caricamento...</span>
-                </div>
-                <p class="text-white mt-3">Caricamento gioco in evidenza...</p>
+            <div id="cards-container" class="row">
+              <!-- Le card dei risultati appariranno qui -->
             </div>
 
-<!-- NUOVA CARD AGGIUNTA -->
-<div class="card mt-4 main-color-2 border-0" style="background: var(--card-bg-gradient);">
-    <div class="card-body p-4">
-        <h3 class="card-title text-contrast-light mb-3">Offerte Speciali</h3>
-        <p class="card-text text-contrast-light">
-            Scopri le offerte imperdibili di questa settimana! Sconti fino al 70% sui titoli più popolari.
-        </p>
-        
-        <!-- Contenitore per le card delle offerte -->
-        <div id="special-offers-container" class="row mt-3">
-            <!-- Le card delle offerte appariranno qui -->
+            <div
+              id="no-results-message"
+              class="text-center py-4"
+              style="display: none"
+            >
+              <i class="fas fa-search fa-3x text-secondary mb-3"></i>
+              <h4 class="text-white">Nessun risultato trovato</h4>
+              <p class="text-light">
+                Prova con un'altra categoria o termine di ricerca
+              </p>
+            </div>
+          </div>
         </div>
-        
-        <div class="d-flex justify-content-between align-items-center mt-4">
-            <span class="badge bg-warning text-dark">LIMITATE</span>
-            <button class="btn btn-light" onclick="refreshOffers()">
-                <i class="fas fa-sync-alt me-2"></i>Aggiorna offerte
-            </button>
-        </div>
+      </div>
     </div>
-</div>
-<!-- FINE NUOVA CARD -->
-
-            <!-- SEZIONE RISULTATI RICERCA (inizialmente nascosta) -->
-            <div id="search-results-section" class="mt-5" style="display: none;">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3 class="text-white" id="search-results-title">Risultati della ricerca</h3>
-                    <button class="btn btn-outline-light btn-sm" onclick="tornaAlCarosello()">
-                        <i class="fas fa-arrow-left me-1"></i>Torna al carosello
-                    </button>
-                </div>
-                
-                <div id="cards-container" class="row">
-                    <!-- Le card dei risultati appariranno qui -->
-                </div>
-                
-                <div id="no-results-message" class="text-center py-4" style="display: none;">
-                    <i class="fas fa-search fa-3x text-secondary mb-3"></i>
-                    <h4 class="text-white">Nessun risultato trovato</h4>
-                    <p class="text-light">Prova con un'altra categoria o termine di ricerca</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
     <!-- Footer -->
     <footer class="footer mt-5 py-5 main-color-1">
       <div class="container">
         <div class="row">
-            <!-- Chi siamo -->
-            <div class="col-md-4">
-                <div class="footer-section">
-                    <h5 class="text-white mb-3">🎮 Smoke Home</h5>
-                    <p class="text-light">
-                        Dal 2023 vendiamo videogiochi "fumosi" a prezzi incredibili!<br>
-                        La nostra missione? Rendere il gaming accessibile a tutti,<br>
-                        tranne a chi non paga in tempo.<br><br>
-                        ⚡ Consegna in 3-5 giorni lavorativi (se generiamo il codice in tempo)<br>
-                        🎯 Soddisfazione garantita o quasi!
-                    </p>
-                </div>
+          <!-- Chi siamo -->
+          <div class="col-md-4">
+            <div class="footer-section">
+              <h5 class="text-white mb-3">🎮 Smoke Home</h5>
+              <p class="text-light">
+                Dal 2023 vendiamo videogiochi "fumosi" a prezzi incredibili!<br />
+                La nostra missione? Rendere il gaming accessibile a tutti,<br />
+                tranne a chi non paga in tempo.<br /><br />
+                ⚡ Consegna in 3-5 giorni lavorativi (se generiamo il codice in
+                tempo)<br />
+                🎯 Soddisfazione garantita o quasi!
+              </p>
             </div>
+          </div>
 
           <!-- Parte Centrale - Link utili -->
           <div class="col-md-4">
@@ -487,6 +545,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../script/HomeScript.js"></script>
     <script src="../script/RegisterScript.js"></script>
-    
   </body>
 </html>
