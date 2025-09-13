@@ -47,7 +47,6 @@ public class Transaction {
 	@PositiveOrZero(message = "Cannot pay a negative amount")
 	private double pricePaid;
 
-	@JsonIgnore
 	@Column(name="transaction_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	private LocalDateTime date;

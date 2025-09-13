@@ -3,7 +3,11 @@ package com.store.storefront.controller;
 import java.util.List;
 
 import com.store.storefront.DTO.TransactionDTO;
+import com.store.storefront.DTO.TransactionRequest;
+import com.store.storefront.model.Game;
 import com.store.storefront.model.PaymentProcessor;
+import com.store.storefront.model.Player;
+import com.store.storefront.service.GameService;
 import com.store.storefront.service.PlayerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +31,12 @@ public class TransactionController {
 
 	private final TransactionService transactionService;
 	private final PlayerService playerService;
+	private final GameService gameService;
 
-	public TransactionController(TransactionService transactionService, PlayerService playerService) {
+	public TransactionController(TransactionService transactionService, PlayerService playerService, GameService gameService) {
 		this.transactionService = transactionService;
 		this.playerService = playerService;
+		this.gameService = gameService;
 	}
 
 	@GetMapping("/payment")
@@ -87,18 +93,31 @@ public class TransactionController {
 	public ResponseEntity<String> processPayment(@PathVariable Integer playerId, @RequestBody TransactionDTO dto) {
 	    System.out.println("Ricevuto DTO: " + dto);
 
-	    if (dto.getTransaction() == null) {
+	    if (dto.getTransactionRequest() == null) {
 	        return ResponseEntity.badRequest().body("❌ Transaction mancante");
 	    }
 	    if (dto.getCardDetails() == null) {
 	        return ResponseEntity.badRequest().body("❌ Dati carta mancanti");
 	    }
 
-	    if (PaymentProcessor.validate(dto.getCardDetails())) {
-	        dto.getTransaction().setPlayer(playerService.findById(playerId));
-	        Transaction transaction = transactionService.createTransaction(dto.getTransaction());
-	        return ResponseEntity.ok("✅ Pagamento riuscito per transazione ID: " + transaction.getId());
+	    if (!PaymentProcessor.validate(dto.getCardDetails())) {
+			return ResponseEntity.badRequest().body("❌ Pagamento fallito: carta non valida");
 	    }
-	    return ResponseEntity.badRequest().body("❌ Pagamento fallito: carta non valida");
+		TransactionRequest request = dto.getTransactionRequest();
+		Transaction transaction = new  Transaction();
+		Player player = playerService.findById(playerId);
+		Game game = gameService.getGameById(request.getGameId());
+		if(player == null){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Player not found");
+		}
+		if(game == null){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Game not found");
+		}
+		transaction.setPlayer(player);
+		transaction.setGame(game);
+		transaction.setPricePaid(request.getPricePaid());
+		transaction.setDate(request.getDate());
+		Transaction savedTransaction = transactionService.createTransaction(transaction);
+		return ResponseEntity.ok("✅ Pagamento riuscito per transazione ID: " + savedTransaction.getId());
 	}
 }

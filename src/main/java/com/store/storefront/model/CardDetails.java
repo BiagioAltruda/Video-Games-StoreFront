@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 
 public class CardDetails {
-    private int cardNumber;
+    private String cardNumber;
     private String cardHolderName;
     @JsonFormat(pattern = "M/d/yyyy")
     private LocalDate cardExpiry;
-    private int cardCVV;
+    private String cardCVV;
 
-    public CardDetails(int cardNumber, String cardHolderName, LocalDate cardExpiry, int cardCVV) {
+    public CardDetails(String cardNumber, String cardHolderName, LocalDate cardExpiry, String cardCVV) {
         this.cardNumber = cardNumber;
         this.cardHolderName = cardHolderName;
         this.cardExpiry = cardExpiry;
@@ -21,11 +21,11 @@ public class CardDetails {
     public CardDetails() {}
 
 
-    public int getCardNumber() {
+    public String getCardNumber() {
         return cardNumber;
     }
 
-    public void setCardNumber(int cardNumber) {
+    public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
 
@@ -45,11 +45,21 @@ public class CardDetails {
         this.cardExpiry = cardExpiry;
     }
 
-    public int getCardCVV() {
+    public String getCardCVV() {
         return cardCVV;
     }
 
-    public void setCardCVV(int cardCVV) {
+    public void setCardCVV(String cardCVV) {
         this.cardCVV = cardCVV;
+    }
+
+    @Override
+    public String toString() {
+        return "CardDetails{" +
+                "cardNumber='" + cardNumber + '\'' +
+                ", cardHolderName='" + cardHolderName + '\'' +
+                ", cardExpiry=" + cardExpiry +
+                ", cardCVV='" + cardCVV + '\'' +
+                '}';
     }
 }

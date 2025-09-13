@@ -23,9 +23,8 @@ async function pay() {
   if (btn) btn.setAttribute("disabled", "disabled");
 
   const expiration =convertDateFormat('01/' + $("#expirationDate").value);
-  console.log(expiration);
   const cardDetails = {
-    cardNumber: $("#cardNumber").value,
+    cardNumber: $("#cardNumber").value.replace(/\s+/g, ''),
     cardHolderName: $("#cardholderName").value,
     cardExpiry: expiration,
     cardCVV: $("#cvv").value
@@ -33,11 +32,17 @@ async function pay() {
 
   console.log(cardDetails);
   console.log(transaction); //{player, game, gameName,pricePaid,date}
-  delete transaction.gameName;
 
+  const transactionRequest = {
+    playerId: transaction.player,
+    gameId: transaction.game,
+    pricePaid: transaction.pricePaid,
+    date: new Date().toISOString(),
+  }
 
-  const dto = {cardDetails , transaction};
-  console.log(JSON.stringify(dto));
+                                                               //localStorage
+  const dto = {cardDetails , transactionRequest}; //encapsulates the data for transfer
+  console.log(JSON.stringify(dto, null, 2));
   try{
     let res = await fetch("http://localhost:8080/smoke/transactions/pay/" + transaction.player, {
       method: "POST",
@@ -65,24 +70,15 @@ const form = document.getElementById("paymentForm");
     pay();
   });
 
-async function getGameData(id) {
-  try {
-    await fetch("smoke/games/" + id)
-        .then(res => {
-          return res.json()
-        })
-  }
-  catch (e) {
-    console.error(e);
-  }
-}
-
 function convertDateFormat(date) {
   const parts = date.split('/');
-  const day = parts[0];
-  const month = parts[1];
-  const year = parts[2];
-  return `${month}/${day}/${year}`;
+  const month = parts[0];
+  let year = parts[1];
+
+  if(year.length === 2){ //convert date since we are
+    year = "20" + year; //assuming year starts with 20xx
+  }
+  return `${parseInt(month)}/1/${year}`;
 }
 
 addEventListener('DOMContentLoaded', checkLoggedIn);
