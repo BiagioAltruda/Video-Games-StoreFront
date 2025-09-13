@@ -1,25 +1,24 @@
 package com.store.storefront.DTO;
 
 import com.store.storefront.model.CardDetails;
-import com.store.storefront.model.Transaction;
 
 public class TransactionDTO {
-    private Transaction transaction;
+    private TransactionRequest transactionRequest;
     private CardDetails cardDetails;
 
-    public TransactionDTO(Transaction transaction, CardDetails cardDetails) {
-        this.transaction = transaction;
+    public TransactionDTO(TransactionRequest transactionRequest, CardDetails cardDetails) {
+        this.transactionRequest = transactionRequest;
         this.cardDetails = cardDetails;
     }
     public TransactionDTO(){
     }
 
-    public Transaction getTransaction() {
-        return transaction;
+    public TransactionRequest getTransactionRequest() {
+        return transactionRequest;
     }
 
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
+    public void setTransactionRequest(TransactionRequest transactionRequest) {
+        this.transactionRequest = transactionRequest;
     }
 
     public CardDetails getCardDetails() {
@@ -28,5 +27,13 @@ public class TransactionDTO {
 
     public void setCardDetails(CardDetails cardDetails) {
         this.cardDetails = cardDetails;
+    }
+
+    @Override
+    public String toString() {
+        return "TransactionDTO{" +
+                "transactionRequest=" + transactionRequest +
+                ", cardDetails=" + cardDetails +
+                '}';
     }
 }

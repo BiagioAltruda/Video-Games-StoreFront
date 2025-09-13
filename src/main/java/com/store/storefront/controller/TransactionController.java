@@ -3,7 +3,11 @@ package com.store.storefront.controller;
 import java.util.List;
 
 import com.store.storefront.DTO.TransactionDTO;
+import com.store.storefront.DTO.TransactionRequest;
+import com.store.storefront.model.Game;
 import com.store.storefront.model.PaymentProcessor;
+import com.store.storefront.model.Player;
+import com.store.storefront.service.GameService;
 import com.store.storefront.service.PlayerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +31,12 @@ public class TransactionController {
 
 	private final TransactionService transactionService;
 	private final PlayerService playerService;
+	private final GameService gameService;
 
-	public TransactionController(TransactionService transactionService, PlayerService playerService) {
+	public TransactionController(TransactionService transactionService, PlayerService playerService, GameService gameService) {
 		this.transactionService = transactionService;
 		this.playerService = playerService;
+		this.gameService = gameService;
 	}
 
 	@GetMapping("/payment")
@@ -82,38 +88,36 @@ public class TransactionController {
 
 	// simulazione di pagamento (mock)
 
-	// Endpoint POST che si attiva con una richiesta a /pay/{playerId}
-	// Serve per processare un pagamento associato a un certo player
+	
 	@PostMapping("/pay/{playerId}")
 	public ResponseEntity<String> processPayment(@PathVariable Integer playerId, @RequestBody TransactionDTO dto) {
+	    System.out.println("Ricevuto DTO: " + dto);
 
-		// Debug: stampa a console il contenuto del DTO ricevuto
-		System.out.println("Ricevuto DTO: " + dto);
+	    if (dto.getTransactionRequest() == null) {
+	        return ResponseEntity.badRequest().body("❌ Transaction mancante");
+	    }
+	    if (dto.getCardDetails() == null) {
+	        return ResponseEntity.badRequest().body("❌ Dati carta mancanti");
+	    }
 
-		// 1. Controllo: se non è stata passata la transazione -> errore 400
-		if (dto.getTransaction() == null) {
-			return ResponseEntity.badRequest().body(" Transaction mancante");
+	    if (!PaymentProcessor.validate(dto.getCardDetails())) {
+			return ResponseEntity.badRequest().body("❌ Pagamento fallito: carta non valida");
+	    }
+		TransactionRequest request = dto.getTransactionRequest();
+		Transaction transaction = new  Transaction();
+		Player player = playerService.findById(playerId);
+		Game game = gameService.getGameById(request.getGameId());
+		if(player == null){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Player not found");
 		}
-
-		// 2. Controllo: se non sono stati passati i dati della carta -> errore 400
-		if (dto.getCardDetails() == null) {
-			return ResponseEntity.badRequest().body(" Dati carta mancanti");
+		if(game == null){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Game not found");
 		}
-
-		// 3. Validazione carta con PaymentProcessor
-		if (PaymentProcessor.validate(dto.getCardDetails())) {
-
-			// Se la carta è valida, si recupera il Player dal DB con il suo ID
-			dto.getTransaction().setPlayer(playerService.findById(playerId));
-
-			// Salva la transazione nel DB tramite il service
-			Transaction transaction = transactionService.createTransaction(dto.getTransaction());
-
-			// Risposta positiva con messaggio e ID della transazione
-			return ResponseEntity.ok(" Pagamento riuscito per transazione ID: " + transaction.getId());
-		}
-
-		// 4. Se la carta non è valida -> errore 400
-		return ResponseEntity.badRequest().body(" Pagamento fallito: carta non valida");
+		transaction.setPlayer(player);
+		transaction.setGame(game);
+		transaction.setPricePaid(request.getPricePaid());
+		transaction.setDate(request.getDate());
+		Transaction savedTransaction = transactionService.createTransaction(transaction);
+		return ResponseEntity.ok("✅ Pagamento riuscito per transazione ID: " + savedTransaction.getId());
 	}
 }

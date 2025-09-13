@@ -5,103 +5,93 @@ function $(selector) {
 
 // Mostra messaggi (puoi sostituire alert con div styled bootstrap)
 function showAlert(type, message) {
-  const resultDiv = $("#paymentResult"); // Seleziona il div dove mostrare il messaggio
+  const resultDiv = $("#paymentResult");
   if (resultDiv) {
-    resultDiv.textContent = message; // Inserisce il testo del messaggio
-    resultDiv.className = ""; // reset classi CSS precedenti
-    resultDiv.classList.add("alert", "alert-" + type, "mt-3"); // aggiunge classi Bootstrap
+    resultDiv.textContent = message;
+    resultDiv.className = ""; // reset classi
+    resultDiv.classList.add("alert", "alert-" + type, "mt-3");
   } else {
-    alert(message); // fallback con alert nativo se non trova il div
+    alert(message); // fallback
   }
 }
+
+
 
 // Funzione principale di pagamento
-async function pay(gameId) {
-  let btn = $("#payBtn"); // Seleziona il bottone di pagamento
-  if (btn) btn.setAttribute("disabled", "disabled"); // Disabilita il bottone per evitare doppi click
+async function pay() {
+  let btn = $("#payBtn");
+  if (btn) btn.setAttribute("disabled", "disabled");
 
-  const game = await getGameData(); // Recupera dati del gioco
-  try {
-    // Costruzione DTO come atteso da TransactionDTO
-    const dto = {
-      transaction: {
-        amount: parseFloat($("#tx-price")?.value || game.price), // Importo dal form o dal gioco
-        date: new Date().toISOString().slice(0,19) // Data attuale senza "Z"
-      },
-      cardDetails: {
-        cardholderName: $("#cardholderName").value, // Nome sulla carta
-        cardNumber: $("#cardNumber").value,         // Numero carta
-        expirationDate: $("#expirationDate").value, // Data scadenza
-        cvv: $("#cvv").value                        // CVV
-      }
-    };
+  const expiration =convertDateFormat('01/' + $("#expirationDate").value);
+  const cardDetails = {
+    cardNumber: $("#cardNumber").value.replace(/\s+/g, ''),
+    cardHolderName: $("#cardholderName").value,
+    cardExpiry: expiration,
+    cardCVV: $("#cvv").value
+  }
 
-    let playerId = getPlayerId(); // Recupera ID del player
+  console.log(cardDetails);
+  console.log(transaction); //{player, game, gameName,pricePaid,date}
 
-    // Invio della richiesta al backend
-    let res = await fetch("http://localhost:8080/smoke/transactions/pay/" + playerId, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dto) // Serializza DTO in JSON
+  const transactionRequest = {
+    playerId: transaction.player,
+    gameId: transaction.game,
+    pricePaid: transaction.pricePaid,
+    date: new Date().toISOString(),
+  }
+
+                                                               //localStorage
+  const dto = {cardDetails , transactionRequest}; //encapsulates the data for transfer
+  console.log(JSON.stringify(dto, null, 2));
+  try{
+    let res = await fetch("http://localhost:8080/smoke/transactions/pay/" + transaction.player, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dto)
     });
 
-    if (!res.ok) throw new Error("HTTP " + res.status); // Se la risposta non è OK lancia errore
-    let msg = await res.text(); // Legge la risposta come testo
-    showAlert("success", msg);  // Mostra messaggio di successo
-
-    if ($("#tx-date")) $("#tx-date").textContent = new Date().toLocaleString(); // Aggiorna data transazione a schermo
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    let msg = await res.text();
+    showAlert("success", msg);
 
   } catch (e) {
-    console.error(e); // Log errore
-    showAlert("danger", "Errore di connessione o server non disponibile"); // Messaggio di errore
+    console.error(e);
+    showAlert("danger", "❌ Errore di connessione o server non disponibile");
   } finally {
-    if (btn) btn.removeAttribute("disabled"); // Riabilita il bottone
+    if (btn) btn.removeAttribute("disabled");
+
   }
 }
 
-// Inizializzazione quando la pagina è pronta
-document.addEventListener("DOMContentLoaded", function () {
-  const form = $("#paymentForm"); // Seleziona il form di pagamento
-  if (!form) return; // Se non esiste, esce
-
-  let txId = getTransactionId(); // Recupera ID transazione
-  if (!txId) {
-    showAlert("danger", "Manca l’ID della transazione."); // Mostra errore se manca
-    return;
-  }
-
-  // Aggiungi hidden input se manca (con transactionId)
-  if (!$('input[name="transactionId"]')) {
-    let hidden = document.createElement("input");
-    hidden.type = "hidden";
-    hidden.name = "transactionId";
-    hidden.value = txId;
-    form.appendChild(hidden);
-  }
-
-  // Dati placeholder (in futuro puoi popolarli da backend con GET)
-  if ($("#tx-id")) $("#tx-id").textContent = txId;                   // Mostra ID transazione
-  if ($("#tx-player")) $("#tx-player").textContent = "Player Name";  // Placeholder nome player
-  if ($("#tx-game")) $("#tx-game").textContent = "Game Title";       // Placeholder titolo gioco
-  if ($("#tx-price")) $("#tx-price").textContent = "49.99";          // Placeholder prezzo
-  if ($("#tx-date")) $("#tx-date").textContent = new Date().toLocaleString(); // Data attuale
-
-  // Intercetta il submit del form
+  // Intercetta il submit
+const form = document.getElementById("paymentForm");
   form.addEventListener("submit", function (e) {
-    e.preventDefault(); // Previene il comportamento di default
-    pay(txId); // Chiama la funzione di pagamento con id player
+    e.preventDefault();
+    pay();
   });
-});
 
-// Funzione per recuperare dati del gioco (placeholder, non completa)
-async function getGameData(id) {
-  try {
-    await fetch("smoke/games/" + id)
-        .then(res => {
-          return res.json() // Restituisce il JSON della risposta
-        })
+function convertDateFormat(date) {
+  const parts = date.split('/');
+  const month = parts[0];
+  let year = parts[1];
+
+  if(year.length === 2){ //convert date since we are
+    year = "20" + year; //assuming year starts with 20xx
   }
-  catch (e) {
-    console.error(e); // Log errore se la fetch fallisce
+  return `${parseInt(month)}/1/${year}`;
+}
+
+addEventListener('DOMContentLoaded', checkLoggedIn);
+function checkLoggedIn(){
+  const token = localStorage.getItem("X-Token");
+  if(token){
+    document.getElementById("login-button").style.display = "none";
+    document.getElementById("logout-button").style.display = "block";
+    return true;
+  }
+  else{
+    document.getElementById("logout-button").style.display = "none";
+    document.getElementById("login-button").style.display = "block";
+    return false;
   }
 }

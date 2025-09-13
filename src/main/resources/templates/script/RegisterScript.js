@@ -1,24 +1,25 @@
-// Quando la pagina è caricata esegue la funzione checkLoggedIn
-addEventListener("DOMContentLoaded", checkLoggedIn)
-
-// Funzione che controlla se l’utente è loggato
+//addEventListener("DOMContentLoaded", checkLoggedIn)
 function checkLoggedIn(){
-  if(localStorage.getItem("X-Token")){ // Se c’è il token in localStorage
-    document.getElementById("login-button").style.display = "none";   // Nasconde bottone login
-    document.getElementById("logout-button").style.display = "block"; // Mostra bottone logout
+  const token = localStorage.getItem("X-Token");
+  console.log("Token value:", token);
+  console.log("Token type:", typeof token);
+  console.log("Token exists:", !!token);
+
+  if(token){
+    document.getElementById("login-button").style.display = "none";
+    document.getElementById("logout-button").style.display = "block";
+    return true;
   }
-  else{ // Se non c’è token
-    document.getElementById("logout-button").style.display = "none"; // Nasconde bottone logout
-    document.getElementById("login-button").style.display = "block"; // Mostra bottone login
+  else{
+    document.getElementById("logout-button").style.display = "none";
+    document.getElementById("login-button").style.display = "block";
+    return false;
   }
 }
-
-// Funzione per login
 async function login() {
-  const u = document.getElementById('user').value; // Recupera username
-  const p = document.getElementById('pass').value; // Recupera password
+  const u = document.getElementById('user').value;
+  const p = document.getElementById('pass').value;
 
-  // Effettua richiesta al backend per login
   fetch(`http://localhost:8080/smoke/accounts/login?username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`, {
     method: 'POST'
   })
@@ -26,93 +27,84 @@ async function login() {
     if (response.status === 200) {
       return response.text(); // ritorna token come stringa
     } else {
-      throw new Error('Login failed'); // Se non 200, errore
+      throw new Error('Login failed');
     }
   })
   .then(async token => {
     console.log("Login response token:", token);
 
-    // Salva il token nel localStorage
+    // Salva il token
     localStorage.setItem('X-Token', await token);
 
-    // Reindirizza a pagina profilo
     window.location.href = "profile.html"
 
-    // Eventuale output testuale a schermo (commentato)
     // document.getElementById('authOut').textContent =
-    //   ' Login OK. Token salvato.';
+    //   '✅ Login OK. Token salvato.';
   })
   .catch(error => {
-    console.error("Login error:", error); // Log errore
-    document.getElementById('authOut').textContent = 'Login fallito'; // Mostra messaggio di errore
+    console.error("Login error:", error);
+    document.getElementById('authOut').textContent = 'Login fallito';
   });
 }
-
-// Funzione per registrazione
 async function register() {
-  const username = document.getElementById('newUsername').value; // Nuovo username
-  const password = document.getElementById('newPassword').value; // Nuova password
-  const confirmPassword = document.getElementById('confirmPassword').value; // Conferma password
+  const username = document.getElementById('newUsername').value;
+  const password = document.getElementById('newPassword').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
 
-  if (password !== confirmPassword) { // Controllo password uguali
+  if (password !== confirmPassword) {
     alert('Le password non coincidono!');
     return;
   }
 
-  if (password.length < 4) { // Controllo lunghezza minima
+  if (password.length < 4) {
     alert('La password deve essere di almeno 4 caratteri!');
     return;
   }
 
-  // Chiamata fetch per registrazione
   fetch(`http://localhost:8080/smoke/accounts/register?name=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
     method: 'POST'
   })
   .then(response => {
     if (response.status === 200) {
-      return response.text(); // Messaggio di successo
+      return response.text();
     } else {
-      throw new Error('Errore durante la registrazione'); // Altrimenti errore
+      throw new Error('Errore durante la registrazione');
     }
   })
   .then(message => {
-    alert(message); // Mostra messaggio di risposta
+    alert(message);
 
-    if (message === 'Account created successfully') { // Se account creato con successo
-      const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal')); 
-      registerModal.hide(); // Chiude modal registrazione
+    if (message === 'Account created successfully') {
+      const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+      registerModal.hide();
 
-      // Resetta i campi input
       document.getElementById('newUsername').value = '';
       document.getElementById('newPassword').value = '';
       document.getElementById('confirmPassword').value = '';
 
-      // Mostra modal login
       const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
       loginModal.show();
     }
   })
   .catch(error => {
-    // Errore durante la registrazione
     alert('Si è verificato un errore durante la registrazione: ' + error.message);
   });
 }
 
-// Funzione per logout
 async function logout(){
-  const token = localStorage.getItem('X-Token'); // Recupera token
+  const token = localStorage.getItem('X-Token');
   await fetch(`http://localhost:8080/smoke/accounts/logout?token=${token}`, {
     method: 'POST',
-    headers: {'X-Token' : token} // Passa token anche come header
+    headers: {'X-Token' : token}
   })
       .then(response => {
         if (response.status === 200) {
-          localStorage.removeItem('X-Token'); // Rimuove token
-          alert("Logout eseguito con successo"); // Conferma logout
+          localStorage.removeItem('X-Token');
+          alert("Logout eseguito con successo");
         }
         else{
-          alert("Errore durante il logout"); // Errore logout
+          alert("Errore durante il logout");
         }
-        checkLoggedIn(); // Aggiorna visibilità pulsanti
+        checkLoggedIn();
       })
 }

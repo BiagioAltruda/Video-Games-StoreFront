@@ -1,6 +1,6 @@
+addEventListener("DOMContentLoaded", checkLoggedIn)
 // Funzione principale che crea le card
 function showAllGames(games) {
-    // Crea l'HTML delle card mappando l'array dei giochi
     const gameCards = games
         .map((game) => {
             return `
@@ -23,9 +23,8 @@ function showAllGames(games) {
 </div>
 `;
         })
-        .join(""); // Unisce tutte le stringhe in un unico blocco HTML
+        .join("");
 
-    // Inserisce le card dentro il container
     const productContainer = document.getElementById('cards-container');
     productContainer.innerHTML = `<div class="row">${gameCards}</div>`;
 }
@@ -33,21 +32,16 @@ function showAllGames(games) {
 // Funzione che chiama il TUO database
 async function loadGames() {
     try {
-        // Richiesta per ottenere tutti i giochi
         const response = await fetch('http://localhost:8080/smoke/games/all');
         
-        // Se la risposta non è OK, lancia un errore
         if (!response.ok) {
             throw new Error(`Errore HTTP: ${response.status}`);
         }
         
-        // Converte la risposta in JSON (array di giochi)
         const games = await response.json();
-        // Mostra tutte le card
         showAllGames(games);
         
     } catch (error) {
-        // In caso di errore, logga e mostra un messaggio all'utente
         console.error('Errore nel caricamento dal database:', error);
         // Mostra un messaggio di errore all'utente
         const container = document.getElementById('cards-container');
@@ -63,23 +57,20 @@ async function loadGames() {
 }
 
 // Avvia il caricamento quando la pagina è pronta
-document.addEventListener('DOMContentLoaded', loadGames); // Al DOM pronto, carica i giochi
+document.addEventListener('DOMContentLoaded', loadGames);
 
-// Mostra i dettagli di un gioco quando si clicca sulla card
+
 function showGameDetails(gameId) {
-    // Costruisce l'URL per il dettaglio del gioco
     const url = `http://localhost:8080/smoke/games/${gameId}`;
 
-    // Effettua la fetch dei dettagli del gioco
     fetch(url)
         .then((response) => {
             if (!response.ok) {
-                throw new Error('Gioco non trovato'); // Errore se non ok
+                throw new Error('Gioco non trovato');
             }
-            return response.json(); // Converte in JSON
+            return response.json();
         })
         .then((game) => {
-        // Template HTML con i dettagli del gioco e form recensione
         const gameDetails = `
         <div class="game-details-container">
             <div class="container mt-4">
@@ -102,8 +93,8 @@ function showGameDetails(gameId) {
                             <p class="text-contrast">${game.description || 'Nessuna descrizione disponibile'}</p> 
                         </div>
                         
-                        <div class="mt-4">
-                           <button class="btn btn-primary me-2" onclick="window.location.href='Payment.html'">
+                        <div class="mt-4">  <!--allows html to properly read the function signature-->
+                           <button class="btn btn-primary me-2" data-game='${JSON.stringify(game)}' onclick="goToPayment(JSON.parse(this.dataset.game))">
                             <i class="fas fa-shopping-cart me-1"></i>Acquista
                             </button>
                             <button class="btn btn-secondary" onclick="closeGameDetails()">
@@ -157,12 +148,10 @@ function showGameDetails(gameId) {
         </div>
         `;
         
-        // Sostituisce le card con i dettagli del gioco
         document.getElementById('cards-container').innerHTML = gameDetails;
         
         // Aggiungi gli event listener dopo che l'HTML è stato renderizzato
         setTimeout(() => {
-            // Recupera il form recensione appena inserito
             const reviewForm = document.getElementById('reviewForm');
             const reviewTextarea = reviewForm.querySelector('textarea[name="content"]');
             const submitBtn = document.getElementById('submitReviewBtn');
@@ -175,14 +164,12 @@ function showGameDetails(gameId) {
             // Gestione dell'invio del form
             reviewForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                submitReview(gameId); // Chiama la funzione di invio recensione
+                submitReview(gameId);
             });
-        }, 100); // timeout per assicurare il DOM aggiornato
+        }, 100);
     })
     .catch((error) => {
-        // Gestione errori nel recupero dettagli
         console.error("Errore durante il recupero dei dettagli", error);
-        // Messaggio di errore + pulsante per tornare alla lista
         document.getElementById('cards-container').innerHTML = `
             <div class="col-12 text-center">
                 <div class="alert alert-danger">
@@ -199,7 +186,6 @@ function showGameDetails(gameId) {
 
 // Funzione per inviare la recensione (da implementare)
 function submitReview(gameId) {
-    // Recupera il form e i suoi dati
     const form = document.getElementById('reviewForm');
     const formData = new FormData(form);
     
@@ -212,8 +198,8 @@ function submitReview(gameId) {
     
     // Esempio: mostra un messaggio di successo
     alert('Recensione inviata con successo!');
-    form.reset(); // Resetta il form
-    document.getElementById('submitReviewBtn').disabled = true; // Disabilita il bottone finché non c'è nuovo testo
+    form.reset();
+    document.getElementById('submitReviewBtn').disabled = true;
 }
 
 // funzione per tornare alla lista giochi
@@ -223,7 +209,6 @@ function closeGameDetails() {
 
 // Variabile globale per memorizzare tutti i giochi
 let allGames = [];
-// Variabile per memorizzare la categoria selezionata
 let categoriaSelezionata = null;
 
 // Funzione per filtrare per categoria (adattata per il tuo HTML)
@@ -241,7 +226,7 @@ function cercaCategoria(categoriaCercata) {
     const tutteLeCategorie = document.querySelectorAll('.categoria-item');
     tutteLeCategorie.forEach(cat => cat.classList.remove('active'));
     
-    // Aggiungi la classe active alla categoria cliccata (in base al testo)
+    // Aggiungi la classe active alla categoria cliccata
     const categoriaCliccata = Array.from(tutteLeCategorie).find(cat => 
         cat.textContent.includes(categoriaCercata)
     );
@@ -249,16 +234,13 @@ function cercaCategoria(categoriaCercata) {
         categoriaCliccata.classList.add('active');
     }
     
-    // Se è stato selezionato "TUTTE LE CATEGORIE" mostra tutto
     if (categoriaCercata === "TUTTE LE CATEGORIE") {
         mostraTuttiIGiochi();
         return;
     }
     
-    // Normalizza la categoria cercata
     const categoriaCercataLower = categoriaCercata.toLowerCase();
     
-    // Filtra i giochi in base al genere
     const giochiFiltrati = allGames.filter(game => {
         if (!game.genre) return false;
         
@@ -266,19 +248,18 @@ function cercaCategoria(categoriaCercata) {
         const categorieGioco = game.genre.split(',')
             .map(cat => cat.trim().toLowerCase());
         
-        // Controlla se una delle categorie combacia
+        // Controlla se una delle categorie matcha
         return categorieGioco.some(categoria => 
             categoria === categoriaCercataLower
         );
     });
     
-    // Mostra i risultati della ricerca per categoria
     mostraRisultatiRicerca(giochiFiltrati, `Categoria: ${categoriaCercata}`);
 }
 
 // Funzione per deselezionare la categoria
 function deselezionaCategoria() {
-    categoriaSelezionata = null; // Reset selezione
+    categoriaSelezionata = null;
     
     // Rimuovi la classe active da tutte le categorie
     const tutteLeCategorie = document.querySelectorAll('.categoria-item');
@@ -290,7 +271,7 @@ function deselezionaCategoria() {
 
 // Funzione per mostrare i risultati della ricerca (adattata)
 function mostraRisultatiRicerca(giochi, titoloRicerca) {
-    const cardsContainer = document.getElementById('cards-container'); // Container principale
+    const cardsContainer = document.getElementById('cards-container');
     
     if (giochi.length > 0) {
         // Genera le card usando la tua funzione esistente showAllGames
@@ -328,7 +309,6 @@ function mostraRisultatiRicerca(giochi, titoloRicerca) {
 
 // Funzione per mostrare tutti i giochi (adattata)
 function mostraTuttiIGiochi() {
-    // Mostra tutte le card a partire dall'array globale
     showAllGames(allGames);
     
     // Rimuovi eventuali titoli di ricerca precedenti
@@ -342,21 +322,17 @@ function mostraTuttiIGiochi() {
 // Modifica la funzione loadGames per salvare i giochi nella variabile globale
 async function loadGames() {
     try {
-        // Fetch verso il backend per tutti i giochi
         const response = await fetch('http://localhost:8080/smoke/games/all');
         
-        // Se non ok, lancia errore
         if (!response.ok) {
             throw new Error(`Errore HTTP: ${response.status}`);
         }
         
-        // Converte a JSON
         const games = await response.json();
         allGames = games; // Salva nella variabile globale
-        showAllGames(games); // Mostra le card
+        showAllGames(games);
         
     } catch (error) {
-        // Gestione errore caricamento
         console.error('Errore nel caricamento dal database:', error);
         const container = document.getElementById('cards-container');
         container.innerHTML = `
@@ -372,20 +348,18 @@ async function loadGames() {
 
 // Aggiungi anche la funzione per la ricerca per nome dal menu laterale
 function setupSearchForm() {
-    const searchForm = document.querySelector('.search-form'); // Seleziona il form di ricerca
+    const searchForm = document.querySelector('.search-form');
     if (searchForm) {
-        // Intercetta il submit e avvia la ricerca
         searchForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            const searchInput = this.querySelector('input[type="text"]'); // Campo di input testo
-            cercaPerNome(searchInput.value.trim()); // Chiama la ricerca per nome
+            const searchInput = this.querySelector('input[type="text"]');
+            cercaPerNome(searchInput.value.trim());
         });
     }
 }
 
 // Funzione per cercare per nome
 function cercaPerNome(nomeCercato) {
-    // Se input vuoto, mostra tutti i giochi
     if (!nomeCercato) {
         mostraTuttiIGiochi();
         return;
@@ -394,20 +368,168 @@ function cercaPerNome(nomeCercato) {
     // Deseleziona eventuali categorie selezionate
     deselezionaCategoria();
     
-    // Normalizza il testo cercato
     const nomeCercatoLower = nomeCercato.toLowerCase();
     
-    // Filtra i giochi il cui nome include il testo cercato
     const giochiFiltrati = allGames.filter(game => {
         return game.name && game.name.toLowerCase().includes(nomeCercatoLower);
     });
     
-    // Mostra i risultati per nome
     mostraRisultatiRicerca(giochiFiltrati, `Risultati per: "${nomeCercato}"`);
 }
 
 // Inizializza i form di ricerca quando la pagina è carica
 document.addEventListener('DOMContentLoaded', function() {
-    loadGames(); // Carica la lista giochi all'avvio
-    setTimeout(setupSearchForm, 100); // Aspetta un attimo e poi configura il form di ricerca
+    loadGames();
+    setTimeout(setupSearchForm, 100); // Aspetta che il DOM sia completamente renderizzato
 });
+
+function checkLoggedIn(){
+    const token = localStorage.getItem("X-Token");
+    console.log("Token value:", token);
+    console.log("Token type:", typeof token);
+    console.log("Token exists:", !!token);
+
+    if(token){
+        document.getElementById("login-button").style.display = "none";
+        document.getElementById("logout-button").style.display = "block";
+        return true;
+    }
+    else{
+        document.getElementById("logout-button").style.display = "none";
+        document.getElementById("login-button").style.display = "block";
+        return false;
+    }
+}
+async function login() {
+    const u = document.getElementById('user').value;
+    const p = document.getElementById('pass').value;
+
+    fetch(`http://localhost:8080/smoke/accounts/login?username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`, {
+        method: 'POST'
+    })
+        .then(response => {
+            if (response.status === 200) {
+                return response.text(); // ritorna token come stringa
+            } else {
+                throw new Error('Login failed');
+            }
+        })
+        .then(async token => {
+            console.log("Login response token:", token);
+
+            // Salva il token
+            localStorage.setItem('X-Token', await token);
+
+            window.location.href = "profile.html"
+
+            // document.getElementById('authOut').textContent =
+            //   '✅ Login OK. Token salvato.';
+        })
+        .catch(error => {
+            console.error("Login error:", error);
+            document.getElementById('authOut').textContent = 'Login fallito';
+        });
+}
+async function register() {
+    const username = document.getElementById('newUsername').value;
+    const password = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    if (password !== confirmPassword) {
+        alert('Le password non coincidono!');
+        return;
+    }
+
+    if (password.length < 4) {
+        alert('La password deve essere di almeno 4 caratteri!');
+        return;
+    }
+
+    fetch(`http://localhost:8080/smoke/accounts/register?name=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
+        method: 'POST'
+    })
+        .then(response => {
+            if (response.status === 200) {
+                return response.text();
+            } else {
+                throw new Error('Errore durante la registrazione');
+            }
+        })
+        .then(message => {
+            alert(message);
+
+            if (message === 'Account created successfully') {
+                const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                registerModal.hide();
+
+                document.getElementById('newUsername').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+
+                const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                loginModal.show();
+            }
+        })
+        .catch(error => {
+            alert('Si è verificato un errore durante la registrazione: ' + error.message);
+        });
+}
+
+async function logout(){
+    const token = localStorage.getItem('X-Token');
+    await fetch(`http://localhost:8080/smoke/accounts/logout?token=${token}`, {
+        method: 'POST',
+        headers: {'X-Token' : token}
+    })
+        .then(response => {
+            if (response.status === 200) {
+                localStorage.removeItem('X-Token');
+                alert("Logout eseguito con successo");
+            }
+            else{
+                alert("Errore durante il logout");
+            }
+            checkLoggedIn();
+        })
+}
+
+async function goToPayment(game){
+    if(!checkLoggedIn()){
+        alert("Devi essere loggato prima di poter procede all'acquisto");
+        return;
+    }
+    const playerId = await getPlayerId();
+    const transactionData = JSON.stringify({
+        "player": playerId,
+        "game": game.id,
+        "gameName": game.name,
+        "pricePaid": game.price,
+        "date" : new Date().toLocaleDateString('en-US')
+    });
+    localStorage.setItem("data", transactionData);
+    window.location.assign("Payment.html")
+}
+
+
+
+
+async function getPlayerId() {
+    let token = localStorage.getItem('X-Token');
+    let options = {method : 'GET' , headers : {'X-Token': token}};
+    try {
+        const response = await fetch(`http://localhost:8080/smoke/accounts/profile`, options);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const playerId = data.id;
+
+        console.log(`The player ID is: ${playerId}`);
+        return playerId; // You can now return the ID from the function
+    } catch (err) {
+        console.error("Failed to fetch player ID:", err);
+        return null; // Or throw the error to the caller
+    }
+}
