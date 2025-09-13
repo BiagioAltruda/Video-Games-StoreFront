@@ -1,4 +1,7 @@
- // Costanti
+
+addEventListener("DOMContentLoaded", checkLoggedIn)
+
+// Costanti
 const baseUrl = 'http://localhost:8080/smoke';
 const gamesUrl = `${baseUrl}/games`;
 const placeholderImage = 'https://via.placeholder.com/500x450/51073a/ecf0f1?text=No+Image';
@@ -10,6 +13,7 @@ let allGames = [];
 let categoriaSelezionata = null;
 let ultimiGiochiVisualizzati = [];
 
+
 // Funzione per gestire gli errori delle immagini
 function handleImageError(img) {
     img.src = errorImage;
@@ -19,6 +23,7 @@ function handleImageError(img) {
 function formatPrice(price) {
     return price ? '€' + price.toFixed(2) : 'GRATIS';
 }
+
 
 // Funzioni per il carosello principale
 function showFeaturedGame(index) {

@@ -1,3 +1,21 @@
+addEventListener("DOMContentLoaded", checkLoggedIn)
+function checkLoggedIn(){
+  const token = localStorage.getItem("X-Token");
+  console.log("Token value:", token);
+  console.log("Token type:", typeof token);
+  console.log("Token exists:", !!token);
+
+  if(token){
+    document.getElementById("login-button").style.display = "none";
+    document.getElementById("logout-button").style.display = "block";
+    return true;
+  }
+  else{
+    document.getElementById("logout-button").style.display = "none";
+    document.getElementById("login-button").style.display = "block";
+    return false;
+  }
+}
 
 document.getElementById("navbar").innerHTML =`
     <nav class="navbar navbar-expand-lg main-color-1 py-3">

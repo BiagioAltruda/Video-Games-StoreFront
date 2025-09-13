@@ -1,3 +1,4 @@
+
 (function () {                     // IIFE = funzione auto-eseguita: isola le variabili dallo scope globale
   "use strict";                    // Modalità rigorosa: aiuta a evitare errori silenziosi
 
@@ -88,7 +89,7 @@
       submitBtn.disabled = false;                                     // riabilita il bottone
     }
   });
-})();                                                                 // Chiude IIFE ed esegue subito
+})();                                   // Chiude IIFE ed esegue subito
 
 // Al caricamento del DOM mostra un saluto se c'è il nome nel localStorage
 document.addEventListener('DOMContentLoaded', () => {

@@ -25,7 +25,11 @@ async function login() {
   })
   .then(response => {
     if (response.status === 200) {
-      return response.text(); // ritorna token come stringa
+      
+    document.getElementById("login-button").style.display = "none";
+    document.getElementById("logout-button").style.display = "block";
+    return response.text(); // ritorna token come stringa
+      
     } else {
       throw new Error('Login failed');
     }
@@ -33,13 +37,15 @@ async function login() {
   .then(async token => {
     console.log("Login response token:", token);
 
+
     // Salva il token
     localStorage.setItem('X-Token', await token);
 
     window.location.href = "profile.html"
+ 
 
     // document.getElementById('authOut').textContent =
-    //   '✅ Login OK. Token salvato.';
+    //   ' Login OK. Token salvato.';
   })
   .catch(error => {
     console.error("Login error:", error);
@@ -92,7 +98,7 @@ async function register() {
 }
 
 async function logout(){
-  const token = localStorage.getItem('X-Token');
+const token = localStorage.getItem('X-Token');
   await fetch(`http://localhost:8080/smoke/accounts/logout?token=${token}`, {
     method: 'POST',
     headers: {'X-Token' : token}

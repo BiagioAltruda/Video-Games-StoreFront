@@ -55,41 +55,17 @@ document.getElementById("footer").innerHTML = `
             </div>
           </div>
 
-          <!-- Parte Destra - Form contatto -->
-          <div class="col-md-4">
-            <div class="footer-section">
-              <h5 class="text-white mb-3">📧 Contattaci</h5>
-              <form class="contact-form">
-                <div class="mb-3">
-                  <input
-                    type="email"
-                    class="form-control"
-                    placeholder="Scrivi la tua mail"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <textarea
-                    class="form-control"
-                    rows="3"
-                    placeholder="Fà la tua domanda"
-                    required
-                  ></textarea>
-                </div>
-                <button type="submit" class="btn btn-light w-100">
-                  <i class="fas fa-paper-plane me-2"></i>Invia
-                </button>
-              </form>
-            </div>
+         <div class="col-md-4 mb-4">
+        <h5 class="text-white mb-3">Newsletter</h5>
+        <form action="#">
+          <div class="mb-3">
+            <input id="email2" type="email" class="form-control" placeholder="Indirizzo E-mail" required />
           </div>
-        </div>
-
-        <!-- Divider -->
-        <div class="row mt-4">
-          <div class="col-12">
-            <hr class="footer-divider" />
-          </div>
-        </div>
+          <button type="button" class="mt-2 text-light-50" onclick="emailSent()">Iscriviti</button>
+          <p>Cliccando su "Iscriviti" accetta la nostra <a href="">informativa sulla privacy</a></p>
+        </form>
+        
+      </div>
 
         <!-- Copyright -->
         <div class="row mt-3">
@@ -102,3 +78,10 @@ document.getElementById("footer").innerHTML = `
       </div>
     </footer>
 `
+ 
+          function emailSent(){
+            const email = document.getElementById("email2").value.trim();
+            let alertMsg = (email !== '') ? 'Email registrata con successo!' : 'Il campo non può essere vuoto';
+            alert(alertMsg);
+          }
+      
