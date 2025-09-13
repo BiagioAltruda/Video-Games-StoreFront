@@ -640,3 +640,71 @@ body {
     from { opacity: 0; }
     to { opacity: 1; }
 }
+
+    /* Stili per le card delle offerte speciali */
+    .offer-card {
+        position: relative;
+        overflow: hidden;
+        transition: all var(--transition-speed) ease;
+    }
+    
+    .offer-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+    
+    .discount-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #ff4757;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-weight: bold;
+        z-index: 10;
+        font-size: 0.9rem;
+    }
+    
+    .price-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    
+    .original-price {
+        text-decoration: line-through;
+        color: #a0a0a0;
+        font-size: 0.9rem;
+    }
+    
+    .discounted-price {
+        color: #2ecc71;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+    
+    /* Stile per la card principale delle offerte */
+    .main-color-2 {
+        background: var(--card-bg-gradient);
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Stile aggiuntivo per le card delle offerte se necessario */
+.offer-card {
+    background: var(--card-bg-gradient);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all var(--transition-speed) ease;
+    height: 380px;
+    display: flex;
+    flex-direction: column;
+}
+
+.offer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}

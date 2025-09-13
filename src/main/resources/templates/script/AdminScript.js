@@ -1,503 +1,503 @@
 // FUNZIONE PER AGGIUNGERE UN NUOVO GIOCO
-document.getElementById('gameForm').addEventListener('submit', async e => {
+document.getElementById('gameForm').addEventListener('submit', async e => { // Aggiunge listener al submit del form "gameForm"
     e.preventDefault();  // Previene il reload della pagina
 
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sto aggiungendo...';
-    submitBtn.disabled = true;
+    const submitBtn = e.target.querySelector('button[type="submit"]'); // Prende il bottone di submit dentro al form
+    const originalText = submitBtn.innerHTML; // Salva il testo originale del bottone
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sto aggiungendo...'; // Mostra spinner e testo di caricamento
+    submitBtn.disabled = true; // Disabilita il bottone per evitare doppi invii
 
-    try {
+    try { // Inizio blocco try per gestione errori
         // Prepara l'oggetto gioco con i dati del form
-        const newGame = {
-            name: document.getElementById('gameName').value,
-            developer: document.getElementById('gameDeveloper').value,
-            genre: document.getElementById('gameGenre').value,
-            price: parseFloat(document.getElementById('gamePrice').value),
-            releaseDate: document.getElementById('gameReleaseDate').value,
-            description: document.getElementById('gameDescription').value,
-            rating: parseInt(document.getElementById('gamePegi').value, 10)
+        const newGame = { // Crea l'oggetto che rappresenta il nuovo gioco
+            name: document.getElementById('gameName').value, // Nome gioco
+            developer: document.getElementById('gameDeveloper').value, // Sviluppatore
+            genre: document.getElementById('gameGenre').value, // Genere
+            price: parseFloat(document.getElementById('gamePrice').value), // Prezzo convertito in numero
+            releaseDate: document.getElementById('gameReleaseDate').value, // Data di uscita (stringa ISO)
+            description: document.getElementById('gameDescription').value, // Descrizione
+            rating: parseInt(document.getElementById('gamePegi').value, 10) // PEGI convertito in intero base 10
         };
 
         // Gestione dell'immagine
-        const imageFile = document.getElementById('gameImage').files[0];
-        if (imageFile) {
+        const imageFile = document.getElementById('gameImage').files[0]; // Recupera il file immagine selezionato (se presente)
+        if (imageFile) { // Se c'è un'immagine
             // Verifica le dimensioni dell'immagine
-            const img = new Image();
-            const imageCheck = await new Promise((resolve) => {
-                img.onload = function() {
-                    resolve(this.width === 300 && this.height === 450);
+            const img = new Image(); // Crea un oggetto Image per caricare l'immagine
+            const imageCheck = await new Promise((resolve) => { // Wrapper Promise per attendere onload/onerror
+                img.onload = function() { // Quando l'immagine è caricata
+                    resolve(this.width === 300 && this.height === 450); // Verifica dimensioni esatte 300x450
                 };
-                img.onerror = function() {
-                    resolve(false);
+                img.onerror = function() { // In caso di errore nel caricare l'immagine
+                    resolve(false); // Fallisce la verifica
                 };
-                img.src = URL.createObjectURL(imageFile);
+                img.src = URL.createObjectURL(imageFile); // Crea URL temporaneo per il file e lo assegna alla Image
             });
 
-            if (!imageCheck) {
-                throw new Error('L\'immagine deve avere dimensioni esatte di 300x450 pixel');
+            if (!imageCheck) { // Se dimensioni non valide
+                throw new Error('L\'immagine deve avere dimensioni esatte di 300x450 pixel'); // Lancia errore bloccante
             }
 
             // Crea il percorso dell'immagine (puoi personalizzare questa logica)
-            const fileName = imageFile.name.toLowerCase().replace(/[^a-z0-9.]/g, '_');
-            newGame.bannerPath = `../../images/${fileName}`;
+            const fileName = imageFile.name.toLowerCase().replace(/[^a-z0-9.]/g, '_'); // Normalizza il nome file
+            newGame.bannerPath = `../../images/${fileName}`; // Imposta il path (nota: non carica il file, solo path)
         }
 
         // Invio della richiesta POST al backend
-        const response = await fetch('http://localhost:8080/smoke/games/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
+        const response = await fetch('http://localhost:8080/smoke/games/add', { // Effettua la POST all'endpoint add
+            method: 'POST', // Metodo HTTP
+            headers: { // Header della richiesta
+                'Content-Type': 'application/json', // Indica JSON nel body
+                'Accept': 'application/json' // Richiede JSON in risposta
             },
-            body: JSON.stringify(newGame)
+            body: JSON.stringify(newGame) // Serializza l'oggetto newGame in JSON
         });
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Errore HTTP ${response.status}: ${response.statusText} - ${errorText}`);
+        if (!response.ok) { // Se status non 2xx
+            const errorText = await response.text(); // Legge il testo dell'errore dal body
+            throw new Error(`Errore HTTP ${response.status}: ${response.statusText} - ${errorText}`); // Lancia errore dettagliato
         }
 
-        const game = await response.json();
-        showAlert(`Gioco "${game.name}" creato con successo! ID: ${game.id}`, 'success');
-        e.target.reset();
-        document.getElementById('imagePreview').classList.add('d-none');
+        const game = await response.json(); // Parsifica la risposta JSON (gioco creato)
+        showAlert(`Gioco "${game.name}" creato con successo! ID: ${game.id}`, 'success'); // Mostra alert di successo
+        e.target.reset(); // Resetta il form
+        document.getElementById('imagePreview').classList.add('d-none'); // Nasconde l'anteprima immagine
 
-    } catch (err) {
-        showAlert('Errore durante la creazione del gioco: ' + err.message, 'danger');
-    } finally {
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
+    } catch (err) { // Gestione errori
+        showAlert('Errore durante la creazione del gioco: ' + err.message, 'danger'); // Mostra alert di errore
+    } finally { // Eseguito sempre
+        submitBtn.innerHTML = originalText; // Ripristina testo bottone
+        submitBtn.disabled = false; // Riabilita il bottone
     }
-});
+}); // Fine listener submit
 
 // ANTEPRIMA IMMAGINE
-document.getElementById('gameImage').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    const preview = document.getElementById('imagePreview');
+document.getElementById('gameImage').addEventListener('change', function(e) { // Listener cambio file immagine (nuovo gioco)
+    const file = e.target.files[0]; // Primo file selezionato
+    const preview = document.getElementById('imagePreview'); // Img di anteprima
     
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-            preview.classList.remove('d-none');
+    if (file) { // Se c'è un file
+        const reader = new FileReader(); // Crea FileReader per leggere come DataURL
+        reader.onload = function(e) { // Quando la lettura è completata
+            preview.src = e.target.result; // Imposta src dell'anteprima con il DataURL
+            preview.classList.remove('d-none'); // Mostra l'anteprima
             
             // Verifica dimensioni
-            const img = new Image();
-            img.onload = function() {
-                if (this.width !== 300 || this.height !== 450) {
-                    showAlert('Attenzione: L\'immagine dovrebbe essere 300x450 px', 'warning');
+            const img = new Image(); // Crea Image per controllare dimensioni
+            img.onload = function() { // Al caricamento
+                if (this.width !== 300 || this.height !== 450) { // Se dimensioni non esatte
+                    showAlert('Attenzione: L\'immagine dovrebbe essere 300x450 px', 'warning'); // Avvisa l'utente
                 }
             };
-            img.src = e.target.result;
+            img.src = e.target.result; // Carica l'immagine dal DataURL
         };
-        reader.readAsDataURL(file);
-    } else {
-        preview.classList.add('d-none');
+        reader.readAsDataURL(file); // Avvia lettura del file come DataURL
+    } else { // Se nessun file selezionato
+        preview.classList.add('d-none'); // Nasconde l'anteprima
     }
-});
+}); // Fine listener change immagine
 
 // FUNZIONE PER MOSTRARE ALERT (rimane uguale)
-function showAlert(message, type = 'info') {
-    const existingAlert = document.querySelector('.custom-alert');
-    if (existingAlert) {
-        existingAlert.remove();
+function showAlert(message, type = 'info') { // Mostra un alert bootstrap-like in alto a destra
+    const existingAlert = document.querySelector('.custom-alert'); // Cerca un alert già presente
+    if (existingAlert) { // Se esiste
+        existingAlert.remove(); // Rimuove l'alert attuale per non accumularli
     }
     
-    const alertDiv = document.createElement('div');
-    alertDiv.className = `alert alert-${type} alert-dismissible fade show custom-alert`;
-    alertDiv.style.position = 'fixed';
-    alertDiv.style.top = '20px';
-    alertDiv.style.right = '20px';
-    alertDiv.style.zIndex = '1050';
-    alertDiv.style.minWidth = '300px';
+    const alertDiv = document.createElement('div'); // Crea un container <div> per l'alert
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show custom-alert`; // Classi bootstrap + custom
+    alertDiv.style.position = 'fixed'; // Posizionamento fisso
+    alertDiv.style.top = '20px'; // Distanza dall'alto
+    alertDiv.style.right = '20px'; // Distanza da destra
+    alertDiv.style.zIndex = '1050'; // Z-index sopra modali standard
+    alertDiv.style.minWidth = '300px'; // Larghezza minima
     alertDiv.innerHTML = `
         ${message}
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    `;
+    `; // Contenuto dell'alert con bottone di chiusura
     
-    document.body.appendChild(alertDiv);
+    document.body.appendChild(alertDiv); // Aggiunge l'alert al body
     
-    setTimeout(() => {
-        if (alertDiv.parentNode) {
-            alertDiv.remove();
+    setTimeout(() => { // Timer auto-chiusura
+        if (alertDiv.parentNode) { // Se è ancora nel DOM
+            alertDiv.remove(); // Rimuove l'alert
         }
-    }, 5000);
-}
+    }, 5000); // Dopo 5 secondi
+} // Fine showAlert
 
 // VALIDAZIONI (rimangono uguali)
-document.addEventListener('DOMContentLoaded', function() {
-    const priceInput = document.getElementById('gamePrice');
-    const releaseDateInput = document.getElementById('gameReleaseDate');
+document.addEventListener('DOMContentLoaded', function() { // Quando il DOM è pronto
+    const priceInput = document.getElementById('gamePrice'); // Input prezzo nuovo gioco
+    const releaseDateInput = document.getElementById('gameReleaseDate'); // Input data uscita nuovo gioco
     
-    if (priceInput) {
-        priceInput.addEventListener('input', function() {
-            if (this.value < 0) {
-                this.value = 0;
+    if (priceInput) { // Se esiste l'input prezzo
+        priceInput.addEventListener('input', function() { // Listener sull'input
+            if (this.value < 0) { // Se valore negativo
+                this.value = 0; // Forza a 0
             }
         });
     }
     
-    if (releaseDateInput) {
-        const today = new Date().toISOString().split('T')[0];
-        releaseDateInput.max = today;
+    if (releaseDateInput) { // Se esiste l'input data
+        const today = new Date().toISOString().split('T')[0]; // Calcola la data odierna in formato YYYY-MM-DD
+        releaseDateInput.max = today; // Imposta la data massima selezionabile a oggi
     }
-});
+}); // Fine DOMContentLoaded validazioni nuovo gioco
 
 // FUNZIONE PER AGGIORNARE UN GIOCO
-async function updateGame(gameData) {
-    try {
-        const response = await fetch('http://localhost:8080/smoke/games/update', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
+async function updateGame(gameData) { // Effettua una PUT per aggiornare un gioco
+    try { // Gestione errori
+        const response = await fetch('http://localhost:8080/smoke/games/update', { // Chiamata PUT al backend
+            method: 'PUT', // Metodo HTTP
+            headers: { // Header della richiesta
+                'Content-Type': 'application/json', // Invia JSON
+                'Accept': 'application/json' // Si aspetta JSON in risposta
             },
-            body: JSON.stringify(gameData)
+            body: JSON.stringify(gameData) // Body JSON con i dati del gioco aggiornato
         });
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Errore HTTP ${response.status}: ${response.statusText} - ${errorText}`);
+        if (!response.ok) { // Se non 2xx
+            const errorText = await response.text(); // Legge testo di errore
+            throw new Error(`Errore HTTP ${response.status}: ${response.statusText} - ${errorText}`); // Lancia errore
         }
 
-        const updatedGame = await response.json();
-        showAlert(`Gioco "${updatedGame.name}" aggiornato con successo!`, 'success');
-        return updatedGame;
+        const updatedGame = await response.json(); // Parsifica risposta JSON
+        showAlert(`Gioco "${updatedGame.name}" aggiornato con successo!`, 'success'); // Mostra successo
+        return updatedGame; // Ritorna il gioco aggiornato
 
-    } catch (err) {
-        showAlert('Errore durante l\'aggiornamento del gioco: ' + err.message, 'danger');
-        throw err;
+    } catch (err) { // In caso di errore
+        showAlert('Errore durante l\'aggiornamento del gioco: ' + err.message, 'danger'); // Mostra errore
+        throw err; // Rilancia l'errore al chiamante
     }
-}
+} // Fine updateGame
 
 // FUNZIONE PER RECUPERARE UN GIOCO PER ID (utile prima dell'update)
-async function getGameById(gameId) {
-    try {
-        const response = await fetch(`http://localhost:8080/smoke/games/${gameId}`);
+async function getGameById(gameId) { // Recupera un gioco per ID
+    try { // Gestione errori
+        const response = await fetch(`http://localhost:8080/smoke/games/${gameId}`); // GET al backend
         
-        if (!response.ok) {
-            throw new Error(`Errore HTTP ${response.status}: ${response.statusText}`);
+        if (!response.ok) { // Se non 2xx
+            throw new Error(`Errore HTTP ${response.status}: ${response.statusText}`); // Lancia errore
         }
 
-        return await response.json();
+        return await response.json(); // Ritorna il JSON del gioco
 
-    } catch (err) {
-        showAlert('Errore durante il recupero del gioco: ' + err.message, 'danger');
-        throw err;
+    } catch (err) { // In caso di errore
+        showAlert('Errore durante il recupero del gioco: ' + err.message, 'danger'); // Mostra alert
+        throw err; // Rilancia errore
     }
-}
+} // Fine getGameById
 
 // ===== FUNZIONE UNICA PER CARICARE LA LISTA GIOCHI =====
-async function loadGamesList(selectElementId, includeGameData = false) {
-    try {
-        const response = await fetch('http://localhost:8080/smoke/games/all');
+async function loadGamesList(selectElementId, includeGameData = false) { // Carica lista giochi e popola un <select>
+    try { // Gestione errori
+        const response = await fetch('http://localhost:8080/smoke/games/all'); // GET all games
         
-        if (!response.ok) {
-            throw new Error(`Errore HTTP: ${response.status}`);
+        if (!response.ok) { // Se errore HTTP
+            throw new Error(`Errore HTTP: ${response.status}`); // Lancia errore generico con status
         }
         
-        const games = await response.json();
-        const select = document.getElementById(selectElementId);
+        const games = await response.json(); // Lista giochi in JSON
+        const select = document.getElementById(selectElementId); // Riferimento al select target
         
-        if (!select) return;
+        if (!select) return; // Se il select non esiste, esce silenziosamente
         
-        select.innerHTML = '<option value="">-- Seleziona un gioco --</option>';
+        select.innerHTML = '<option value="">-- Seleziona un gioco --</option>'; // Reset con placeholder
         
-        games.forEach(game => {
-            const option = document.createElement('option');
-            option.value = game.id;
-            option.textContent = `${game.name} (${game.developer})`;
+        games.forEach(game => { // Per ogni gioco
+            const option = document.createElement('option'); // Crea option
+            option.value = game.id; // Imposta value con ID
+            option.textContent = `${game.name} (${game.developer})`; // Testo visibile
             
-            if (includeGameData) {
-                option.setAttribute('data-game', JSON.stringify(game));
+            if (includeGameData) { // Se richiesto, include i dati
+                option.setAttribute('data-game', JSON.stringify(game)); // Salva il JSON del gioco in data-attribute
             }
             
-            select.appendChild(option);
+            select.appendChild(option); // Aggiunge l'option al select
         });
         
-        return games;
+        return games; // Ritorna la lista giochi per eventuale uso esterno
         
-    } catch (error) {
-        console.error('Errore nel caricamento giochi:', error);
+    } catch (error) { // In caso di errore
+        console.error('Errore nel caricamento giochi:', error); // Log su console
         
-        const select = document.getElementById(selectElementId);
-        if (select) {
+        const select = document.getElementById(selectElementId); // Riferimento al select
+        if (select) { // Se esiste
             select.innerHTML = `
                 <option value="">
                     Errore nel caricamento - Riprova più tardi
                 </option>
-            `;
+            `; // Mostra option di errore
         }
         
-        showAlert('Impossibile caricare i giochi. Riprova più tardi.', 'warning');
-        throw error;
+        showAlert('Impossibile caricare i giochi. Riprova più tardi.', 'warning'); // Alert utente
+        throw error; // Rilancia errore
     }
-}
+} // Fine loadGamesList
 
 // ===== FUNZIONI PER LA MODIFICA =====
 
 // Funzione per caricare i dati del gioco selezionato nel form di modifica
-async function loadGameForEdit(gameId) {
-    if (!gameId) {
-        document.getElementById('editGameFormContainer').style.display = 'none';
-        document.getElementById('editGamePlaceholder').style.display = 'block';
-        return;
+async function loadGameForEdit(gameId) { // Popola il form di edit con i dati del gioco
+    if (!gameId) { // Se nessun gioco selezionato
+        document.getElementById('editGameFormContainer').style.display = 'none'; // Nasconde form
+        document.getElementById('editGamePlaceholder').style.display = 'block'; // Mostra placeholder
+        return; // Esce
     }
 
-    try {
-        const game = await getGameById(gameId);
+    try { // Gestione errori
+        const game = await getGameById(gameId); // Recupera gioco dal backend
         
         // Popola il form di modifica
-        document.getElementById('editGameId').value = game.id;
-        document.getElementById('editGameName').value = game.name;
-        document.getElementById('editGameDeveloper').value = game.developer;
-        document.getElementById('editGameGenre').value = game.genre;
-        document.getElementById('editGamePrice').value = game.price;
-        document.getElementById('editGameReleaseDate').value = game.releaseDate;
-        document.getElementById('editGameDescription').value = game.description;
-        document.getElementById('editGamePegi').value = game.rating;
+        document.getElementById('editGameId').value = game.id; // ID (hidden/readonly)
+        document.getElementById('editGameName').value = game.name; // Nome
+        document.getElementById('editGameDeveloper').value = game.developer; // Developer
+        document.getElementById('editGameGenre').value = game.genre; // Genere
+        document.getElementById('editGamePrice').value = game.price; // Prezzo
+        document.getElementById('editGameReleaseDate').value = game.releaseDate; // Data
+        document.getElementById('editGameDescription').value = game.description; // Descrizione
+        document.getElementById('editGamePegi').value = game.rating; // PEGI
         
         // Gestione immagine
-        const preview = document.getElementById('editImagePreview');
-        if (game.bannerPath) {
-            preview.src = game.bannerPath;
-            preview.style.display = 'block';
-            document.getElementById('currentImageInfo').textContent = 'Immagine corrente';
-        } else {
-            preview.style.display = 'none';
-            document.getElementById('currentImageInfo').textContent = 'Nessuna immagine';
+        const preview = document.getElementById('editImagePreview'); // Img anteprima edit
+        if (game.bannerPath) { // Se c'è un banner
+            preview.src = game.bannerPath; // Imposta src
+            preview.style.display = 'block'; // Mostra l'immagine
+            document.getElementById('currentImageInfo').textContent = 'Immagine corrente'; // Testo info
+        } else { // Se non c'è immagine
+            preview.style.display = 'none'; // Nasconde anteprima
+            document.getElementById('currentImageInfo').textContent = 'Nessuna immagine'; // Testo info
         }
         
         // Mostra il form
-        document.getElementById('editGameFormContainer').style.display = 'block';
-        document.getElementById('editGamePlaceholder').style.display = 'none';
+        document.getElementById('editGameFormContainer').style.display = 'block'; // Mostra form di edit
+        document.getElementById('editGamePlaceholder').style.display = 'none'; // Nasconde placeholder
         
-    } catch (error) {
-        showAlert('Errore nel caricamento del gioco: ' + error.message, 'danger');
+    } catch (error) { // In caso di errore
+        showAlert('Errore nel caricamento del gioco: ' + error.message, 'danger'); // Alert
     }
-}
+} // Fine loadGameForEdit
 
 // Funzione annulla modifica
-function cancelEdit() {
-    document.getElementById('selectGameToEdit').value = '';
-    document.getElementById('editGameFormContainer').style.display = 'none';
-    document.getElementById('editGamePlaceholder').style.display = 'block';
-    document.getElementById('editGameForm').reset();
-}
+function cancelEdit() { // Ripristina lo stato della sezione modifica
+    document.getElementById('selectGameToEdit').value = ''; // Reset select
+    document.getElementById('editGameFormContainer').style.display = 'none'; // Nasconde form
+    document.getElementById('editGamePlaceholder').style.display = 'block'; // Mostra placeholder
+    document.getElementById('editGameForm').reset(); // Resetta campi del form
+} // Fine cancelEdit
 
 // Funzione per aggiornare la lista giochi per modifica
-function refreshGamesList() {
-    loadGamesList('selectGameToEdit');
-    showAlert('Lista giochi aggiornata', 'info');
-}
+function refreshGamesList() { // Aggiorna la lista giochi nel select di edit
+    loadGamesList('selectGameToEdit'); // Ricarica l'elenco
+    showAlert('Lista giochi aggiornata', 'info'); // Mostra info alert
+} // Fine refreshGamesList
 
 // ===== FUNZIONI PER L'ELIMINAZIONE =====
 
 // Funzione per caricare i dettagli del gioco selezionato per l'eliminazione
-function loadGameForDelete(gameId) {
-    if (!gameId) {
-        document.getElementById('deleteGamePreview').classList.add('d-none');
-        document.getElementById('deleteGamePlaceholder').classList.remove('d-none');
-        return;
+function loadGameForDelete(gameId) { // Popola l'anteprima del pannello di delete
+    if (!gameId) { // Se nessun gioco selezionato
+        document.getElementById('deleteGamePreview').classList.add('d-none'); // Nasconde pannello dettagli
+        document.getElementById('deleteGamePlaceholder').classList.remove('d-none'); // Mostra placeholder
+        return; // Esce
     }
 
-    try {
-        const select = document.getElementById('selectGameToDelete');
-        const selectedOption = select.options[select.selectedIndex];
-        const game = JSON.parse(selectedOption.getAttribute('data-game'));
+    try { // Gestione errori
+        const select = document.getElementById('selectGameToDelete'); // Select dei giochi da eliminare
+        const selectedOption = select.options[select.selectedIndex]; // Option selezionata
+        const game = JSON.parse(selectedOption.getAttribute('data-game')); // Parsea i dati gioco dal data-attribute
         
         // Popola i dettagli del gioco
-        document.getElementById('deleteGameTitle').textContent = game.name;
+        document.getElementById('deleteGameTitle').textContent = game.name; // Titolo con nome gioco
         document.getElementById('deleteGameDetails').textContent = 
-            `${game.developer} • ${game.genre} • €${game.price} • PEGI ${game.rating}`;
+            `${game.developer} • ${game.genre} • €${game.price} • PEGI ${game.rating}`; // Riepilogo dettagli
         document.getElementById('deleteGameDescription').textContent = 
-            game.description || 'Nessuna descrizione disponibile';
+            game.description || 'Nessuna descrizione disponibile'; // Descrizione o fallback
         
         // Gestione immagine
-        const gameImage = document.getElementById('deleteGameImage');
-        if (game.bannerPath) {
-            gameImage.src = game.bannerPath;
-            gameImage.style.display = 'block';
-        } else {
-            gameImage.style.display = 'none';
+        const gameImage = document.getElementById('deleteGameImage'); // Img di anteprima delete
+        if (game.bannerPath) { // Se esiste banner
+            gameImage.src = game.bannerPath; // Imposta src
+            gameImage.style.display = 'block'; // Mostra immagine
+        } else { // Se no
+            gameImage.style.display = 'none'; // Nasconde immagine
         }
         
         // Mostra il pannello di conferma
-        document.getElementById('deleteGamePreview').classList.remove('d-none');
-        document.getElementById('deleteGamePlaceholder').classList.add('d-none');
+        document.getElementById('deleteGamePreview').classList.remove('d-none'); // Mostra pannello dettagli
+        document.getElementById('deleteGamePlaceholder').classList.add('d-none'); // Nasconde placeholder
         
-    } catch (error) {
-        showAlert('Errore nel caricamento del gioco: ' + error.message, 'danger');
+    } catch (error) { // In caso di errore
+        showAlert('Errore nel caricamento del gioco: ' + error.message, 'danger'); // Alert
     }
-}
+} // Fine loadGameForDelete
 
 // Funzione per confermare l'eliminazione
-async function confirmDelete() {
-    const gameId = document.getElementById('selectGameToDelete').value;
-    if (!gameId) return;
+async function confirmDelete() { // Esegue la DELETE del gioco selezionato
+    const gameId = document.getElementById('selectGameToDelete').value; // ID gioco selezionato
+    if (!gameId) return; // Se non selezionato, esce
 
-    try {
-        const response = await fetch(`http://localhost:8080/smoke/games/delete/${gameId}`, {
-            method: 'DELETE',
+    try { // Gestione errori
+        const response = await fetch(`http://localhost:8080/smoke/games/delete/${gameId}`, { // Chiamata DELETE
+            method: 'DELETE', // Metodo HTTP
             headers: {
-                'Accept': 'application/json'
+                'Accept': 'application/json' // Accetta JSON (anche se la risposta è testo)
             }
         });
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Errore HTTP ${response.status}: ${response.statusText} - ${errorText}`);
+        if (!response.ok) { // Se errore HTTP
+            const errorText = await response.text(); // Legge body errore
+            throw new Error(`Errore HTTP ${response.status}: ${response.statusText} - ${errorText}`); // Lancia errore
         }
 
-        const result = await response.text();
-        showAlert(`Gioco eliminato con successo: ${result}`, 'success');
+        const result = await response.text(); // Legge il testo di risposta (es. messaggio)
+        showAlert(`Gioco eliminato con successo: ${result}`, 'success'); // Mostra successo
         
         // Reset dell'interfaccia
-        cancelDelete();
-        refreshDeleteGamesList();
+        cancelDelete(); // Resetta pannello delete
+        refreshDeleteGamesList(); // Ricarica lista giochi per delete
         
-    } catch (error) {
-        showAlert('Errore durante l\'eliminazione del gioco: ' + error.message, 'danger');
+    } catch (error) { // In caso di errore
+        showAlert('Errore durante l\'eliminazione del gioco: ' + error.message, 'danger'); // Alert
     }
-}
+} // Fine confirmDelete
 
 // Funzione per annullare l'eliminazione
-function cancelDelete() {
-    document.getElementById('selectGameToDelete').value = '';
-    document.getElementById('deleteGamePreview').classList.add('d-none');
-    document.getElementById('deleteGamePlaceholder').classList.remove('d-none');
-}
+function cancelDelete() { // Ripristina lo stato UI della sezione delete
+    document.getElementById('selectGameToDelete').value = ''; // Reset selezione
+    document.getElementById('deleteGamePreview').classList.add('d-none'); // Nasconde pannello dettagli
+    document.getElementById('deleteGamePlaceholder').classList.remove('d-none'); // Mostra placeholder
+} // Fine cancelDelete
 
 // Funzione per aggiornare la lista giochi per eliminazione
-function refreshDeleteGamesList() {
-    loadGamesList('selectGameToDelete', true);
-    cancelDelete();
-    showAlert('Lista giochi aggiornata', 'info');
-}
+function refreshDeleteGamesList() { // Ricarica l'elenco per il select di delete
+    loadGamesList('selectGameToDelete', true); // Carica lista con data-game incluso
+    cancelDelete(); // Resetta stato pannello
+    showAlert('Lista giochi aggiornata', 'info'); // Mostra info
+} // Fine refreshDeleteGamesList
 
 // ===== EVENT LISTENERS =====
 
 // Anteprima immagine per il form di modifica
-document.getElementById('editGameImage')?.addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    const preview = document.getElementById('editImagePreview');
+document.getElementById('editGameImage')?.addEventListener('change', function(e) { // Listener opzionale (?.) per cambio immagine in edit
+    const file = e.target.files[0]; // File selezionato
+    const preview = document.getElementById('editImagePreview'); // Img anteprima
     
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-            preview.style.display = 'block';
-            document.getElementById('currentImageInfo').textContent = 'Nuova immagine selezionata';
+    if (file) { // Se c'è file
+        const reader = new FileReader(); // Crea FileReader
+        reader.onload = function(e) { // Al termine della lettura
+            preview.src = e.target.result; // Mostra anteprima
+            preview.style.display = 'block'; // Assicura visibilità
+            document.getElementById('currentImageInfo').textContent = 'Nuova immagine selezionata'; // Aggiorna info UI
             
             // Verifica dimensioni
-            const img = new Image();
-            img.onload = function() {
-                if (this.width !== 300 || this.height !== 450) {
-                    showAlert('Attenzione: L\'immagine dovrebbe essere 300x450 px', 'warning');
+            const img = new Image(); // Crea Image per controllo dimensioni
+            img.onload = function() { // Al caricamento
+                if (this.width !== 300 || this.height !== 450) { // Se dimensioni non corrette
+                    showAlert('Attenzione: L\'immagine dovrebbe essere 300x450 px', 'warning'); // Avvisa l'utente
                 }
             };
-            img.src = e.target.result;
+            img.src = e.target.result; // Carica da DataURL
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(file); // Legge file come DataURL
     }
-});
+}); // Fine listener change immagine in edit
 
 // Event listener per il form di modifica
-document.getElementById('editGameForm')?.addEventListener('submit', async function(e) {
-    e.preventDefault();
+document.getElementById('editGameForm')?.addEventListener('submit', async function(e) { // Listener submit opzionale (?.) per form edit
+    e.preventDefault(); // Previene reload
     
-    const gameId = document.getElementById('editGameId').value;
-    const submitBtn = this.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
+    const gameId = document.getElementById('editGameId').value; // ID del gioco in modifica
+    const submitBtn = this.querySelector('button[type="submit"]'); // Bottone submit del form
+    const originalText = submitBtn.innerHTML; // Testo originale bottone
     
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvataggio...';
-    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvataggio...'; // Spinner + testo
+    submitBtn.disabled = true; // Disabilita bottone
 
-    try {
+    try { // Gestione errori
         // Prima recupera il gioco corrente per mantenere il bannerPath originale
-        const currentGame = await getGameById(gameId);
+        const currentGame = await getGameById(gameId); // GET gioco corrente
         
-        const updatedGame = {
-            id: parseInt(gameId),
-            name: document.getElementById('editGameName').value,
-            developer: document.getElementById('editGameDeveloper').value,
-            genre: document.getElementById('editGameGenre').value,
-            price: parseFloat(document.getElementById('editGamePrice').value),
-            releaseDate: document.getElementById('editGameReleaseDate').value,
-            description: document.getElementById('editGameDescription').value,
-            rating: parseInt(document.getElementById('editGamePegi').value),
+        const updatedGame = { // Costruisce l'oggetto aggiornato
+            id: parseInt(gameId), // ID convertito in intero
+            name: document.getElementById('editGameName').value, // Nome
+            developer: document.getElementById('editGameDeveloper').value, // Developer
+            genre: document.getElementById('editGameGenre').value, // Genere
+            price: parseFloat(document.getElementById('editGamePrice').value), // Prezzo numero
+            releaseDate: document.getElementById('editGameReleaseDate').value, // Data
+            description: document.getElementById('editGameDescription').value, // Descrizione
+            rating: parseInt(document.getElementById('editGamePegi').value), // PEGI intero
             // Mantieni il bannerPath originale di default
-            bannerPath: currentGame.bannerPath
+            bannerPath: currentGame.bannerPath // Default: usa il path già esistente
         };
 
         // Gestione immagine - solo se viene selezionata una nuova immagine
-        const imageFile = document.getElementById('editGameImage').files[0];
-        if (imageFile) {
+        const imageFile = document.getElementById('editGameImage').files[0]; // File immagine selezionato per edit
+        if (imageFile) { // Se l'utente ha scelto una nuova immagine
             // Verifica dimensioni immagine
-            const img = new Image();
-            const imageCheck = await new Promise((resolve) => {
-                img.onload = function() {
-                    resolve(this.width === 300 && this.height === 450);
+            const img = new Image(); // Image per controllo dimensioni
+            const imageCheck = await new Promise((resolve) => { // Promise per attendere onload/onerror
+                img.onload = function() { // On load
+                    resolve(this.width === 300 && this.height === 450); // Controlla 300x450
                 };
-                img.onerror = function() {
-                    resolve(false);
+                img.onerror = function() { // On error
+                    resolve(false); // Fallisce la verifica
                 };
-                img.src = URL.createObjectURL(imageFile);
+                img.src = URL.createObjectURL(imageFile); // Carica l'immagine localmente
             });
 
-            if (!imageCheck) {
-                throw new Error('L\'immagine deve avere dimensioni esatte di 300x450 pixel');
+            if (!imageCheck) { // Se non valida
+                throw new Error('L\'immagine deve avere dimensioni esatte di 300x450 pixel'); // Errore bloccante
             }
 
-            const fileName = imageFile.name.toLowerCase().replace(/[^a-z0-9.]/g, '_');
-            updatedGame.bannerPath = `../../images/${fileName}`;
+            const fileName = imageFile.name.toLowerCase().replace(/[^a-z0-9.]/g, '_'); // Normalizza nome file
+            updatedGame.bannerPath = `../../images/${fileName}`; // Aggiorna bannerPath con il nuovo fileName
         }
 
-        await updateGame(updatedGame);
+        await updateGame(updatedGame); // Effettua la PUT per salvare le modifiche
         
         // Reset solo del campo file, mantieni gli altri valori per eventuali nuove modifiche
-        document.getElementById('editGameImage').value = '';
+        document.getElementById('editGameImage').value = ''; // Pulisce input file
         
-        showAlert(`Gioco "${updatedGame.name}" modificato con successo!`, 'success');
-        refreshGamesList();
+        showAlert(`Gioco "${updatedGame.name}" modificato con successo!`, 'success'); // Alert successo
+        refreshGamesList(); // Aggiorna la lista del select di edit
         
-    } catch (error) {
-        showAlert('Errore durante la modifica: ' + error.message, 'danger');
-    } finally {
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
+    } catch (error) { // In caso di errore
+        showAlert('Errore durante la modifica: ' + error.message, 'danger'); // Alert errore
+    } finally { // Sempre
+        submitBtn.innerHTML = originalText; // Ripristina testo bottone
+        submitBtn.disabled = false; // Riabilita bottone
     }
-});
+}); // Fine submit edit
 
 // ===== INIZIALIZZAZIONE =====
 
 // Carica la lista all'apertura della pagina
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() { // Quando il DOM è pronto
     // Inizializza la lista giochi per la modifica
-    if (document.getElementById('selectGameToEdit')) {
-        loadGamesList('selectGameToEdit');
+    if (document.getElementById('selectGameToEdit')) { // Se esiste il select per edit
+        loadGamesList('selectGameToEdit'); // Carica l'elenco
     }
     
     // Inizializza la lista giochi per l'eliminazione
-    if (document.getElementById('selectGameToDelete')) {
-        loadGamesList('selectGameToDelete', true);
+    if (document.getElementById('selectGameToDelete')) { // Se esiste il select per delete
+        loadGamesList('selectGameToDelete', true); // Carica lista includendo data-game
     }
     
     // Validazioni per il form di modifica
-    const editPriceInput = document.getElementById('editGamePrice');
-    const editReleaseDateInput = document.getElementById('editGameReleaseDate');
+    const editPriceInput = document.getElementById('editGamePrice'); // Input prezzo in edit
+    const editReleaseDateInput = document.getElementById('editGameReleaseDate'); // Input data in edit
     
-    if (editPriceInput) {
-        editPriceInput.addEventListener('input', function() {
-            if (this.value < 0) {
-                this.value = 0;
+    if (editPriceInput) { // Se esiste
+        editPriceInput.addEventListener('input', function() { // Listener input
+            if (this.value < 0) { // Se negativo
+                this.value = 0; // Forza a 0
             }
         });
     }
     
-    if (editReleaseDateInput) {
-        const today = new Date().toISOString().split('T')[0];
-        editReleaseDateInput.max = today;
+    if (editReleaseDateInput) { // Se esiste
+        const today = new Date().toISOString().split('T')[0]; // Oggi in YYYY-MM-DD
+        editReleaseDateInput.max = today; // Imposta max data a oggi
     }
-});
+}); // Fine DOMContentLoaded inizializzazione
