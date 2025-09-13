@@ -20,61 +20,9 @@
 <body class="bg-light">
 
  <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg main-color-1 py-3">
-      <div class="container">
-        <a class="navbar-brand fw-bold" href="home.html">
-          <i class="fas fa-home me-2"></i>Home
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">
-                <i class="fas fa-user me-1"></i>Profilo Personale
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <i class="fas fa-book me-1"></i>Catalogo
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <i class="fas fa-tags me-1"></i>Categorie
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="Preventivatore.html">
-                <i class="fas fa-chart-line me-1"></i>Trends
-              </a>
-            </li>
-          </ul>
-          <form class="d-flex me-2">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Cerca..."
-            />
-            <button class="btn btn-outline-light" type="submit">
-              <i class="fas fa-search"></i>
-            </button>
-          </form>
-          <button id="login-button" style="display: block" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
-            <i class="fas fa-sign-in-alt me-1"></i>Login
-          </button>
-          <button id="logout-button" style="display: none"  type="button" class="btn btn-primary " onclick="logout()">
-            <i class="fas fa-sign-in-alt me-1"></i>Logout
-          </button>
-        </div>
-      </div>
-    </nav>
+
+ <div id="navbar"></div>
+ <script src="../script/navBarScript.js"></script>
 
     <!-- Modale di Login -->
     <div
@@ -349,107 +297,8 @@
   <!-- container -->
 
       <!-- Footer -->
-    <footer class="footer mt-5 py-5 main-color-1">
-      <div class="container">
-        <div class="row">
-            <!-- Chi siamo -->
-            <div class="col-md-4">
-                <div class="footer-section">
-                    <h5 class="text-white mb-3">🎮 Smoke Home</h5>
-                    <p class="text-light">
-                        Dal 2023 vendiamo videogiochi "fumosi" a prezzi incredibili!<br>
-                        La nostra missione? Rendere il gaming accessibile a tutti,<br>
-                        tranne a chi non paga in tempo.<br><br>
-                        ⚡ Consegna in 3-5 giorni lavorativi (se generiamo il codice in tempo)<br>
-                        🎯 Soddisfazione garantita o quasi!
-                    </p>
-                </div>
-            </div>
-
-          <!-- Parte Centrale - Link utili -->
-          <div class="col-md-4">
-            <div class="footer-section">
-              <h5 class="text-white mb-3">🔗 Link Utili</h5>
-              <ul class="list-unstyled">
-                <li class="mb-2">
-                  <a
-                    href="DomandeFrequenti.html"
-                    class="text-light text-decoration-none"
-                  >
-                    <i class="fas fa-question-circle me-2"></i>Domande frequenti
-                  </a>
-                </li>
-                <li class="mb-2">
-                  <a href="#" class="text-light text-decoration-none">
-                    <i class="fas fa-envelope me-2"></i>Contatti
-                  </a>
-                </li>
-              </ul>
-
-              <h6 class="text-white mt-4 mb-2">🌐 Canali Social</h6>
-              <div class="social-links">
-                <a href="https://discord.com/" class="text-light me-3"
-                  ><i class="fab fa-discord fa-lg"></i
-                ></a>
-                <a href="https://www.instagram.com/" class="text-light me-3"
-                  ><i class="fab fa-instagram fa-lg"></i
-                ></a>
-                <a href="https://www.facebook.com/" class="text-light me-3"
-                  ><i class="fab fa-facebook fa-lg"></i
-                ></a>
-                <a href="https://www.youtube.com/" class="text-light"
-                  ><i class="fab fa-youtube fa-lg"></i
-                ></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Parte Destra - Form contatto -->
-          <div class="col-md-4">
-            <div class="footer-section">
-              <h5 class="text-white mb-3">📧 Contattaci</h5>
-              <form class="contact-form">
-                <div class="mb-3">
-                  <input
-                    type="email"
-                    class="form-control"
-                    placeholder="Scrivi la tua mail"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <textarea
-                    class="form-control"
-                    rows="3"
-                    placeholder="Fà la tua domanda"
-                    required
-                  ></textarea>
-                </div>
-                <button type="submit" class="btn btn-light w-100">
-                  <i class="fas fa-paper-plane me-2"></i>Invia
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <!-- Divider -->
-        <div class="row mt-4">
-          <div class="col-12">
-            <hr class="footer-divider" />
-          </div>
-        </div>
-
-        <!-- Copyright -->
-        <div class="row mt-3">
-          <div class="col-12 text-center">
-            <p class="text-light mb-0">
-              &copy; 2025 Smoke Home - Tutti i diritti riservati (forse)
-            </p>
-          </div>
-        </div>
-      </div>
-    </footer>
+ <div id="footer"></div>
+ <script src="../script/footerScript.js"></script>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
