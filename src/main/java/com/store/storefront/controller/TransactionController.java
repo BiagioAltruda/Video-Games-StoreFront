@@ -35,7 +35,7 @@ public class TransactionController {
 
 	@GetMapping("/payment")
 	public String paymentPage() {
-		return "pages/Payment"; // -> src/main/resources/templates/pages/Payment.html
+		return "pages/Payment"; // /pages/Payment.html
 	}
 
 	// restituisce tutte le transazioni

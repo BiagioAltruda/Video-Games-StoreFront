@@ -53,7 +53,7 @@ async function pay(gameId) {
 
   } catch (e) {
     console.error(e); // Log errore
-    showAlert("danger", "❌ Errore di connessione o server non disponibile"); // Messaggio di errore
+    showAlert("danger", "Errore di connessione o server non disponibile"); // Messaggio di errore
   } finally {
     if (btn) btn.removeAttribute("disabled"); // Riabilita il bottone
   }

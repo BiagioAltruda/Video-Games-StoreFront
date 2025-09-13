@@ -1,6 +1,5 @@
 package com.store.storefront.model;
 
-
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,7 +19,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
-
 @Entity
 @Table(name = "transactions") // nome della tabella nel database
 public class Transaction {
@@ -31,39 +29,41 @@ public class Transaction {
 	@Positive(message = "id cannot be negative")
 	private Long id;
 
+	// Relazione Many-to-One: molte transazioni possono appartenere a un singolo
+	// player
+	// fetch = FetchType.LAZY -> il Player associato verrà caricato dal DB solo
+	// quando richiesto
+	@ManyToOne(fetch = FetchType.LAZY)
 
-	// Relazione Many-to-One: molte transazioni possono appartenere a un singolo player
-	// fetch = FetchType.LAZY -> il Player associato verrà caricato dal DB solo quando richiesto
-	@ManyToOne(fetch = FetchType.LAZY)  
-
-	// Specifica la colonna di join nella tabella 'transaction' che fa da foreign key verso la tabella 'player'
-	// In questo caso la colonna 'player_id' nella tabella 'transaction' referenzia la primary key di 'player'
-	@JoinColumn(name = "player_id")  
+	// Specifica la colonna di join nella tabella 'transaction' che fa da foreign
+	// key verso la tabella 'player'
+	// In questo caso la colonna 'player_id' nella tabella 'transaction' referenzia
+	// la primary key di 'player'
+	@JoinColumn(name = "player_id")
 
 	// Rappresenta il riferimento all'entità Player collegata a questa transazione
 	private Player player;
 
 	@ManyToOne
-	@JoinColumn(name = "game_id",nullable = false)
+	@JoinColumn(name = "game_id", nullable = false)
 	private Game game;
-
 
 	@Column(name = "price_paid")
 	@PositiveOrZero(message = "Cannot pay a negative amount")
 	private double pricePaid;
 
 	@JsonIgnore
-	@Column(name="transaction_date")
+	@Column(name = "transaction_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	private LocalDateTime date;
 
-	//Constructors
+	// Constructors
 	public Transaction() {
 
 	}
 
 	public Transaction(Long id, Player player, Game game, double pricePaid, LocalDateTime data) {
-	
+
 		this.id = id;
 		this.player = player;
 		this.game = game;
@@ -71,8 +71,7 @@ public class Transaction {
 		this.date = data;
 	}
 
-
-	//Getters and Setters
+	// Getters and Setters
 	public Long getId() {
 		return id;
 	}
@@ -112,9 +111,5 @@ public class Transaction {
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
-
-	
-
-	
 
 }

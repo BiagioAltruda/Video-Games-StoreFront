@@ -22,9 +22,7 @@ public class TrendingController {
 
 	TrendingService service;
 
-	public TrendingController() {
 
-	}
 
 	public TrendingController(TrendingService service) {
 		// costruttore pieno
