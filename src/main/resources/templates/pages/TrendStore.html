@@ -19,7 +19,7 @@
       referrerpolicy="no-referrer"
     />
     <!-- Il tuo CSS globale -->
-    <link rel="stylesheet" href="../styles/StoreFrontStyleSheet.css" />
+    <link rel="stylesheet" href="../styles/StoreFrontStyleSheetTrends.css" />
   </head>
 
   <body class="bg-light">
@@ -31,9 +31,11 @@
     <main class="py-4">
       <div class="container">
         <!-- Header + Refresh -->
-        <div class="d-flex align-items-center justify-content-between mb-3">
+        <div
+          class="d-flex align-items-center justify-content-between mb-3 mt-5"
+        >
           <h2 class="mb-0 d-flex align-items-center">
-            <i class="fas fa-fire me-2"></i>Trending Games
+            <i class="fas fa-trophy me-2"></i>Classifica Completa
           </h2>
         </div>
 
@@ -45,12 +47,13 @@
         <!-- Divider -->
         <hr class="my-5" />
 
-        
+        <!-- Contenitore per la lista di tutti i giochi -->
+        <div id="allGamesContainer" class="games-list-container">
+          <!-- La lista dei giochi viene generata qui via JS -->
+        </div>
 
         <!-- Divider -->
         <hr class="my-5" />
-
-    
       </div>
     </main>
 
