@@ -501,3 +501,314 @@ document.addEventListener('DOMContentLoaded', function() { // Quando il DOM è p
         editReleaseDateInput.max = today; // Imposta max data a oggi
     }
 }); // Fine DOMContentLoaded inizializzazione
+
+// Variabili globali
+let players = []; // Cambiato da 'users' a 'players' per coerenza
+const baseUrl = 'http://localhost:8080/smoke/player';
+
+// Elementi DOM
+const usersTableBody = document.getElementById('usersTableBody');
+const editUserSelect = document.getElementById('editUserSelect');
+const deleteUserSelect = document.getElementById('deleteUserSelect');
+const createUserSubmit = document.getElementById('createUserSubmit');
+const editUserSubmit = document.getElementById('editUserSubmit');
+const deleteUserSubmit = document.getElementById('deleteUserSubmit');
+const editUserBtn = document.getElementById('editUserBtn');
+const deleteUserBtn = document.getElementById('deleteUserBtn');
+
+// Inizializzazione
+document.addEventListener('DOMContentLoaded', function() {
+    loadPlayers();
+    setupEventListeners();
+});
+
+// Funzione per caricare i player dal database
+async function loadPlayers() {
+    try {
+        const response = await fetch(baseUrl);
+        
+        if (!response.ok) {
+            throw new Error(`Errore HTTP: ${response.status}`);
+        }
+        
+        players = await response.json();
+        renderPlayersTable();
+        populateSelects();
+        
+    } catch (error) {
+        console.error('Errore nel caricamento dei player:', error);
+        showToast('error', 'Errore nel caricamento dei player: ' + error.message);
+        
+        // Mostra messaggio di errore nella tabella
+        usersTableBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center text-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Errore nel caricamento dati: ${error.message}
+                </td>
+            </tr>
+        `;
+    }
+}
+
+// Funzione per renderizzare la tabella player
+function renderPlayersTable() {
+    usersTableBody.innerHTML = '';
+    
+    if (players.length === 0) {
+        usersTableBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Nessun player trovato nel database
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    players.forEach(player => {
+        const row = document.createElement('tr');
+        
+        // Formatta la data
+        let creationDate = 'N/A';
+        if (player.creationDate) {
+            if (typeof player.creationDate === 'string' && player.creationDate.includes('T')) {
+                creationDate = player.creationDate.split('T')[0];
+            } else {
+                creationDate = player.creationDate;
+            }
+        }
+        
+        row.innerHTML = `
+            <td>${player.id}</td>
+            <td>${player.name}</td>
+            <td>${player.language || 'N/A'}</td>
+            <td><span class="badge bg-primary">Livello ${player.playerLevel || 0}</span></td>
+            <td>${creationDate}</td>
+        `;
+        
+        usersTableBody.appendChild(row);
+    });
+}
+
+// Funzione per popolare i select nei modali
+function populateSelects() {
+    // Popola il select per modifica
+    editUserSelect.innerHTML = '<option value="">Seleziona un player</option>';
+    players.forEach(player => {
+        const option = document.createElement('option');
+        option.value = player.id;
+        option.textContent = `${player.name} (Livello ${player.playerLevel || 0})`;
+        option.setAttribute('data-name', player.name);
+        option.setAttribute('data-language', player.language || '');
+        option.setAttribute('data-playerLevel', player.playerLevel || '');
+        editUserSelect.appendChild(option);
+    });
+    
+    // Popola il select per eliminazione
+    deleteUserSelect.innerHTML = '<option value="">Seleziona un player</option>';
+    players.forEach(player => {
+        const option = document.createElement('option');
+        option.value = player.id;
+        option.textContent = `${player.name} (Livello ${player.playerLevel || 0})`;
+        deleteUserSelect.appendChild(option);
+    });
+}
+
+// Funzione per creare un nuovo player nel database
+async function createPlayer(playerData) {
+    try {
+        const response = await fetch(`${baseUrl}/new`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(playerData)
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || 'Errore nella creazione del player');
+        }
+        
+        const newPlayer = await response.json();
+        
+        // Ricarica i player dal database per avere dati aggiornati
+        await loadPlayers();
+        
+        // Chiudi il modale e resetta il form
+        bootstrap.Modal.getInstance(document.getElementById('createUserModal')).hide();
+        document.getElementById('createUserForm').reset();
+        
+        showToast('success', 'Player creato con successo!');
+        
+    } catch (error) {
+        console.error('Errore nella creazione del player:', error);
+        showToast('error', 'Errore nella creazione del player: ' + error.message);
+    }
+}
+
+// Funzione per aggiornare un player nel database
+async function updatePlayer(playerData) {
+    try {
+        const response = await fetch(`${baseUrl}/update`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(playerData)
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || 'Errore nell\'aggiornamento del player');
+        }
+        
+        const updatedPlayer = await response.json();
+        
+        // Ricarica i player dal database per avere dati aggiornati
+        await loadPlayers();
+        
+        // Chiudi il modale e resetta il form
+        bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
+        document.getElementById('editUserForm').reset();
+        
+        showToast('success', 'Player aggiornato con successo!');
+        
+    } catch (error) {
+        console.error('Errore nell\'aggiornamento del player:', error);
+        showToast('error', 'Errore nell\'aggiornamento del player: ' + error.message);
+    }
+}
+
+// Funzione per eliminare un player dal database
+async function deletePlayer(playerId) {
+    try {
+        const response = await fetch(`${baseUrl}/${playerId}`, {
+            method: 'DELETE'
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || 'Errore nell\'eliminazione del player');
+        }
+        
+        // Ricarica i player dal database per avere dati aggiornati
+        await loadPlayers();
+        
+        // Chiudi il modale
+        bootstrap.Modal.getInstance(document.getElementById('deleteUserModal')).hide();
+        
+        showToast('success', 'Player eliminato con successo!');
+        
+    } catch (error) {
+        console.error('Errore nell\'eliminazione del player:', error);
+        showToast('error', 'Errore nell\'eliminazione del player: ' + error.message);
+    }
+}
+
+// Funzione per impostare i listener degli eventi
+function setupEventListeners() {
+    // Creazione player
+    createUserSubmit.addEventListener('click', function() {
+        const name = document.getElementById('createUsername').value;
+        const password = document.getElementById('createPassword').value;
+        const language = document.getElementById('createLanguage').value;
+        const playerLevel = parseInt(document.getElementById('createLevel').value) || 0;
+        
+        if (!name || !password) {
+            showToast('error', 'Nome e password sono obbligatori');
+            return;
+        }
+        
+        const playerData = {
+            name: name,
+            password: password,
+            language: language,
+            playerLevel: playerLevel
+        };
+        
+        createPlayer(playerData);
+    });
+    
+    // Modifica player
+    editUserSubmit.addEventListener('click', function() {
+        const playerId = parseInt(editUserSelect.value);
+        const name = document.getElementById('editUsername').value;
+        const language = document.getElementById('editLanguage').value;
+        const playerLevel = parseInt(document.getElementById('editLevel').value) || 0;
+        
+        if (!playerId) {
+            showToast('error', 'Seleziona un player da modificare');
+            return;
+        }
+        
+        // Prendi i dati originali per confronto
+        const selectedOption = editUserSelect.options[editUserSelect.selectedIndex];
+        const originalName = selectedOption.getAttribute('data-name');
+        const originalLanguage = selectedOption.getAttribute('data-language');
+        const originalPlayerLevel = selectedOption.getAttribute('data-playerLevel');
+        
+        const playerData = {
+            id: playerId
+        };
+        
+        // Aggiungi solo i campi che sono stati modificati
+        if (name && name !== originalName) {
+            playerData.name = name;
+        }
+        if (language !== originalLanguage) {
+            playerData.language = language;
+        }
+        if (playerLevel.toString() !== originalPlayerLevel) {
+            playerData.playerLevel = playerLevel;
+        }
+        
+        // Se non ci sono modifiche, esci
+        if (Object.keys(playerData).length === 1) {
+            showToast('info', 'Nessuna modifica da salvare');
+            return;
+        }
+        
+        updatePlayer(playerData);
+    });
+    
+    // Eliminazione player
+    deleteUserSubmit.addEventListener('click', function() {
+        const playerId = parseInt(deleteUserSelect.value);
+        
+        if (!playerId) {
+            showToast('error', 'Seleziona un player da eliminare');
+            return;
+        }
+        
+        // Conferma aggiuntiva per eliminazione
+        if (confirm('Sei sicuro di voler eliminare definitivamente questo player?')) {
+            deletePlayer(playerId);
+        }
+    });
+    
+    // Quando si seleziona un player da modificare
+    editUserSelect.addEventListener('change', function() {
+        const playerId = parseInt(this.value);
+        const selectedOption = this.options[this.selectedIndex];
+        
+        if (selectedOption && playerId) {
+            document.getElementById('editUsername').value = selectedOption.getAttribute('data-name') || '';
+            document.getElementById('editLanguage').value = selectedOption.getAttribute('data-language') || '';
+            document.getElementById('editLevel').value = selectedOption.getAttribute('data-playerLevel') || '';
+        } else {
+            document.getElementById('editUsername').value = '';
+            document.getElementById('editLanguage').value = '';
+            document.getElementById('editLevel').value = '';
+        }
+    });
+}
+
+// Funzione per mostrare toast
+function showToast(type, message) {
+    console.log(`${type.toUpperCase()}: ${message}`);
+    // Usa alert per semplicità, puoi sostituire con la tua implementazione di toast
+    alert(`${type.toUpperCase()}: ${message}`);
+}

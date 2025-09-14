@@ -363,171 +363,155 @@
   </div>
 </div>
 
-        <!-- UTENTI - Sostituito Amici con Utenti -->
-        <div class="tab-pane fade" id="tab-users">
-          <div class="card game-details-container">
-            <div class="card-header bg-main">
-              <h5 class="mb-0">Gestione Utenti</h5>
-            </div>
-
-            <div class="card-body text-contrast">
-              <div class="d-grid gap-2 d-md-flex mb-4">
-                <button class="btn btn-success me-md-2" data-bs-toggle="modal" data-bs-target="#createUserModal">
-                  <i class="fas fa-user-plus me-2"></i>Crea nuovo utente
-                </button>
-                <button class="btn btn-warning me-md-2" data-bs-toggle="modal" data-bs-target="#editUserModal">
-                  <i class="fas fa-user-edit me-2"></i>Modifica Utente
-                </button>
-                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
-                  <i class="fas fa-user-times me-2"></i>Elimina utente
-                </button>
-              </div>
-
-              <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Username</th>
-                      <th>Email</th>
-                      <th>Ruolo</th>
-                      <th>Data Registrazione</th>
-                    </tr>
-                  </thead>
-                  <tbody id="usersTableBody">
-                    <tr>
-                      <td>1</td>
-                      <td>admin</td>
-                      <td>admin@smokehome.com</td>
-                      <td><span class="badge bg-danger">Amministratore</span></td>
-                      <td>01/01/2023</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>mario_rossi</td>
-                      <td>mario.rossi@example.com</td>
-                      <td><span class="badge bg-primary">Utente</span></td>
-                      <td>15/03/2023</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+<!-- UTENTI - Sostituito Amici con Utenti -->
+<div class="tab-pane fade" id="tab-users">
+  <div class="card game-details-container">
+    <div class="card-header bg-main">
+      <h5 class="mb-0">Gestione Utenti</h5>
     </div>
 
-    <!-- Modale Crea Utente -->
-    <div class="modal fade" id="createUserModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Crea Nuovo Utente</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input type="text" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Ruolo</label>
-                <select class="form-select">
-                  <option value="user">Utente</option>
-                  <option value="admin">Amministratore</option>
-                </select>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-            <button type="button" class="btn btn-success">Crea Utente</button>
-          </div>
-        </div>
+    <div class="card-body text-contrast">
+      <div class="d-grid gap-2 d-md-flex mb-4">
+        <button class="btn btn-success me-md-2" data-bs-toggle="modal" data-bs-target="#createUserModal">
+          <i class="fas fa-user-plus me-2"></i>Crea nuovo utente
+        </button>
+        <button class="btn btn-warning me-md-2" id="editUserBtn" data-bs-toggle="modal" data-bs-target="#editUserModal">
+          <i class="fas fa-user-edit me-2"></i>Modifica Utente
+        </button>
+        <button class="btn btn-danger" id="deleteUserBtn" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
+          <i class="fas fa-user-times me-2"></i>Elimina utente
+        </button>
       </div>
-    </div>
 
-    <!-- Modale Modifica Utente -->
-    <div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Modifica Utente</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="mb-3">
-                <label class="form-label">Seleziona Utente</label>
-                <select class="form-select">
-                  <option value="1">admin</option>
-                  <option value="2">mario_rossi</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Nuovo Username</label>
-                <input type="text" class="form-control">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Nuova Email</label>
-                <input type="email" class="form-control">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Nuovo Ruolo</label>
-                <select class="form-select">
-                  <option value="user">Utente</option>
-                  <option value="admin">Amministratore</option>
-                </select>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-            <button type="button" class="btn btn-warning">Salva Modifiche</button>
-          </div>
-        </div>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Ruolo</th>
+              <th>Data Registrazione</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <!-- I dati verranno caricati dinamicamente via JavaScript -->
+          </tbody>
+        </table>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- Modale Elimina Utente -->
-    <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Elimina Utente</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Modale Crea Utente -->
+<div class="modal fade" id="createUserModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Crea Nuovo Utente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="createUserForm">
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" id="createUsername" required>
           </div>
-          <div class="modal-body">
-            <form>
-              <div class="mb-3">
-                                <label class="form-label">Seleziona Utente da eliminare</label>
-                <select class="form-select">
-                  <option value="2">mario_rossi (Utente)</option>
-                </select>
-              </div>
-              <div class="alert alert-danger">
-                <i class="fas fa-exclamation-triangle me-2"></i>
-                Attenzione: Questa operazione non può essere annullata.
-              </div>
-            </form>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" id="createEmail" required>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-            <button type="button" class="btn btn-danger">Elimina Definitivamente</button>
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" id="createPassword" required>
           </div>
-        </div>
+          <div class="mb-3">
+            <label class="form-label">Ruolo</label>
+            <select class="form-select" id="createRole">
+              <option value="USER">Utente</option>
+              <option value="ADMIN">Amministratore</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        <button type="button" class="btn btn-success" id="createUserSubmit">Crea Utente</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Modale Modifica Utente -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modifica Utente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editUserForm">
+          <div class="mb-3">
+            <label class="form-label">Seleziona Utente</label>
+            <select class="form-select" id="editUserSelect">
+              <option value="">Seleziona un utente</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nuovo Username</label>
+            <input type="text" class="form-control" id="editUsername">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nuova Email</label>
+            <input type="email" class="form-control" id="editEmail">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nuovo Ruolo</label>
+            <select class="form-select" id="editRole">
+              <option value="USER">Utente</option>
+              <option value="ADMIN">Amministratore</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        <button type="button" class="btn btn-warning" id="editUserSubmit">Salva Modifiche</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modale Elimina Utente -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Elimina Utente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="deleteUserForm">
+          <div class="mb-3">
+            <label class="form-label">Seleziona Utente da eliminare</label>
+            <select class="form-select" id="deleteUserSelect">
+              <option value="">Seleziona un utente</option>
+            </select>
+          </div>
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Attenzione: Questa operazione non può essere annullata.
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        <button type="button" class="btn btn-danger" id="deleteUserSubmit">Elimina Definitivamente</button>
+      </div>
+    </div>
+  </div>
+</di
 
     <!-- Footer -->
     <div id="footer"></div>
