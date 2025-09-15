@@ -148,7 +148,7 @@ function showGameDetails(gameId) {
                                     </tr>
                                     </thead>
                                     <tbody id="review-body">
-                                    ${showReviews(game.id)}
+                                   
                                     </tbody>
                                     </table>
                                     </div>
@@ -164,7 +164,7 @@ function showGameDetails(gameId) {
 
         
         document.getElementById('cards-container').innerHTML = gameDetails;
-        
+        showReviews(game.id);
         // Aggiungi gli event listener dopo che l'HTML è stato renderizzato
         setTimeout(() => {
             const reviewForm = document.getElementById('reviewForm');
