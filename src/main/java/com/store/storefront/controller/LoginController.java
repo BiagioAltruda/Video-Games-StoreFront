@@ -74,4 +74,11 @@ public class LoginController {
         validSessions.remove(token);
         return ResponseEntity.status(200).build();
     }
+
+    @GetMapping("is-admin")
+    public ResponseEntity<Boolean> isAdmin(@RequestHeader(value = "X-Token", required = false) String token) {
+        if (!validSessions.containsKey(token))
+            return ResponseEntity.status(404).build();
+        return ResponseEntity.ok(validSessions.get(token).isAdmin());
+    }
 }

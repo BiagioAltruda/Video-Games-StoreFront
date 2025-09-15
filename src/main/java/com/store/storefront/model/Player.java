@@ -35,6 +35,10 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
  
 	private String language;
 
+	@Column(name = "is_Admin")
+	@JsonIgnore
+	private boolean isAdmin;
+
 	@JsonIgnore
 	@ManyToMany
 	@JoinTable(
@@ -173,7 +177,15 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 	public void setReviews(Set<Review> reviews) {
 		this.reviews = reviews;
 	}
- 
+
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean admin) {
+		isAdmin = admin;
+	}
+
 	@Override
 	public String toString() {
 		return "Player{" +

@@ -71,6 +71,7 @@ function showGameDetails(gameId) {
             return response.json();
         })
         .then((game) => {
+            console.log(game);
         const gameDetails = `
         <div class="game-details-container">
             <div class="container mt-4">

@@ -65,8 +65,8 @@ function showFeaturedGame(index) {
     document.getElementById('featured-game-container').innerHTML = featuredCard;
     currentFeaturedIndex = index;
     
-    document.getElementById('current-game-number').textContent = index + 1;
-    document.getElementById('total-games').textContent = allGames.length;
+    // document.getElementById('current-game-number').textContent = index + 1;
+    // document.getElementById('total-games').textContent = allGames.length;
 }
 
 function nextFeaturedGame() {
@@ -253,15 +253,17 @@ function mostraRisultatiRicerca(giochi, titoloRicerca) {
 // Funzioni per i dettagli del gioco
 function showGameDetails(gameId) {
     const url = `http://localhost:8080/smoke/games/${gameId}`;
-
+    //console.log(`http://localhost:8080/smoke/games/${gameId}`);
     fetch(url)
         .then((response) => {
             if (!response.ok) {
                 throw new Error('Gioco non trovato');
             }
+            console.log(response);
             return response.json();
         })
         .then((game) => {
+            console.log(game);
         const gameDetails = `
         <div class="game-details-container">
             <div class="container mt-4">

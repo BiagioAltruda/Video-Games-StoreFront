@@ -1,4 +1,3 @@
-
 (function () {                     // IIFE = funzione auto-eseguita: isola le variabili dallo scope globale
   "use strict";                    // Modalità rigorosa: aiuta a evitare errori silenziosi
 
