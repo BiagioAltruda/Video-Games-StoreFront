@@ -12,6 +12,33 @@
     <!-- CSS del progetto -->
     <link rel="stylesheet" href="../styles/StoreFrontStyleSheet.css" />
   </head>
+
+  <style>
+/* STILE MIGLIORATO PER LE NAV PILLS - SPECIFICITÀ AUMENTATA */
+ul.nav.nav-pills .nav-item .nav-link {
+    color: #51073a !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+ul.nav.nav-pills .nav-item .nav-link.active {
+    background-color: #51073a !important;
+    color: white !important;
+    border-color: #51073a;
+}
+
+ul.nav.nav-pills .nav-item .nav-link:hover:not(.active) {
+    background-color: rgba(81, 7, 58, 0.1);
+    border-color: rgba(81, 7, 58, 0.3);
+}
+
+/* Aggiungiamo anche stile per le icone */
+ul.nav.nav-pills .nav-item .nav-link .fas {
+    color: inherit !important;
+}
+</style>
+
   <body>
 
     <!-- Navbar -->
@@ -42,24 +69,23 @@
 <!-- GIOCHI - Tab con sottomenù -->
 <div class="tab-pane fade show active" id="tab-games">
   <!-- Sottomenù Giochi -->
-  <ul class="nav nav-pills mb-4">
-    <li class="nav-item">
-      <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#insert-game">
-        <i class="fas fa-plus-circle me-2"></i>Inserisci Gioco
-      </button>
-    </li>
-    <li class="nav-item">
-      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#edit-game">
-        <i class="fas fa-edit me-2"></i>Modifica Gioco
-      </button>
-    </li>
-    <li class="nav-item">
-      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#delete-game">
-        <i class="fas fa-trash me-2"></i>Rimuovi Gioco
-      </button>
-    </li>
-  </ul>
-
+     <ul class="nav nav-pills mb-4">
+            <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#insert-game">
+                    <i class="fas fa-plus-circle me-2"></i>Inserisci Gioco
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#edit-game">
+                    <i class="fas fa-edit me-2"></i>Modifica Gioco
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#delete-game">
+                    <i class="fas fa-trash me-2"></i>Rimuovi Gioco
+                </button>
+            </li>
+        </ul>
   <div class="tab-content">
     <!-- Sottotab Inserisci Gioco -->
     <div class="tab-pane fade show active" id="insert-game">
