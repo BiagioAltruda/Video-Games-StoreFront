@@ -65,8 +65,6 @@ function showFeaturedGame(index) {
     document.getElementById('featured-game-container').innerHTML = featuredCard;
     currentFeaturedIndex = index;
     
-    document.getElementById('current-game-number').textContent = index + 1;
-    document.getElementById('total-games').textContent = allGames.length;
 }
 
 function nextFeaturedGame() {
