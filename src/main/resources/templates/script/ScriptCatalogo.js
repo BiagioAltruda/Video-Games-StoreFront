@@ -139,7 +139,20 @@ function showGameDetails(gameId) {
 
                                 <div id="reviewsList">
                                     <h5>Recensioni degli utenti</h5>
-                                    <p class="text-muted">Ancora nessuna recensione. Sii il primo a recensire!</p>
+                                    <div id="review-container">
+                                    <table>
+                                    <thead>
+                                    <tr>
+                                    <th>Descrizione</th>
+                                    <th>Utente</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="review-body">
+                                    ${showReviews(game.id)}
+                                    </tbody>
+                                    </table>
+                                    </div>
+                                    <p class="text-muted" id="no-review">Ancora nessuna recensione. Sii il primo a recensire!</p>
                                 </div>
                             </div>
                         </div>
@@ -148,6 +161,7 @@ function showGameDetails(gameId) {
             </div>
         </div>
         `;
+
         
         document.getElementById('cards-container').innerHTML = gameDetails;
         
@@ -186,23 +200,95 @@ function showGameDetails(gameId) {
 }
 
 // Funzione per inviare la recensione (da implementare)
-function submitReview(gameId) {
+async function submitReview(gameId) {
     const form = document.getElementById('reviewForm');
     const formData = new FormData(form);
-    
-    // Qui dovresti implementare la logica per inviare la recensione al server
-    console.log('Recensione per il gioco', gameId, ':', {
-        rating: formData.get('rating'),
-        title: formData.get('title'),
-        content: formData.get('content')
-    });
-    
-    // Esempio: mostra un messaggio di successo
-    alert('Recensione inviata con successo!');
-    form.reset();
-    document.getElementById('submitReviewBtn').disabled = true;
+
+    try {
+        const reviewerId = await getPlayerId();
+        const positive = formData.get('rating') === '👍';
+
+        const review = {
+            reviewerId: reviewerId,
+            reviewedId: gameId,
+            reviewedType: "GAME",
+            content: formData.get('content'),
+            positiveReview: positive
+        }
+
+        const response = await fetch('http://localhost:8080/smoke/review', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(review)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Failed to submit review: ${response.statusText} - ${errorText}`);
+        }
+        await response.json();
+
+        alert('Recensione inviata con successo!');
+        form.reset();
+        document.getElementById('submitReviewBtn').disabled = true;
+
+    } catch (error) {
+        console.error("Error submitting review:", error);
+        alert(`Impossibile inviare la recensione. Dettagli: ${error.message}`);
+        document.getElementById('submitReviewBtn').disabled = false;
+    }
 }
 
+async function showReviews(gameId) {
+    try {
+        const response = await fetch(`http://localhost:8080/smoke/review/entity?id=10090&type=GAME`);
+        if (!response.ok) {
+            throw new Error(response.statusText);
+        }
+        const reviews = await response.json();
+
+        const reviewBody = document.getElementById('review-body');
+
+        // Clear previous content to prevent duplicates
+        reviewBody.innerHTML = '';
+
+        // Check if there are reviews to display
+        if (reviews.length === 0) {
+            document.getElementById('no-review').style.display = 'block';
+        }
+        else{
+            document.getElementById('no-review').style.display = 'none';
+        // Add a header for context
+        const header = `
+            <thead>
+                <tr>
+                    <th>Recensione</th>
+                    <th>Valutazione</th>
+                </tr>
+            </thead>
+        `;
+
+        for (const review of reviews) {
+            if(review.positiveReview)
+                reviewBody.innerHTML += `
+                <tr>
+                    <td>${review.content}</td>
+                    <td>👍</td> </tr>
+            `;
+            else
+                reviewBody.innerHTML += `
+                <tr>
+                    <td>${review.content}</td>
+                    <td>👎</td> </tr>
+            `;
+
+            }
+        }
+    } catch (err) {
+        console.error("Error fetching reviews:", err);
+        document.getElementById('review-body').innerHTML = `<tr><td colspan="2" class="text-danger text-center">Impossibile caricare le recensioni.</td></tr>`;
+    }
+}
 // funzione per tornare alla lista giochi
 function closeGameDetails() {
     loadGames(); // Richiama la funzione che carica tutti i giochi
@@ -493,10 +579,6 @@ async function goToPayment(game){
     localStorage.setItem("data", transactionData);
     window.location.assign("Payment.html")
 }
-
-
-
-
 async function getPlayerId() {
     let token = localStorage.getItem('X-Token');
     let options = {method : 'GET' , headers : {'X-Token': token}};

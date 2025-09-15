@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("smoke/review")
 public class ReviewController {
@@ -27,8 +27,8 @@ public class ReviewController {
     public Review getReviewById(@PathVariable int id) {
         return reviewService.getReviewById(id);
     }
-    @GetMapping("/entity/{id}-{type}")
-    public ResponseEntity<List<Review>> getReviewByEntity(@PathVariable int id, @PathVariable String type) {
+    @GetMapping("/entity")
+    public ResponseEntity<List<Review>> getReviewByEntity(@RequestParam ("id") int id, @RequestParam ("type") String type) {
         if (type.equals("PLAYER"))
             return ResponseEntity.ok(reviewService.findReviewsByEntityIdAndType(id, ReviewableEntities.PLAYER));
         if (type.equals("GAME"))
