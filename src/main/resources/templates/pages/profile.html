@@ -14,6 +14,77 @@
     <!-- CSS del progetto -->
     <link rel="stylesheet" href="../styles/StoreFrontStyleSheetProfile&Admin.css" />
   </head>
+  
+  <style>
+/* NUOVA VISUALIZZAZIONE A ELENCO ORIZZONTALE */
+#gamesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.game-row {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.2s ease;
+}
+
+.game-row:hover {
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.game-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-right: 15px;
+  border-radius: 4px;
+}
+
+.game-info {
+  flex-grow: 1;
+}
+
+.game-title {
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: var(--main-color);
+}
+
+.game-meta {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0;
+}
+
+.game-status {
+  padding: 6px 12px;
+  background-color: var(--secondary-color);
+  color: white;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  margin-left: 15px;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .game-row {
+    flex-wrap: wrap;
+  }
+  
+  .game-status {
+    margin-left: 0;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+  }
+}
+</style>
+
   <body>
 
     <!-- Navbar -->

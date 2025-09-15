@@ -45,7 +45,6 @@ async function showGames() {
     </div>`;
 
   try {
-    // Call getProfile just once and get the ID from the result
     const profileData = await getProfile();
     const playerId = profileData.id;
 
@@ -63,26 +62,26 @@ async function showGames() {
       gamesList.style.display = 'none';
     } else {
       gamesEmpty.style.display = 'none';
-      gamesList.style.display = 'flex-block';
+      gamesList.style.display = 'block';
       gamesList.innerHTML = ''; // Clear the list before adding items
+      
       for (const game of games) {
-        gamesList.innerHTML += `
-          <div class="col-md-4 mb-4">
-            <div class="card game-card" onclick="showGameDetails(${game.id})" style="cursor: pointer;">
-              <img src="${game.bannerPath ? game.bannerPath : 'https://via.placeholder.com/300x450/51073a/ecf0f1?text=No+Image'}" 
-                   class="card-img-top" alt="${game.name}"
-                   onerror="this.src='https://via.placeholder.com/300x450/51073a/ecf0f1?text=Image+Error'">
-              <div class="card-overlay">
-                <h5 class="card-title">${game.name}</h5>
-                <p class="card-developer">${game.developer}</p>
-                <p class="card-genre">${game.genre}</p>
-              </div>
-              <div class="card-body">
-                <p class="card-rating">${game.price ? '€' + game.price.toFixed(2) : 'Gratis'}</p>
-              </div>
-            </div>
+        const gameRow = document.createElement('div');
+        gameRow.className = 'game-row';
+        gameRow.onclick = () => showGameDetails(game.id);
+        
+        gameRow.innerHTML = `
+          <img src="${game.bannerPath ? game.bannerPath : 'https://via.placeholder.com/80x80/51073a/ecf0f1?text=No+Image'}" 
+               class="game-image" alt="${game.name}"
+               onerror="this.src='https://via.placeholder.com/80x80/51073a/ecf0f1?text=Image+Error'">
+          <div class="game-info">
+            <div class="game-title">${game.name}</div>
+            <p class="game-meta">${game.developer} / ${game.genre}</p>
           </div>
+          <div class="game-status">Acquistato</div>
         `;
+        
+        gamesList.appendChild(gameRow);
       }
     }
   } catch (error) {
