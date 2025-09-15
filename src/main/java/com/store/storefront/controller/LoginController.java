@@ -82,3 +82,6 @@ public class LoginController {
         return ResponseEntity.ok(validSessions.get(token).isAdmin());
     }
 }
+
+
+

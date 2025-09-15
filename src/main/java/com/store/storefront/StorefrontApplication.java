@@ -12,6 +12,7 @@ public class StorefrontApplication {
 		EnvLoader.load();
 
 		SpringApplication.run(StorefrontApplication.class, args);
+		
 	}
 
 }
