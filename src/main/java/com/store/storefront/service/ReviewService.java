@@ -1,10 +1,10 @@
-package com.store.storefront.repository;
+package com.store.storefront.service;
 
 import com.store.storefront.ReviewableEntities;
-import com.store.storefront.model.Player;
 import com.store.storefront.model.Review;
-import com.store.storefront.model.Reviewable;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.store.storefront.repository.GameRepo;
+import com.store.storefront.repository.PlayerRepo;
+import com.store.storefront.repository.ReviewRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

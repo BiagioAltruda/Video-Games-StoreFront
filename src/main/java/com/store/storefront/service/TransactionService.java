@@ -66,5 +66,9 @@ public class TransactionService {
 
 	}
 
+	public List<Transaction> getTransactionsByPlayerId(Integer playerId) {
+		return transactionRepo.findByPlayer_Id(playerId);
+	}
+
 
 }

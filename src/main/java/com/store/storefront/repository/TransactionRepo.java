@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 public interface TransactionRepo extends JpaRepository<Transaction, Long> {
 
  // Restituisce tutte le transazioni legate a un certo player (tramite il suo id)
- List<Transaction> findByPlayer_Id(Long playerId);
+ List<Transaction> findByPlayer_Id(Integer player_id);
 
  // Restituisce tutte le transazioni legate a un certo game (tramite il suo id)
  List<Transaction> findByGame_Id(Long gameId);

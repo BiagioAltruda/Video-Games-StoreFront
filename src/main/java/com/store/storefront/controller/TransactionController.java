@@ -1,5 +1,6 @@
 package com.store.storefront.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.store.storefront.DTO.TransactionDTO;
@@ -58,6 +59,15 @@ public class TransactionController {
 		if (trans == null)
 			return ResponseEntity.notFound().build();
 		return ResponseEntity.ok(trans);
+	}
+	@GetMapping("player/{id}")
+	public ResponseEntity<List<Game>> getTransactionsByPlayerId(@PathVariable Integer id) {
+		List<Game> ownedGames = new ArrayList();
+		List<Transaction> transactions = transactionService.getTransactionsByPlayerId(id);
+		for (Transaction transaction : transactions) {
+			ownedGames.add(transaction.getGame());
+		}
+		return ResponseEntity.ok(ownedGames);
 	}
 
 	// Crea (201 Created)

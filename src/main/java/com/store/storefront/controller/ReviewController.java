@@ -2,7 +2,7 @@ package com.store.storefront.controller;
 
 import com.store.storefront.ReviewableEntities;
 import com.store.storefront.model.Review;
-import com.store.storefront.repository.ReviewService;
+import com.store.storefront.service.ReviewService;
 import com.store.storefront.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

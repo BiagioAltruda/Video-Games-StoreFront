@@ -27,8 +27,7 @@ public class Player implements Reviewable{ //Entity responsible for storing the 
 	private String name;
 	@NotBlank(message = "password cannot be blank")
 	private String password;
- 
- 
+
 	@PositiveOrZero(message = "player level cannot be negative")
 	private int playerLevel;
 	private LocalDate creationDate;

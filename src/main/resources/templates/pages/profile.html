@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="../script/authentication.js" ></script>
+    <script src="../script/ProfileScript.js"></script>
     <title>Smoke Home – Profilo personale</title>
 
     <!-- Bootstrap & Font Awesome -->
@@ -24,13 +25,11 @@
 </div>
 
     <!-- PROFILO -->
+
     <div class="container my-4">
       <!-- Header profilo -->
-      <div class="d-flex align-items-center gap-3 mb-4 text-contrast">
-        <div>
-          <h4 class="mb-0 context-aware-text" id="profileUsername">Username</h4>
-          <small class="text-muted" id="profileEmail">user@example.com</small>
-        </div>
+      <div id="profile-welcome"></div>
+      <script>getProfile();showProfile()</script>
       </div>
 
       <!-- Tabs -->
@@ -49,18 +48,8 @@
       <div class="tab-content pt-3">
         <!-- GIOCHI (invariato) -->
         <div class="tab-pane fade show active" id="tab-games">
-          <div class="card game-details-container">
-            <div class="card-header bg-main">
-              <h5 class="mb-0">La tua libreria</h5>
-            </div>
-            <div class="card-body text-contrast">
-              <div id="gamesEmpty" class="text-center mb-3">
-                <p class="mb-2">Nessun gioco in libreria.</p>
-                <a href="../pages/Catalogo.html" class="btn btn-primary">Vai al catalogo</a>
-              </div>
-              <div class="row g-3" id="gamesList"></div>
-            </div>
-          </div>
+          <script>showGames()</script>
+        </div>
         </div>
 
         <!-- AMICI -->
@@ -68,6 +57,9 @@
   <div class="card game-details-container">
     <div class="card-header bg-main">
       <h5 class="mb-0">I tuoi amici</h5>
+      <div id="friend-list">
+
+      </div>
     </div>
 
     <div class="card-body text-contrast">
@@ -146,7 +138,6 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-     <script src="../script/ProfileScript.js"></script>
       <script src="../script/RegisterScript.js"></script>
   </body>
 </html>
