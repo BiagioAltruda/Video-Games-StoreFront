@@ -353,3 +353,22 @@ body {
         font-size: 1.1rem;
     }
 }
+
+/* Colore link delle tab */
+.nav-tabs .nav-link {
+  color: var(--main-color) !important;
+}
+
+/* Colore tab attiva */
+.nav-tabs .nav-link.active {
+  color: var(--main-color) !important;
+  background-color: transparent;   /* niente sfondo blu */
+  border-color: transparent;       /* niente bordino blu */
+  font-weight: bold;               /* opzionale per evidenziare */
+}
+
+/* Colore hover */
+.nav-tabs .nav-link:hover {
+  color: var(--secondary-color) !important;
+}
+

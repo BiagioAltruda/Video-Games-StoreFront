@@ -154,3 +154,86 @@ document.getElementById("navbar").innerHTML =`
       </div>
     </div>
     `
+    // CSS come stringa
+const modalStyles = `
+  #loginModal .modal-content,
+  #registerModal .modal-content {
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 18px 48px rgba(0,0,0,0.35);
+    border: 1px solid rgba(81, 7, 58, 0.25);
+  }
+
+  #loginModal .modal-header,
+  #registerModal .modal-header {
+    background: var(--main-color);
+    color: var(--light-color);
+  }
+
+  #loginModal .modal-header .btn-close,
+  #registerModal .modal-header .btn-close {
+    filter: invert(1) grayscale(100%);
+    opacity: 0.8;
+  }
+  #loginModal .modal-header .btn-close:hover,
+  #registerModal .modal-header .btn-close:hover {
+    opacity: 1;
+  }
+
+  #loginModal .modal-body,
+  #registerModal .modal-body {
+    background: #fff;
+    padding: 1.25rem 1.25rem 0.75rem;
+  }
+
+  #loginModal .input-group-text,
+  #registerModal .input-group-text {
+    background: rgba(166, 177, 178, 0.18);
+    color: var(--main-color);
+    border-color: var(--secondary-color);
+  }
+
+  #loginModal .form-control,
+  #registerModal .form-control {
+    border-color: var(--secondary-color);
+    color: var(--text-dark);
+  }
+
+  #loginModal .form-control:focus,
+  #registerModal .form-control:focus {
+    border-color: var(--main-color);
+    box-shadow: 0 0 0 0.2rem rgba(81, 7, 58, 0.15);
+  }
+
+  #loginModal .modal-footer,
+  #registerModal .modal-footer {
+    background: #fafafa;
+  }
+
+  #loginModal .btn-primary,
+  #registerModal .btn-primary {
+    background: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: var(--main-color);
+    font-weight: 600;
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  }
+
+  #loginModal .btn-primary:hover,
+  #registerModal .btn-primary:hover {
+    background: var(--light-color);
+    border-color: var(--light-color);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+  }
+
+  .modal-backdrop.show {
+    opacity: .35;
+    backdrop-filter: blur(2px);
+  }
+`;
+
+// Creo <style> e lo attacco a <head>
+const styleEl = document.createElement("style");
+styleEl.textContent = modalStyles;
+document.head.appendChild(styleEl);
