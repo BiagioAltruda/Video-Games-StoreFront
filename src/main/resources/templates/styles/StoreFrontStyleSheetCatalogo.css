@@ -382,3 +382,110 @@ body {
     from { opacity: 0; }
     to { opacity: 1; }
 }
+
+#review-body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#review-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+#review-body thead {
+    background-color: #1a1a2e;
+    color: white;
+}
+
+#review-body th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+#review-body tr {
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s;
+}
+
+#review-body tr:last-child {
+    border-bottom: none;
+}
+
+#review-body tr:hover {
+    background-color: #f8f9fa;
+}
+
+#review-body td {
+    padding: 12px 15px;
+    vertical-align: top;
+}
+
+#review-body td:first-child {
+    width: 75%;
+    color: #333;
+    line-height: 1.5;
+}
+
+#review-body td:last-child {
+    text-align: center;
+    font-size: 1.2em;
+    width: 25%;
+}
+
+/* Messaggio quando non ci sono recensioni */
+#no-review {
+    text-align: center;
+    padding: 30px;
+    color: #6c757d;
+    font-style: italic;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin: 20px 0;
+    border: 1px dashed #dee2e6;
+}
+
+/* Messaggio di errore */
+.text-danger {
+    color: #dc3545;
+    padding: 20px;
+    text-align: center;
+    background-color: #f8d7da;
+    border-radius: 8px;
+    margin: 20px 0;
+    border: 1px solid #f5c6cb;
+}
+
+/* Responsive design per dispositivi mobili */
+@media (max-width: 768px) {
+    #review-body table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    #review-body th, 
+    #review-body td {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+    
+    #review-body td:first-child {
+        width: 70%;
+    }
+    
+    #review-body td:last-child {
+        width: 30%;
+        font-size: 1.1em;
+    }
+    
+    #no-review {
+        padding: 20px 15px;
+        margin: 15px 0;
+    }
+}
