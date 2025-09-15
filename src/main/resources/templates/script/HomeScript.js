@@ -311,9 +311,9 @@ function showGameDetails(gameId) {
                 </div>
 
                 <div class="mt-4">
-                  <button type="button" class="btn btn-primary me-2" onclick="window.location.href='Payment.html'">
-                    <i class="fas fa-shopping-cart me-1"></i>Acquista
-                  </button>
+                 <button type="button" class="btn btn-primary me-2" id="buyBtn">
+  <i class="fas fa-shopping-cart me-1"></i>Acquista
+</button>
                   <button type="button" class="btn btn-secondary" onclick="closeGameDetails()">
                     <i class="fas fa-arrow-left me-1"></i>Torna indietro
                   </button>
@@ -324,8 +324,13 @@ function showGameDetails(gameId) {
         </div>`;
 
       cards.innerHTML = gameDetails;
+      const buyBtn = document.getElementById('buyBtn');
+if (buyBtn) {
+  buyBtn.addEventListener('click', () => goToPayment(game));
+}
       // porta in vista (opzionale)
       cards.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
     })
     .catch((error) => {
       console.error("Errore durante il recupero dei dettagli", error);
@@ -426,3 +431,44 @@ document.addEventListener('DOMContentLoaded', function() {
     // Carica i giochi
     loadGames();
 });
+
+async function goToPayment(game){
+    if(!checkLoggedIn()){
+        alert("Devi essere loggato prima di poter procede all'acquisto");
+        return;
+    }
+    const playerId = await getPlayerId();
+    const transactionData = JSON.stringify({
+        "player": playerId,
+        "game": game.id,
+        "gameName": game.name,
+        "pricePaid": game.price,
+        "date" : new Date().toLocaleDateString('en-US')
+    });
+    localStorage.setItem("data", transactionData);
+    window.location.assign("Payment.html")
+}
+
+
+
+
+async function getPlayerId() {
+    let token = localStorage.getItem('X-Token');
+    let options = {method : 'GET' , headers : {'X-Token': token}};
+    try {
+        const response = await fetch(`http://localhost:8080/smoke/accounts/profile`, options);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const playerId = data.id;
+
+        console.log(`The player ID is: ${playerId}`);
+        return playerId; // You can now return the ID from the function
+    } catch (err) {
+        console.error("Failed to fetch player ID:", err);
+        return null; // Or throw the error to the caller
+    }
+}
