@@ -41,8 +41,8 @@ public class FriendsController {
 		return service.findById(id);
 	}
 //fa vedere lista amici
-	@GetMapping("friend-list")
-	public List<Friends> getFriendsList(@RequestParam int id) {
+	@GetMapping("friend-list/{id}")
+	public List<Friends> getFriendsList(@PathVariable int id) {
 		return service.getFriendsList(id);
 	}
 }

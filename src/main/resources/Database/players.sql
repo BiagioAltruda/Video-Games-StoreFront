@@ -31,6 +31,7 @@ CREATE TABLE `players` (
   `password` varchar(255) DEFAULT NULL,
   `language` varchar(255) DEFAULT NULL,
   `reviews` int DEFAULT NULL,
+  `is_admin` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -41,7 +42,7 @@ CREATE TABLE `players` (
 
 LOCK TABLES `players` WRITE;
 /*!40000 ALTER TABLE `players` DISABLE KEYS */;
-INSERT INTO `players` VALUES (1,'biagio',0,0,NULL,'test',NULL,NULL),(4,'vale',NULL,0,'2025-09-09','skibidiboppi',NULL,NULL);
+INSERT INTO `players` VALUES (1,'biagio',0,0,NULL,'test',NULL,NULL,1),(4,'vale',NULL,0,'2025-09-09','skibidiboppi',NULL,NULL,0);
 /*!40000 ALTER TABLE `players` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-09-10  9:32:45
+-- Dump completed on 2025-09-15 12:58:14

@@ -58,7 +58,21 @@
     <div class="card-header bg-main">
       <h5 class="mb-0">I tuoi amici</h5>
       <div id="friend-list">
-
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Livello</th>
+              <th>Data Registrazione</th>
+            </tr>
+            </thead>
+            <tbody id="players-table">
+            <script>showFriends()</script>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -73,7 +87,7 @@
       <!-- Form: SOLO FRIEND_ID -->
       <form class="row g-2 mb-3" id="addFriendForm" novalidate>
         <div class="col-md-4">
-          <label for="friendId" class="form-label mb-1">FRIEND_ID (amico)</label>
+          <label for="friendId" class="form-label mb-1">ID amico</label>
           <input
             type="number"
             class="form-control"
@@ -87,7 +101,7 @@
            <div class="form-text">Inserisci l’ID numerico del giocatore da aggiungere.</div>
         </div>
         <div class="col-auto d-flex align-items-end">
-          <button type="submit" class="btn btn-primary" disabled>Aggiungi amico</button>
+          <button type="button" class="btn btn-primary" onclick="addFriend()">Aggiungi amico</button>
         </div>
       </form>
 <ul class="list-group" id="friendsList"></ul>

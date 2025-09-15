@@ -92,6 +92,74 @@ async function showGames() {
   }
 }
 
+async function showFriends() {
+  try {
+    const playerData = await getProfile();
+    const playerId = playerData.id;
+    const response = await fetch(`http://localhost:8080/smoke/friends/friend-list/${playerId}`);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch friends: ${response.statusText}`);
+    }
+
+    const friendsList = await response.json(); // Renamed to avoid confusion
+    const tableBody = document.getElementById('players-table');
+
+    // Clear the table before adding new rows to prevent duplicates on re-render
+    tableBody.innerHTML = '';
+
+    for (const f of friendsList) {
+      const friendResponse = await fetch(`http://localhost:8080/smoke/player/${f.secondPlayer}`);
+
+      if (!friendResponse.ok) {
+        throw new Error(`Failed to fetch details for player ID ${f.secondPlayer}: ${friendResponse.statusText}`);
+      }
+
+      const friend = await friendResponse.json(); // Correctly get the JSON data
+
+      tableBody.innerHTML += `
+        <tr>
+          <td>${friend.id}</td>
+          <td>${friend.name}</td>
+          <td><span class="badge bg-primary">Livello ${friend.playerLevel}</span></td>
+          <td>${new Date(friend.creationDate).toLocaleDateString()}</td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error("Error fetching friends:", error);
+    // Optional: Add a row to the table to indicate an error
+    document.getElementById('players-table').innerHTML = `<tr><td colspan="4" class="text-danger text-center">Failed to load friends.</td></tr>`;
+  }
+}
+
+async function addFriend () {
+  try{
+    const playerData = await getProfile();
+    const playerId = playerData.id;
+    const newFriend = parseInt(document.getElementById('friendId').value);
+    const response = await fetch(`http://localhost:8080/smoke/friends`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        firstPlayer : playerId,
+        secondPlayer : newFriend,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to add friend: ${response.statusText}`);
+    }
+
+  }
+  catch (error) {
+    console.error("Error adding friend:", error);
+  }
+}
+
+/*
+
+ */
+
 // (function () {                     // IIFE = funzione auto-eseguita: isola le variabili dallo scope globale
 //   "use strict";                    // Modalità rigorosa: aiuta a evitare errori silenziosi
 //
