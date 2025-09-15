@@ -49,10 +49,12 @@ async function pay() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dto)
     });
+    
 
     if (!res.ok) throw new Error("HTTP " + res.status);
     let msg = await res.text();
     showAlert("success", msg);
+    
 
   } catch (e) {
     console.error(e);

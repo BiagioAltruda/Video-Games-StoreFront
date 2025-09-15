@@ -95,7 +95,7 @@ function showGameDetails(gameId) {
                         </div>
                         
                         <div class="mt-4">  <!--allows html to properly read the function signature-->
-                           <button class="btn btn-primary me-2" data-game='${JSON.stringify(game)}' onclick="goToPayment(JSON.parse(this.dataset.game))">
+                           <button type="button" class="btn btn-primary me-2" data-game='${JSON.stringify(game)}' onclick="goToPayment(JSON.parse(this.dataset.game))">
                             <i class="fas fa-shopping-cart me-1"></i>Acquista
                             </button>
                             <button class="btn btn-secondary" onclick="closeGameDetails()">
