@@ -53,7 +53,7 @@ public class Transaction {
 	private double pricePaid;
 
 	@Column(name="transaction_date")
-	@Temporal(TemporalType.TIMESTAMP)
+	//@Temporal(TemporalType.TIMESTAMP)
 	private LocalDateTime date;
 
 	// Constructors
