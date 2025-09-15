@@ -26,48 +26,80 @@ function formatPrice(price) {
 
 
 // Funzioni per il carosello principale
+// mostro il gioco in evidenza all’indice dato
 function showFeaturedGame(index) {
-    document.getElementById('featured-loading').style.display = 'none';
-    document.getElementById('featured-game-container').style.display = 'flex';
-    
-    const game = allGames[index];
-    const featuredCard = `
-<div class="card featured-game-card" onclick="showGameDetails(${game.id})" style="cursor: pointer;">
-    <img src="${game.bannerPath ? game.bannerPath : placeholderImage}" 
-         class="card-img-left" alt="${game.name}"
-         onerror="handleImageError(this)">
-    
+  // sicurezza: dati pronti?
+  if (!Array.isArray(allGames) || allGames.length === 0) return;
+  if (index < 0 || index >= allGames.length) index = 0;
+
+  // UI: mostra il contenitore featured
+  const wrap = document.getElementById('featured-game-container');
+  const loader = document.getElementById('featured-loading');
+  if (loader) loader.style.display = 'none';
+  if (wrap)   wrap.style.display = 'flex';
+
+  const game = allGames[index];
+  if (!game || !game.id) return; // niente render senza id valido
+
+  const placeholderImage = 'https://via.placeholder.com/300x450/51073a/ecf0f1?text=Image+Error';
+
+  const featuredCard = `
+  <div class="card featured-game-card" data-game-id="${game.id}" style="cursor:pointer; position:relative;">
+    <img src="${game.bannerPath ? game.bannerPath : placeholderImage}"
+         class="card-img-left" alt="${game.name || ''}"
+         onerror="handleImageError && handleImageError(this)">
+
     <div class="card-content-right">
-        <div>
-            <h3 class="card-title">${game.name}</h3>
-            <p class="card-developer">${game.developer}</p>
-            <span class="card-genre">${game.genre}</span>
-            
-            <p class="card-description">${game.description || 'Nessuna descrizione disponibile.'}</p>
-        </div>
-        
-        <div class="card-price-section">
-            <p class="card-rating">${formatPrice(game.price)}</p>
-        </div>
+      <div>
+        <h3 class="card-title">${game.name || 'Titolo non disponibile'}</h3>
+        <p class="card-developer">${game.developer || ''}</p>
+        <span class="card-genre">${game.genre || ''}</span>
+        <p class="card-description">${game.description || 'Nessuna descrizione disponibile.'}</p>
+      </div>
+      <div class="card-price-section">
+        <p class="card-rating">${typeof game.price === 'number' ? formatPrice(game.price) : 'Gratis'}</p>
+      </div>
     </div>
-    
+
+    <!-- contatore -->
+    <div class="carousel-counter position-absolute top-0 end-0 p-2" style="pointer-events:none;">
+      <span id="current-game-number">${index + 1}</span>/<span id="total-games">${allGames.length}</span>
+    </div>
+
+    <!-- frecce -->
     <div class="carousel-arrows">
-        <div class="carousel-arrow carousel-arrow-prev" onclick="event.stopPropagation(); prevFeaturedGame()">
-            &#10094;
-        </div>
-        <div class="carousel-arrow carousel-arrow-next" onclick="event.stopPropagation(); nextFeaturedGame()">
-            &#10095;
-        </div>
+      <div class="carousel-arrow carousel-arrow-prev" onclick="event.stopPropagation(); prevFeaturedGame()">&#10094;</div>
+      <div class="carousel-arrow carousel-arrow-next" onclick="event.stopPropagation(); nextFeaturedGame()">&#10095;</div>
     </div>
-</div>
-`;
-    
-    document.getElementById('featured-game-container').innerHTML = featuredCard;
-    currentFeaturedIndex = index;
-    
-    // document.getElementById('current-game-number').textContent = index + 1;
-    // document.getElementById('total-games').textContent = allGames.length;
+  </div>
+  `;
+
+  // inietto card e aggiorno stato
+  wrap.innerHTML = featuredCard;
+  currentFeaturedIndex = index;
+
+  // (ridondante ma sicuro) aggiorno contatore se presente
+  const curEl = document.getElementById('current-game-number');
+const totEl = document.getElementById('total-games');
+if (curEl && totEl) {
+  curEl.textContent = index + 1;
+  totEl.textContent = allGames.length;
 }
+}
+
+// rende cliccabile tutta la card senza onclick inline
+(() => {
+  const featuredWrap = document.getElementById('featured-game-container');
+  if (!featuredWrap) return;
+  featuredWrap.addEventListener('click', (e) => {
+    if (e.target.closest('.carousel-arrow')) return; // le frecce hanno già il loro handler
+    const card = e.target.closest('.featured-game-card');
+    if (!card) return;
+    const id = Number(card.dataset.gameId);
+    if (!id) return;
+    showGameDetails(id);
+  });
+})();
 
 function nextFeaturedGame() {
     const nextIndex = (currentFeaturedIndex + 1) % allGames.length;
@@ -252,70 +284,96 @@ function mostraRisultatiRicerca(giochi, titoloRicerca) {
 
 // Funzioni per i dettagli del gioco
 function showGameDetails(gameId) {
-    const url = `http://localhost:8080/smoke/games/${gameId}`;
-    //console.log(`http://localhost:8080/smoke/games/${gameId}`);
-    fetch(url)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Gioco non trovato');
-            }
-            console.log(response);
-            return response.json();
-        })
-        .then((game) => {
-            console.log(game);
-        const gameDetails = `
+  // 1) mostra l’area dei risultati e nascondi il featured
+  const featured = document.getElementById('featured-game-container');
+  const results  = document.getElementById('search-results-section');
+  const cards    = document.getElementById('cards-container');
+  const loader   = document.getElementById('featured-loading');
+
+  if (loader)   loader.style.display = 'none';
+  if (featured) featured.style.display = 'none';
+  if (results)  results.style.display  = 'block';
+  if (cards)    { 
+    cards.style.display = 'block';
+    // stato "loading" opzionale
+    cards.innerHTML = `
+      <div class="col-12 text-center py-4">
+        <div class="spinner-border text-light" role="status"></div>
+        <p class="text-white mt-3">Caricamento dettagli...</p>
+      </div>`;
+  }
+
+  // 2) fetch del gioco
+  const url = `http://localhost:8080/smoke/games/${gameId}`;
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) throw new Error('Gioco non trovato');
+      return response.json();
+    })
+    .then((game) => {
+      if (!cards) return;
+
+      const img = game.bannerPath || 'https://via.placeholder.com/500x700/51073a/ecf0f1?text=No+Image';
+      const priceTxt = (typeof game.price === 'number')
+        ? '€' + game.price.toFixed(2)
+        : 'Gratis';
+
+      const gameDetails = `
         <div class="game-details-container">
-            <div class="container mt-4">
-                <div class="row">
-                    <div class="col-md-6">
-                        <img src="${game.bannerPath}" 
-                             class="img-fluid rounded" alt="${game.name}" 
-                             onerror="this.src='https://via.placeholder.com/500x700/51073a/ecf0f1?text=Image+Error'">
-                    </div>
-                    <div class="col-md-6">
-                        <h2 class="text-contrast">${game.name}</h2> 
-                        <p class="text-contrast"><strong>Sviluppatore:</strong> ${game.developer}</p> 
-                        <p class="text-contrast"><strong>Genere:</strong> ${game.genre}</p> 
-                        <p class="text-contrast"><strong>Prezzo:</strong> ${game.price ? '€' + game.price.toFixed(2) : 'Gratis'}</p> 
-                        <p class="text-contrast"><strong>Pegi:</strong> + ${game.rating || 'N/A'}</p> 
-                        <p class="text-contrast"><strong>Data di rilascio:</strong> ${game.releaseDate || 'N/D'}</p> 
-                        
-                        <div class="mt-4">
-                            <h5 class="text-contrast">Descrizione</h5> 
-                            <p class="text-contrast">${game.description || 'Nessuna descrizione disponibile'}</p> 
-                        </div>
-                        
-                        <div class="mt-4">
-                           <button class="btn btn-primary me-2" onclick="window.location.href='Payment.html'">
-                            <i class="fas fa-shopping-cart me-1"></i>Acquista
-                            </button>
-                            <button class="btn btn-secondary" onclick="closeGameDetails()">
-                                <i class="fas fa-arrow-left me-1"></i>Torna indietro
-                            </button>
-                        </div>
-                    </div>
+          <div class="container mt-4">
+            <div class="row">
+              <div class="col-md-6">
+                <img src="${img}" class="img-fluid rounded" alt="${game.name || ''}"
+                     onerror="this.src='https://via.placeholder.com/500x700/51073a/ecf0f1?text=Image+Error'">
+              </div>
+              <div class="col-md-6">
+                <h2 class="text-contrast">${game.name || 'Titolo non disponibile'}</h2>
+                <p class="text-contrast"><strong>Sviluppatore:</strong> ${game.developer || 'N/D'}</p>
+                <p class="text-contrast"><strong>Genere:</strong> ${game.genre || 'N/D'}</p>
+                <p class="text-contrast"><strong>Prezzo:</strong> ${priceTxt}</p>
+                <p class="text-contrast"><strong>Pegi:</strong> + ${game.rating || 'N/A'}</p>
+                <p class="text-contrast"><strong>Data di rilascio:</strong> ${game.releaseDate || 'N/D'}</p>
+
+                <div class="mt-4">
+                  <h5 class="text-contrast">Descrizione</h5>
+                  <p class="text-contrast">${game.description || 'Nessuna descrizione disponibile'}</p>
                 </div>
+
+                <div class="mt-4">
+                 <button type="button" class="btn btn-primary me-2" id="buyBtn">
+  <i class="fas fa-shopping-cart me-1"></i>Acquista
+</button>
+                  <button type="button" class="btn btn-secondary" onclick="closeGameDetails()">
+                    <i class="fas fa-arrow-left me-1"></i>Torna indietro
+                  </button>
                 </div>
+              </div>
             </div>
-        </div>
-        `;
-        
-        document.getElementById('cards-container').innerHTML = gameDetails;
+          </div>
+        </div>`;
+
+      cards.innerHTML = gameDetails;
+      const buyBtn = document.getElementById('buyBtn');
+if (buyBtn) {
+  buyBtn.addEventListener('click', () => goToPayment(game));
+}
+      // porta in vista (opzionale)
+      cards.scrollIntoView({ behavior: 'smooth', block: 'start' });
     })
     .catch((error) => {
-        console.error("Errore durante il recupero dei dettagli", error);
-        document.getElementById('cards-container').innerHTML = `
-            <div class="col-12 text-center">
-                <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    Errore nel caricamento dei dettagli: ${error.message}
-                </div>
-                <button class="btn btn-secondary" onclick="closeGameDetails()">
-                    Torna alla lista
-                </button>
-            </div>
-        `;
+      console.error("Errore durante il recupero dei dettagli", error);
+      if (!cards) return;
+      cards.innerHTML = `
+        <div class="col-12 text-center">
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            Errore nel caricamento dei dettagli: ${error.message}
+          </div>
+          <button type="button" class="btn btn-secondary" onclick="closeGameDetails()">
+            Torna alla lista
+          </button>
+        </div>`;
+      if (results) results.style.display = 'block';
     });
 }
 
@@ -401,3 +459,43 @@ document.addEventListener('DOMContentLoaded', function() {
     // Carica i giochi
     loadGames();
 });
+
+async function goToPayment(game) {
+  if (!checkLoggedIn || !checkLoggedIn()) {
+    alert("Devi essere loggato prima di poter procedere all'acquisto");
+    return;
+  }
+
+  const playerId = await getPlayerId();
+  if (!playerId) {
+    alert("Impossibile ottenere il tuo profilo. Riprova il login.");
+    return;
+  }
+
+  const transactionData = JSON.stringify({
+    player:   playerId,
+    game:     game.id,
+    gameName: game.name,
+    pricePaid: game.price,
+    date:     new Date().toLocaleDateString('en-US')
+  });
+
+  localStorage.setItem("data", transactionData);
+  window.location.assign("Payment.html"); // stessa cartella di home.html
+}
+
+async function getPlayerId() {
+  const token = localStorage.getItem('X-Token');
+  try {
+    const resp = await fetch('http://localhost:8080/smoke/accounts/profile', {
+      method: 'GET',
+      headers: { 'X-Token': token }
+    });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    return data.id;
+  } catch (err) {
+    console.error("Failed to fetch player ID:", err);
+    return null;
+  }
+}
